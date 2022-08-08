@@ -8,7 +8,58 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
+  id Int @id @default(autoincrement())
+
+  name     String
+  username String @unique
+  email    String @unique
+
+  collegeName    String
+  registrationId String
+
+  imageUrl String
+
+  teamsRegistered TeamRegistration[]
+
+  to   Transaction[] @relation("to")
+  from Transaction[] @relation("from")
+}
+
+model Team {
+  id Int @id @default(autoincrement())
+
+  teamName String
+
+  registrationStatus RegistrationStatus
+
+  members TeamRegistration[]
+
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id])
+}
+
+model TeamRegistration {
+  id Int @id @default(autoincrement())
+
+  registrationStatus RegistrationStatus
+  role               TeamMemberRole
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  teamId Int
+  team   Team @relation(fields: [teamId], references: [id])
+}
+
+enum RegistrationStatus {
+  REGISTERED
+  PENDING
+  CANCELLED
+}
+
+enum TeamMemberRole {
+  LEADER
+  MEMBER
 }
 
 model Module {
@@ -34,13 +85,43 @@ model Event {
   incentive      Int?
   isIncentivised Boolean
 
-  prizeDescription  String[]
-  stagesDescription String[]
-  description       String[]
+  prizeDescription  String
+  stagesDescription String
+  description       String
+
+  venue String
+  lat   String
+  lng   String
 
   registrationStartTime DateTime
   registrationEndTime   DateTime
 
   moduleId Int
   module   Module @relation(fields: [moduleId], references: [id])
+
+  teams Team[]
+
+  transactions Transaction[]
+}
+
+enum TransactionReason {
+  ATTENDANCE
+  PURCHASE
+}
+
+model Transaction {
+  id Int @id @default(autoincrement())
+
+  fromUserId Int
+  from       User @relation(fields: [fromUserId], references: [id], name: "from")
+
+  toUserId Int
+  to       User @relation(fields: [toUserId], references: [id], name: "to")
+
+  amount Int
+
+  reason TransactionReason
+
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id])
 }
