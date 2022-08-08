@@ -1,0 +1,10 @@
+*.log
+
+.env
+
+*tmp*
+*temp*
+
+node_modules
+
+dist

@@ -1,0 +1,72 @@
+{
+  "name": "tecno-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./dist/server.js",
+    "dev": "pnpm db:update && nodemon --exec ts-node server.ts",
+    "build": "tsc && tsc-alias",
+    "prepare": "husky install",
+    "db:pull": "prisma db pull",
+    "db:generate": "prisma generate",
+    "db:update": "prisma migrate dev",
+    "prisma:format": "prisma format",
+    "lint": "eslint . --ext .ts --fix",
+    "pre-commit": "lint-staged",
+    "preinstall": "npx only-allow pnpm"
+  },
+  "packageManager": "pnpm@7.9.0",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "helmet": "^5.1.1",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.7.7"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/morgan": "^1.9.3",
+    "@types/node": "^18.6.4",
+    "@types/nodemailer": "^6.4.5",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "eslint": "^8.21.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1",
+    "prisma": "^4.1.1",
+    "ts-node": "^10.9.1",
+    "tsc-alias": "^1.7.0",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "^4.7.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pnpm pre-commit",
+      "pre-merge-commit": "pnpm db:update"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "pnpm lint",
+      "pnpm prettier --write ."
+    ],
+    "*.prisma": [
+      "pnpm prisma:format",
+      "pnpm prisma:format"
+    ]
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "dist/**"
+    ]
+  }
+}
