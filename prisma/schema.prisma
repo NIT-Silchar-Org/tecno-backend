@@ -10,3 +10,37 @@ datasource db {
 model User {
   id String @id @default(uuid())
 }
+
+model Module {
+  id Int @id @default(autoincrement())
+
+  name        String
+  description String
+
+  image String
+
+  events Event[]
+}
+
+model Event {
+  id Int @id @default(autoincrement())
+
+  name  String
+  image String
+
+  maxTeamSize Int
+  minTeamSize Int
+
+  incentive      Int?
+  isIncentivised Boolean
+
+  prizeDescription  String[]
+  stagesDescription String[]
+  description       String[]
+
+  registrationStartTime DateTime
+  registrationEndTime   DateTime
+
+  moduleId Int
+  module   Module @relation(fields: [moduleId], references: [id])
+}
