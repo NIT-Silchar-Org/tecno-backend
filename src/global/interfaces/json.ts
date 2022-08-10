@@ -1,5 +1,5 @@
 interface Response<T = string> {
-  success: boolean;
+  status: number;
   msg: T;
 }
 

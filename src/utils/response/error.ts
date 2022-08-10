@@ -8,7 +8,7 @@ import * as Interfaces from "@interfaces";
  */
 function error(msg: string): Interfaces.JSON.Response {
   return {
-    success: false,
+    status: 500,
     msg,
   };
 }

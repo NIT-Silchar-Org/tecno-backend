@@ -7,6 +7,7 @@ import morgan from "morgan";
 
 import * as Routers from "@routes";
 import * as Constants from "@constants";
+import * as Utils from "@utils";
 
 dotenv.config();
 
@@ -29,6 +30,11 @@ app
 //----------------------- ROUTERS ----------------------------
 
 app.use(`${Constants.Server.ROOT}/home`, Routers.Home);
+
+//----------------------- ERROR HANDLERS ---------------------
+
+app.use(Utils.Error.errorLogger);
+app.use(Utils.Error.errorHandler);
 
 //----------------------- APP --------------------------------
 app.listen(process.env.PORT!, () => {

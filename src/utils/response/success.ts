@@ -1,4 +1,5 @@
 import * as Interfaces from "@interfaces";
+
 /**
  * @description Gives back a JSON
  * Object to send as response.
@@ -7,7 +8,7 @@ import * as Interfaces from "@interfaces";
  */
 function success<T = string>(msg: T): Interfaces.JSON.Response<T> {
   return {
-    success: true,
+    status: 200,
     msg,
   };
 }

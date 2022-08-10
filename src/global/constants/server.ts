@@ -1,3 +1,3 @@
-const ROOT = "/api/v1";
+const ROOT = "/api";
 
 export { ROOT };

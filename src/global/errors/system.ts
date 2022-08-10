@@ -1,5 +1,5 @@
-import * as Utils from "@utils";
+import * as Interfaces from "@interfaces";
 
-const serverError = Utils.Response.Error("Internal Server Error.");
+const serverError: Interfaces.Error.Message = "Internal Server Error.";
 
 export { serverError };

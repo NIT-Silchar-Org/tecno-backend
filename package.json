@@ -14,7 +14,8 @@
     "prisma:format": "prisma format",
     "lint": "eslint . --ext .ts --fix",
     "pre-commit": "lint-staged",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "postinstall": "pnpm db:update"
   },
   "packageManager": "pnpm@7.9.0",
   "keywords": [],
@@ -54,7 +55,6 @@
       "pnpm prettier --write ."
     ],
     "*.prisma": [
-      "pnpm prisma:format",
       "pnpm prisma:format"
     ]
   },

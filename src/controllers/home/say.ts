@@ -1,11 +1,13 @@
-import { Request, Response } from "express";
-
+import * as Interfaces from "@interfaces";
 import * as Errors from "@errors";
 // import * as Success from "@success";
 
-function sayHello(_: Request, res: Response) {
-  // res.json(Success.Home.hello);
-  res.json(Errors.System.serverError);
-}
+const sayHello: Interfaces.Controller.Async = async (_req, _res, next) => {
+  // _res.json(Success.Home.hello);
+  // return _res.json(Success.Home.hello);
+
+  // next(Errors.System.serverError);
+  return next(Errors.System.serverError);
+};
 
 export { sayHello };
