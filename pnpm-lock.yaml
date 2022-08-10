@@ -33,6 +33,7 @@ dependencies:
   dotenv: 16.0.1
   express: 4.18.1
   helmet: 5.1.1
+  husky: 8.0.1
   morgan: 1.10.0
   nodemailer: 6.7.7
   picocolors: 1.0.0
@@ -46,7 +47,6 @@ devDependencies:
   '@typescript-eslint/eslint-plugin': 5.32.0_iosr3hrei2tubxveewluhu5lhy
   '@typescript-eslint/parser': 5.32.0_qugx7qdu5zevzvxaiqyxfiwquq
   eslint: 8.21.0
-  husky: 8.0.1
   lint-staged: 13.0.3
   nodemon: 2.0.19
   prettier: 2.7.1
@@ -1166,7 +1166,7 @@ packages:
     resolution: {integrity: sha512-xs7/chUH/CKdOCs7Zy0Aev9e/dKOMZf3K1Az1nar3tzlv0jfqnYtu235bstsWTmXOR0EfINrPa97yy4Lz6RiKw==}
     engines: {node: '>=14'}
     hasBin: true
-    dev: true
+    dev: false
 
   /iconv-lite/0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
