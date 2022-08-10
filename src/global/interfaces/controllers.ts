@@ -10,6 +10,6 @@ type Async = (
   req: Request,
   res: Response,
   next: NextFunction
-) => Promise<Response | void> | undefined;
+) => Promise<Response | void>;
 
 export { Sync, Async };

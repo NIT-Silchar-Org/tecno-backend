@@ -5,10 +5,12 @@ import * as Interfaces from "@interfaces";
  * Object to send as response.
  *
  * @param msg Error message
+ * @param status Status Code
  */
-function error(msg: string): Interfaces.JSON.Response {
+
+function error(msg: string, status = 500): Interfaces.JSON.Response {
   return {
-    status: 500,
+    status,
     msg,
   };
 }
