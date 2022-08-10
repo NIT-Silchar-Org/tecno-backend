@@ -1,4 +1,5 @@
 import { ErrorRequestHandler } from "express";
+import pc from "picocolors";
 
 import * as Interfaces from "@interfaces";
 
@@ -9,7 +10,12 @@ const errorLogger: ErrorRequestHandler = (
   next
 ) => {
   if (err) {
-    console.error(`Error Code: ${err.status}, Message: ${err.msg}`);
+    console.error(
+      "Error Code:" +
+        pc.bgRed(pc.black(` ${pc.italic(err.status)} `)) +
+        ", Message: " +
+        pc.bgRed(pc.black(` ${pc.italic(err.msg)} `))
+    );
   }
 
   next(err);

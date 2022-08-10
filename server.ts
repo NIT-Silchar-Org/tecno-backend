@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import pc from "picocolors";
 
 import * as Routers from "@routes";
 import * as Constants from "@constants";
@@ -39,7 +40,14 @@ app.use(Utils.Error.errorHandler);
 //----------------------- APP --------------------------------
 app.listen(process.env.PORT!, () => {
   console.log(
-    `Server listening on port: ${process.env.PORT}, in mode: ${process.env.NODE_ENV}`
+    pc.bgGreen(
+      pc.black(
+        "Server listening on port:" +
+          pc.bold(pc.italic(` ${process.env.PORT} `)) +
+          ", in mode:" +
+          pc.bold(pc.italic(` ${process.env.NODE_ENV} `))
+      )
+    )
   );
 });
 
