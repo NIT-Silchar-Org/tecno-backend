@@ -45,10 +45,10 @@ model TeamRegistration {
   role               TeamMemberRole
 
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   teamId Int
-  team   Team @relation(fields: [teamId], references: [id])
+  team   Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
 }
 
 enum RegistrationStatus {
@@ -97,7 +97,7 @@ model Event {
   registrationEndTime   DateTime
 
   moduleId Int
-  module   Module @relation(fields: [moduleId], references: [id])
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
   teams Team[]
 
@@ -113,15 +113,15 @@ model Transaction {
   id Int @id @default(autoincrement())
 
   fromUserId Int
-  from       User @relation(fields: [fromUserId], references: [id], name: "from")
+  from       User @relation(fields: [fromUserId], references: [id], name: "from", onDelete: Restrict)
 
   toUserId Int
-  to       User @relation(fields: [toUserId], references: [id], name: "to")
+  to       User @relation(fields: [toUserId], references: [id], name: "to", onDelete: Restrict)
 
   amount Int
 
   reason TransactionReason
 
   eventId Int
-  event   Event @relation(fields: [eventId], references: [id])
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Restrict)
 }

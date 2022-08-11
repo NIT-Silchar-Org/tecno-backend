@@ -4,12 +4,14 @@ import pc from "picocolors";
 import * as Interfaces from "@interfaces";
 
 const errorLogger: ErrorRequestHandler = (
-  err: Interfaces.JSON.Response,
+  err: Error | Interfaces.JSON.Response,
   _,
   __,
   next
 ) => {
-  if (err) {
+  if (err instanceof Error) {
+    console.error(err);
+  } else if (err) {
     console.error(
       "Error Code:" +
         pc.bgRed(pc.black(` ${pc.italic(err.status)} `)) +
