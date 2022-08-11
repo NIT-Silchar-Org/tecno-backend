@@ -4,7 +4,7 @@ import * as Controllers from "@controllers";
 
 const router: Router = Router({ mergeParams: true });
 
-// ROOT: /api/vx/home
+// ROOT: /api/home
 
 router.get("/", Controllers.Home.sayHello);
 

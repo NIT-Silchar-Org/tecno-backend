@@ -32,6 +32,7 @@ app
 
 app.use(`${Constants.Server.ROOT}/home`, Routers.Home);
 app.use(`${Constants.Server.ROOT}/transaction`, Routers.Transaction);
+app.use(`${Constants.Server.ROOT}/team`, Routers.Home);
 
 //----------------------- ERROR HANDLERS ---------------------
 
