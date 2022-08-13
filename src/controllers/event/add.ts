@@ -1,8 +1,8 @@
 import * as Interfaces from "@interfaces";
 import { Event } from "@prisma/client";
 import { prisma } from "@utils/prisma";
-import success from "@utils/response/success";
 import * as Errors from "@errors";
+import * as Utils from "@utils";
 
 export const createEvent: Interfaces.Controller.Async = async (
   req,
@@ -48,6 +48,8 @@ export const createEvent: Interfaces.Controller.Async = async (
   )
     return next(Errors.Module.invalidInput);
 
+  if (!!incentive !== !!isIncentivised) return next(Errors.Module.invalidInput);
+
   if (!(await prisma.module.findFirst()))
     return next(Errors.Module.moduleNotFound);
 
@@ -74,5 +76,5 @@ export const createEvent: Interfaces.Controller.Async = async (
   });
 
   if (!event) return next(Errors.System.serverError);
-  return res.json(success(event));
+  return res.json(Utils.Response.Success(event));
 };

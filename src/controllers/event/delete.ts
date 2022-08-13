@@ -1,7 +1,7 @@
 import * as Interfaces from "@interfaces";
 import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
-import success from "@utils/response/success";
+import * as Utils from "@utils";
 
 export const deleteEvent: Interfaces.Controller.Async = async (
   req,
@@ -20,5 +20,5 @@ export const deleteEvent: Interfaces.Controller.Async = async (
 
   const event = await prisma.event.delete({ where: { id: eventId } });
   if (!event) return next(Errors.System.serverError);
-  return res.json(success(event));
+  return res.json(Utils.Response.Success(event));
 };

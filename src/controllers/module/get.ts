@@ -1,7 +1,7 @@
 import * as Interfaces from "@interfaces";
 import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
-import success from "@utils/response/success";
+import * as Utils from "@utils";
 
 export const getAllModules: Interfaces.Controller.Async = async (
   _req,
@@ -10,7 +10,7 @@ export const getAllModules: Interfaces.Controller.Async = async (
 ) => {
   const modules = await prisma.module.findMany();
   if (!modules) return next(Errors.System.serverError);
-  return res.json(success(modules));
+  return res.json(Utils.Response.Success(modules));
 };
 export const getModuleById: Interfaces.Controller.Async = async (
   req,
@@ -23,5 +23,5 @@ export const getModuleById: Interfaces.Controller.Async = async (
 
   const module = await prisma.module.findFirst({ where: { id: moduleId } });
   if (!module) return next(Errors.System.serverError);
-  return res.json(success(module));
+  return res.json(Utils.Response.Success(module));
 };

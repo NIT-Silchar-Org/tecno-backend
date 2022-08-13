@@ -2,6 +2,7 @@ import * as Interfaces from "@interfaces";
 import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
 import success from "@utils/response/success";
+import * as Utils from "@utils";
 
 export const getAllEvents: Interfaces.Controller.Async = async (
   _req,
@@ -10,7 +11,7 @@ export const getAllEvents: Interfaces.Controller.Async = async (
 ) => {
   const events = await prisma.event.findMany();
   if (!events) return next(Errors.System.serverError);
-  return res.json(success(events));
+  return res.json(Utils.Response.Success(events));
 };
 
 export const getEventsByModule: Interfaces.Controller.Async = async (
@@ -45,5 +46,5 @@ export const getEventInModuleById: Interfaces.Controller.Async = async (
     where: { id: eventId, moduleId },
   });
   if (!event) return next(Errors.System.serverError);
-  return res.json(success(event));
+  return res.json(Utils.Response.Success(event));
 };

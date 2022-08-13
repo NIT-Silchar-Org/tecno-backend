@@ -1,8 +1,8 @@
 import * as Interfaces from "@interfaces";
 import { Module } from "@prisma/client";
 import { prisma } from "@utils/prisma";
-import success from "@utils/response/success";
 import * as Errors from "@errors";
+import * as Utils from "@utils";
 
 export const createModule: Interfaces.Controller.Async = async (
   req,
@@ -20,5 +20,5 @@ export const createModule: Interfaces.Controller.Async = async (
     },
   });
   if (!module) return next(Errors.System.serverError);
-  return res.json(success(module));
+  return res.json(Utils.Response.Success(module));
 };
