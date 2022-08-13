@@ -8,7 +8,9 @@ datasource db {
 }
 
 model User {
-  id String @id
+  id Int @id @default(autoincrement())
+
+  firebaseId String @unique
 
   name     String
   username String @unique
@@ -46,8 +48,8 @@ model TeamRegistration {
   registrationStatus RegistrationStatus
   role               TeamMemberRole
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   teamId Int
   team   Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
@@ -114,11 +116,11 @@ enum TransactionReason {
 model Transaction {
   id Int @id @default(autoincrement())
 
-  fromUserId String
-  from       User   @relation(fields: [fromUserId], references: [id], name: "from", onDelete: Restrict)
+  fromUserId Int
+  from       User @relation(fields: [fromUserId], references: [id], name: "from", onDelete: Restrict)
 
-  toUserId String
-  to       User   @relation(fields: [toUserId], references: [id], name: "to", onDelete: Restrict)
+  toUserId Int
+  to       User @relation(fields: [toUserId], references: [id], name: "to", onDelete: Restrict)
 
   amount Int
 

@@ -2,9 +2,9 @@ import * as Interfaces from "@interfaces";
 import firebaseAdmin from "@utils/firebase";
 
 import * as Errors from "@errors";
-import { prisma } from "@utils/prisma";
+// import { prisma } from "@utils/prisma";
 
-const validateUser: Interfaces.Controller.Async = async (req, res, next) => {
+const validateUser: Interfaces.Controller.Async = async (req, _res, next) => {
   const auth: string | undefined = req?.headers?.authorization;
 
   if (!auth) {
@@ -21,13 +21,18 @@ const validateUser: Interfaces.Controller.Async = async (req, res, next) => {
     return next(Errors.Auth.userNotAuthenticated);
   }
 
-  const { uid } = parsedToken;
+  // const { uid } = parsedToken;
 
-  const user = await prisma.user.findFirst({
-    where: {
-      id: uid,
-    },
-  });
+  // const user = await prisma.user.findFirst({
+  //   where: {
+  //     id: uid,
+  //   },
+  // });
+
+  // if(!user){
+  //   // TODO change error
+  //   return next(Errors.Auth.userNotAuthenticated);
+  // }
 
   return next();
 };
