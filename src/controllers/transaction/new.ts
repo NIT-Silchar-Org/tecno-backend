@@ -16,7 +16,7 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
 
   const toUser = await prisma.user.findFirst({
     where: {
-      id: parseInt(toUserId),
+      id: toUserId,
     },
   });
 
@@ -111,7 +111,7 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
 
   const admin = await prisma.user.findFirst({
     where: {
-      id: parseInt(toAdminId),
+      id: toAdminId,
     },
   });
 

@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id String @id
 
   name     String
   username String @unique
@@ -46,8 +46,8 @@ model TeamRegistration {
   registrationStatus RegistrationStatus
   role               TeamMemberRole
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   teamId Int
   team   Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
@@ -114,11 +114,11 @@ enum TransactionReason {
 model Transaction {
   id Int @id @default(autoincrement())
 
-  fromUserId Int
-  from       User @relation(fields: [fromUserId], references: [id], name: "from", onDelete: Restrict)
+  fromUserId String
+  from       User   @relation(fields: [fromUserId], references: [id], name: "from", onDelete: Restrict)
 
-  toUserId Int
-  to       User @relation(fields: [toUserId], references: [id], name: "to", onDelete: Restrict)
+  toUserId String
+  to       User   @relation(fields: [toUserId], references: [id], name: "to", onDelete: Restrict)
 
   amount Int
 
