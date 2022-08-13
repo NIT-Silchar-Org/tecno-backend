@@ -9,6 +9,7 @@ import pc from "picocolors";
 import * as Routers from "@routes";
 import * as Constants from "@constants";
 import * as Utils from "@utils";
+import * as Middlewares from "@middlewares";
 
 dotenv.config();
 
@@ -27,6 +28,10 @@ app
   .use(morgan(process.env.NODE_ENV === "development" ? "dev" : "short"))
   .use(express.json())
   .use(express.urlencoded({ extended: true }));
+
+//----------------------- ROUTERS ----------------------------
+
+app.use(Middlewares.Auth.validateUser);
 
 //----------------------- ROUTERS ----------------------------
 
