@@ -7,7 +7,7 @@
     "start": "node ./dist/server.js",
     "dev": "pnpm db:update && nodemon --exec ts-node server.ts",
     "build": "tsc && tsc-alias",
-    "prepare": "if [[ $NODE_ENVIRONMENT != \"production\" ]]; then husky install; fi",
+    "prepare": "bash ./prepare.sh",
     "db:pull": "prisma db pull",
     "db:generate": "prisma generate",
     "db:update": "prisma migrate dev",
@@ -15,8 +15,7 @@
     "lint": "eslint . --ext .ts --fix",
     "pre-commit": "lint-staged",
     "preinstall": "npx only-allow pnpm",
-    "postinstall": "pnpm db:update",
-    "heroku-prebuild": "npm config set ignore-scripts true"
+    "postinstall": "pnpm db:update"
   },
   "packageManager": "pnpm@7.9.0",
   "keywords": [],
