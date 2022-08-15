@@ -10,9 +10,13 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
 
+  firebaseId String @unique
+
   name     String
   username String @unique
   email    String @unique
+
+  balance Int
 
   collegeName    String
   registrationId String?
@@ -70,6 +74,8 @@ model Module {
 
   image String
 
+  thirdPartyURL String?
+
   events Event[]
 }
 
@@ -124,4 +130,6 @@ model Transaction {
 
   eventId Int
   event   Event @relation(fields: [eventId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
 }
