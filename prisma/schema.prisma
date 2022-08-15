@@ -15,7 +15,7 @@ model User {
   email    String @unique
 
   collegeName    String
-  registrationId String
+  registrationId String?
 
   imageUrl String
 
