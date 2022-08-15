@@ -9,7 +9,7 @@ import pc from "picocolors";
 import * as Routers from "@routes";
 import * as Constants from "@constants";
 import * as Utils from "@utils";
-// import * as Middlewares from "@middlewares";
+import * as Middlewares from "@middlewares";
 
 dotenv.config();
 
@@ -31,9 +31,11 @@ app
 
 //----------------------- ROUTERS ----------------------------
 
-// app.use(Middlewares.Auth.validateUser);
+app.use(`${Constants.Server.ROOT}/auth`, Routers.Auth);
 
-//----------------------- ROUTERS ----------------------------
+app.use(Middlewares.Auth.validateUser);
+
+//----------------------- PROTECTED ROUTERS ----------------------------
 
 app.use(`${Constants.Server.ROOT}/home`, Routers.Home);
 app.use(`${Constants.Server.ROOT}/module`, Routers.Module);

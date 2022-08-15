@@ -1,49 +1,13 @@
 import * as Interfaces from "@interfaces";
-import * as Utils from "@utils";
+import * as Success from "@success";
 
 import { User } from "@prisma/client";
+import { prisma } from "@utils/prisma";
 
 const getAllUsers: Interfaces.Controller.Async = async (_req, res, _next) => {
-  const userArr: User[] = [
-    {
-      id: 123,
-      firebaseId: "adakkd",
-      balance: 22,
-      collegeName: "NITS",
-      email: "bhagwan@gmail.com",
-      imageUrl:
-        "http://www.mobiloitte.com/blhttp://www.mobiloitte.com/blog/wp-content/uploads/2019/07/New-Project-2019-07-15T110046.613.pngog/wp-content/uploads/2019/07/New-Project-2019-07-15T110046.613.png",
-      name: "akbar",
-      registrationId: "2012000",
-      username: "birbal",
-    },
-    {
-      id: 123,
-      firebaseId: "adakkd",
-      balance: 22,
-      collegeName: "NITS",
-      email: "bhagwan@gmail.com",
-      imageUrl:
-        "http://www.mobiloitte.com/blhttp://www.mobiloitte.com/blog/wp-content/uploads/2019/07/New-Project-2019-07-15T110046.613.pngog/wp-content/uploads/2019/07/New-Project-2019-07-15T110046.613.png",
-      name: "akbar",
-      registrationId: "2012000",
-      username: "birbal",
-    },
-    {
-      id: 123,
-      firebaseId: "adakkd",
-      balance: 22,
-      collegeName: "NITS",
-      email: "bhagwan@gmail.com",
-      imageUrl:
-        "http://www.mobiloitte.com/blhttp://www.mobiloitte.com/blog/wp-content/uploads/2019/07/New-Project-2019-07-15T110046.613.pngog/wp-content/uploads/2019/07/New-Project-2019-07-15T110046.613.png",
-      name: "akbar",
-      registrationId: "2012000",
-      username: "birbal",
-    },
-  ];
+  const users: User[] = await prisma.user.findMany();
 
-  res.json(Utils.Response.Success<User[]>(userArr));
+  res.json(Success.User.getAllUsersResponse(users));
 };
 
 export { getAllUsers };
