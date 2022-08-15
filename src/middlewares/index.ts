@@ -1,4 +1,5 @@
-import * as Auth from "./auth";
 import * as Transaction from "./transaction";
+import * as Module from "./module";
+import * as Auth from "./auth";
 
-export { Transaction, Auth };
+export { Transaction, Module, Auth };
