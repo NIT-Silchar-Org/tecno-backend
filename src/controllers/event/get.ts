@@ -31,19 +31,18 @@ export const getEventsByModule: Interfaces.Controller.Async = async (
   return res.json(success(events));
 };
 
-export const getEventInModuleById: Interfaces.Controller.Async = async (
+export const getEventById: Interfaces.Controller.Async = async (
   req,
   res,
   next
 ) => {
-  const { eventId: EID, moduleId: MID } = req.params;
+  const { eventId: EID } = req.params;
   const eventId = Number.parseInt(EID);
-  const moduleId = Number.parseInt(MID);
-  if (isNaN(eventId) || isNaN(moduleId))
-    return next(Errors.Module.invalidInput);
+
+  if (isNaN(eventId)) return next(Errors.Module.invalidInput);
 
   const event = await prisma.event.findFirst({
-    where: { id: eventId, moduleId },
+    where: { id: eventId },
   });
   if (!event) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(event));

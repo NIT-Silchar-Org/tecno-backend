@@ -72,6 +72,8 @@ model Module {
 
   image String
 
+  thirdPartyURL String?
+
   events Event[]
 }
 

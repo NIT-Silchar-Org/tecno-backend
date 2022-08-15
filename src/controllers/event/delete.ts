@@ -11,11 +11,8 @@ export const deleteEvent: Interfaces.Controller.Async = async (
   const { eventId: EID } = req.params;
   const eventId = Number.parseInt(EID);
   if (isNaN(eventId)) return next(Errors.Module.invalidInput);
-  const { moduleId: MID } = req.params;
-  const moduleId = Number.parseInt(MID);
-  if (isNaN(moduleId)) return next(Errors.Module.invalidInput);
 
-  if (!(await prisma.event.findFirst({ where: { id: eventId, moduleId } })))
+  if (!(await prisma.event.findFirst({ where: { id: eventId } })))
     return next(Errors.Module.eventNotFound);
 
   const event = await prisma.event.delete({ where: { id: eventId } });
