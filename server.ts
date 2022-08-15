@@ -31,9 +31,11 @@ app
 
 //----------------------- ROUTERS ----------------------------
 
+app.use(`${Constants.Server.ROOT}/auth`, Routers.Auth);
+
 // app.use(Middlewares.Auth.validateUser);
 
-//----------------------- ROUTERS ----------------------------
+//----------------------- PROTECTED ROUTERS ----------------------------
 
 app.use(`${Constants.Server.ROOT}/home`, Routers.Home);
 app.use(`${Constants.Server.ROOT}/user`, Routers.User);
