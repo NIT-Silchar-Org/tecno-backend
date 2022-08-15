@@ -7,7 +7,7 @@
     "start": "node ./dist/server.js",
     "dev": "pnpm db:update && nodemon --exec ts-node server.ts",
     "build": "tsc && tsc-alias",
-    "prepare": "bash ./prepare.sh",
+    "prepare": "bash ./scripts/prepare.sh",
     "db:pull": "prisma db pull",
     "db:generate": "prisma generate",
     "db:update": "prisma migrate dev",
@@ -15,7 +15,7 @@
     "lint": "eslint . --ext .ts --fix",
     "pre-commit": "lint-staged",
     "preinstall": "npx only-allow pnpm",
-    "postinstall": "pnpm db:update"
+    "postinstall": "bash ./scripts/postinstall.sh"
   },
   "packageManager": "pnpm@7.9.0",
   "keywords": [],
