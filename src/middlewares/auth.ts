@@ -1,5 +1,5 @@
 import * as Interfaces from "@interfaces";
-import firebaseAdmin from "@utils/firebase";
+import * as Utils from "@utils";
 
 import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
@@ -13,7 +13,7 @@ const validateUser: Interfaces.Controller.Async = async (req, _res, next) => {
 
   const idToken: string = (auth as string).split(" ")[1];
 
-  const firebaseAuth = firebaseAdmin.auth();
+  const firebaseAuth = Utils.Firebase.firebaseAdmin.auth();
 
   const decodedToken = await firebaseAuth.verifyIdToken(idToken);
 

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/server.js",
+    "start:aws": "node --experimental-specifier-resolution=node ./dist/server.js",
+    "start": "pnpm db:update && nodemon --exec ts-node server.ts",
     "dev": "pnpm db:update && nodemon --exec ts-node server.ts",
     "build": "tsc && tsc-alias",
     "prepare": "bash ./scripts/prepare.sh",
@@ -15,7 +16,8 @@
     "lint": "eslint . --ext .ts --fix",
     "pre-commit": "lint-staged",
     "preinstall": "npx only-allow pnpm",
-    "postinstall": "bash ./scripts/postinstall.sh"
+    "postinstall": "bash ./scripts/postinstall.sh",
+    "heroku-postbuild": "prisma migrate deploy"
   },
   "packageManager": "pnpm@7.9.0",
   "keywords": [],
@@ -52,6 +54,7 @@
     "tsconfig-paths": "^4.1.0",
     "ts-node": "^10.9.1"
   },
+  "type": "module",
   "lint-staged": {
     "*.ts": [
       "pnpm lint",
