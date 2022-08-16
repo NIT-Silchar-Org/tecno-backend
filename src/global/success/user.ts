@@ -11,4 +11,13 @@ const getOneUserResponse = (user: User) => {
   return Utils.Response.Success<User>(user);
 };
 
-export { userCreated, getAllUsersResponse, getOneUserResponse };
+const updateUserImgResponse = (user: User) => {
+  return Utils.Response.Success<User>(user);
+};
+
+export {
+  userCreated,
+  getAllUsersResponse,
+  getOneUserResponse,
+  updateUserImgResponse,
+};

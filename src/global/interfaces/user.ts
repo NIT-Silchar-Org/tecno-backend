@@ -8,4 +8,8 @@ interface CreateUserBody {
   imageUrl: string | null | undefined;
 }
 
-export { CreateUserBody };
+interface UserImgUpdateBody {
+  imageUrl: string;
+}
+
+export { CreateUserBody, UserImgUpdateBody };
