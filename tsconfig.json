@@ -18,7 +18,6 @@
     "incremental": true,
     "target": "ES6",
     "experimentalDecorators": true,
-    "module": "ES6",
     "rootDir": "./",
     "baseUrl": ".",
     "declaration": true,
@@ -42,6 +41,7 @@
     "noImplicitOverride": true,
     "skipLibCheck": true,
     "typeRoots": ["@types", "./node_modules/@types"],
+    "resolveJsonModule": true
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]
