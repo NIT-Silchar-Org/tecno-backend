@@ -99,6 +99,8 @@ model Event {
   lat   String
   lng   String
 
+  // Manager and Organizers add relation
+
   registrationStartTime DateTime
   registrationEndTime   DateTime
 

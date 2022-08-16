@@ -1,4 +1,4 @@
-import admin from "firebase-admin";
+import admin, { FirebaseError } from "firebase-admin";
 // import serviceAccount from "../../firebase_secret.json";
 
 let firebaseAdmin: admin.app.App;
@@ -13,4 +13,8 @@ const firebaseInit = () => {
   });
 };
 
-export { firebaseAdmin, firebaseInit };
+function isFirebaseError(obj: any): obj is FirebaseError {
+  return "code" in obj && "message" in obj;
+}
+
+export { firebaseAdmin, firebaseInit, isFirebaseError };
