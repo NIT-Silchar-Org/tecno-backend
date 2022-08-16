@@ -1,0 +1,236 @@
+openapi: 3.0.0
+info:
+  title: Tecnoesis API
+  version: 1.0.0
+  description: The API for Tecnoesis 2022 event
+
+components:
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 38
+
+        firebaseId:
+          type: string
+          example: "YiuqYLtElLTNGaNy9vistAz3u663"
+
+        name:
+          type: string
+          example: "John Smith"
+
+        username:
+          type: string
+          example: "helloworldxxx69"
+
+        email:
+          type: string
+          example: "helloworld@nits.ac.in"
+
+        balance:
+          type: integer
+          example: 1000
+
+        collegeName:
+          type: string
+          example: "National Institute of Technology, Silchar"
+
+        registrationId:
+          type: string
+          example: "2012001"
+
+        imageUrl:
+          type: string
+          example: "https://avatars.githubusercontent.com/u/74897001"
+
+    Team:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 32
+
+        teamName:
+          type: string
+          example: "404 Coders"
+
+        registrationStatus:
+          type: string
+          enum:
+            - REGISTERED
+            - PENDING
+            - CANCELLED
+
+    TeamRegistration:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 23
+
+        registrationStatus:
+          type: string
+          enum:
+            - REGISTERED
+            - PENDING
+            - CANCELLED
+
+        rol:
+          type: string
+          enum:
+            - LEADER
+            - MEMBER
+
+    Module:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 93
+
+        name:
+          type: string
+          example: "Coding Hackathon"
+
+        description:
+          type: string
+          example: "A very good event module"
+
+        image:
+          type: string
+          example: "https://avatars.githubusercontent.com/u/74897001"
+
+        thirdPartyUrl:
+          type: string
+          example: "https://www.google.com"
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 43
+
+        name:
+          type: string
+          example: "Coding Competition"
+
+        image:
+          type: string
+          example: "https://avatars.githubusercontent.com/u/74897001"
+
+        maxTeamSize:
+          type: integer
+          example: 5
+
+        minTeamSize:
+          type: integer
+          example: 1
+
+        incentive:
+          type: number
+          example: 100
+
+        isIncentivised:
+          type: boolean
+          example: true
+
+        prizeDescription:
+          type: string
+          example: "First prize gets a Lamborghini"
+
+        stagesDescription:
+          type: string
+          example: "First round will be a group discussion"
+
+        description:
+          type: string
+          example: "Very good competition. Pls register."
+
+        venue:
+          type: string
+          example: "Sports Complex"
+
+        lat:
+          type: string
+          example: "24.7560907"
+
+        lng:
+          type: string
+          example: "92.7823423"
+
+        registrationStartTime:
+          type: string
+          example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+
+        registrationEndTime:
+          type: string
+          example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 65
+
+        amount:
+          type: number
+          example: 2000
+
+        reason:
+          type: string
+          enum:
+            - ATTENDANCE
+            - PURCHASE
+
+        createdAt:
+          type: string
+          example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+
+servers:
+  - url: http://localhost:5000/api
+    description: Development Server
+
+paths:
+  /auth/signup:
+    post:
+      description: Login or SignUp a user
+      tags:
+        - Auth
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON object containing user information
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "John Smith"
+                email:
+                  type: string
+                  example: "awesomeguy@nits.ac.in"
+                collegeName:
+                  type: string
+                  example: "National Institute of Technology, Silchar"
+                registrationId:
+                  type: string
+                  example: "2012001"
+                imageUrl:
+                  type: string
+                  example: "https://avatars.githubusercontent.com/u/74897001"
+
+      responses:
+        200:
+          description: Successful
