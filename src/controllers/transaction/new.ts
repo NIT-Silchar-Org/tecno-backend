@@ -3,6 +3,7 @@ import { prisma } from "@utils/prisma";
 import * as Interfaces from "@interfaces";
 import * as Success from "@success";
 import * as Errors from "@errors";
+import { TransactionReason } from "@prisma/client";
 
 const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
   req,
@@ -31,10 +32,13 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
   if (event.isIncentivised) {
     const amount = event.incentive!;
 
+    // Permission class add
+    // Money deduct from admin but API accessible to manager
+
     const transactionCreate = prisma.transaction.create({
       data: {
         amount,
-        reason: "ATTENDANCE",
+        reason: TransactionReason.ATTENDANCE,
         event: {
           connect: {
             id: event.id,
@@ -76,7 +80,7 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
     await prisma.transaction.create({
       data: {
         amount: 0,
-        reason: "ATTENDANCE",
+        reason: TransactionReason.ATTENDANCE,
         event: {
           connect: {
             id: event.id,

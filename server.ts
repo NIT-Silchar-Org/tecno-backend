@@ -6,13 +6,12 @@ import helmet from "helmet";
 import morgan from "morgan";
 import pc from "picocolors";
 import swaggerUI from "swagger-ui-express";
+import YAML from "yamljs";
 
 import * as Routers from "@routes";
 import * as Constants from "@constants";
 import * as Utils from "@utils";
 import * as Middlewares from "@middlewares";
-
-import swaggerDocument from "./docs/swagger.json";
 
 dotenv.config();
 Utils.Firebase.firebaseInit();
@@ -33,13 +32,20 @@ app
   .use(express.json())
   .use(express.urlencoded({ extended: true }));
 
-//----------------------- ROUTERS ----------------------------
+//----------------------- DOCS ------------------------------
+
+const swaggerDocument = YAML.load(Constants.Server.DOCS);
 
 app.use(
   `${Constants.Server.ROOT}/docs`,
   swaggerUI.serve,
-  swaggerUI.setup(swaggerDocument)
+  swaggerUI.setup(swaggerDocument, {
+    customCss: ".swagger-ui .topbar { display: none }",
+    customSiteTitle: "Tecnoesis API",
+  })
 );
+
+//----------------------- ROUTERS ----------------------------
 app.use(`${Constants.Server.ROOT}/auth`, Routers.Auth);
 
 //----------------------- PROTECTED ROUTERS ----------------------------
