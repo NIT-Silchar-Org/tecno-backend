@@ -234,3 +234,282 @@ paths:
       responses:
         200:
           description: Successful
+
+  /event/{eventId}/add:
+    post:
+      description: Register a team for an event
+
+      tags:
+        - Team
+
+      security:
+        - BearerAuth: []
+
+      parameters:
+
+        - in: path
+          name: eventId
+
+          schema:
+            type: integer
+
+          required: true
+
+          description: Numeric ID of the event in which the team is registering
+
+      requestBody:
+
+        description: A JSON Object containing team info for registering
+
+        content:
+          application/json:
+            schema:
+              type: object
+
+              properties:
+                name:
+                  type: string
+                  example: "John Smith"
+
+                members:
+                  type: array
+
+                  items:
+                    type: object
+
+                    properties:
+                      username:
+                        type: string
+                        example: "johnsmittecno22"
+
+                      role:
+                        type: string
+                        enum:
+                          - LEADER
+                          - MEMBER
+                        example: MEMBER
+
+      responses:
+
+        200:
+          description: Team Registration Successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  msg:
+                    type: string
+                    example: Team Created sucessfully.
+
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: Team size isn't allowed.
+
+        404:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: User not found.
+
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 409
+                  msg:
+                    type: string
+                    example: Team Already Exists.
+
+  /event/{eventId}/team/{teamId}:
+    get:
+      description: Get the details of a team
+
+      tags:
+        - Team
+
+      parameters:
+
+        - in: path
+          name: eventId
+
+          schema:
+            type: integer
+
+          required: true
+
+          description: Numeric ID of the event in which the team is registering
+
+        - in: path
+          name: teamId
+
+          schema:
+            type: integer
+
+          required: true
+
+          description: Numeric ID of the team
+
+      responses:
+
+        200:
+          description: Team Deatils Successfully Recieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  teamName:
+                    type: string
+                    example: "404 Coders"
+                  registrationStatus:
+                    type: string
+                    enum:
+                      - REGISTERED
+                      - PENDING
+                      - CANCELLED
+                  event:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: "Coding Hackathon"
+                      venue:
+                        type: string
+                        example: "Sports Complex"
+                      lat:
+                        type: string
+                        description: "Latitude"
+                        example: "24.7560907"
+
+                      lng:
+                        type: string
+                        description: "Longitude"
+                        example: "93.7560907"
+                      module:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: "Hackathons"
+
+        404:
+          description: Team Not Found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: Team Not Found.
+
+  /event/{eventId}/team/{teamId}/respond:
+    patch:
+      description: User responding to team invite
+
+      tags:
+        - Team
+
+      security:
+        - BearerAuth: []
+
+      parameters:
+
+        - in: path
+          name: eventId
+
+          schema:
+            type: integer
+
+          required: true
+
+          description: Numeric ID of the event in which the team is registering
+
+        - in: path
+          name: teamId
+
+          schema:
+            type: integer
+
+          required: true
+
+          description: Numeric ID of the team
+
+      requestBody:
+
+        description: A JSON Object for the user's response to an invitation
+
+        content:
+          application/json:
+            schema:
+              type: object
+
+              properties:
+
+                status:
+                  type: string
+                  enum:
+                    - REGISTERED
+                    - PENDING
+                    - CANCELLED
+                  example: REGISTERED
+
+      responses:
+
+        200:
+          description: User Response Registered.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  msg:
+                    type: string
+                    example: User Status Updated.
+
+        409:
+          description: Conflict.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: User Not Part of Team.

@@ -8,8 +8,8 @@ interface RegisterTeamBody {
   }[];
 }
 
-interface ResgitrationResponse {
+interface RegistrationResponse {
   status: RegistrationStatus;
 }
 
-export { RegisterTeamBody, ResgitrationResponse };
+export { RegisterTeamBody, RegistrationResponse };

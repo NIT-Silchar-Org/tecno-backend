@@ -58,7 +58,6 @@ app.use(`${Constants.Server.ROOT}/module`, Routers.Module);
 app.use(`${Constants.Server.ROOT}/event`, Routers.Event);
 app.use(`${Constants.Server.ROOT}/user`, Routers.User);
 app.use(`${Constants.Server.ROOT}/transaction`, Routers.Transaction);
-app.use(`${Constants.Server.ROOT}/team`, Routers.Home);
 
 //----------------------- ERROR HANDLERS ---------------------
 
