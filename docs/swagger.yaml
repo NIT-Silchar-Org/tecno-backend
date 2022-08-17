@@ -234,6 +234,123 @@ paths:
       responses:
         200:
           description: Successful
+  /transaction/attendance:
+    post:
+      description: Transaction for attendance, provided the user is manager of the event.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON containing the eventId and the attendee id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toUserId:
+                  type: string
+                  example: "u7dpk73akmjzs765"
+                eventId:
+                  type: string
+                  example: "pq864mvcx66238njdhfy98"
+
+      responses:
+        200:
+          description:
+            Transaction completed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Transaction completed successfully."
+        403:
+          description:
+            Transaction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "Transaction failed."
+  /transaction/purchase:
+    post:
+      description:
+        Transaction for purchase, provided the receiver is admin.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON containing the eventId and the attendee id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toAdminId:
+                  type: string
+                  example: "u7dpk73akmjzs765"
+                eventId:
+                  type: string
+                  example: "pq864mvcx66238njdhfy98"
+                amount:
+                  type: number
+                  example: 100
+      responses:
+        200:
+          description:
+            Transaction completed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Transaction completed successfully."
+        403:
+          description:
+            Transaction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "Transaction failed."
+        400:
+          description:
+            Transaction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid amount transaction"
 
   /event/{eventId}/add:
     post:

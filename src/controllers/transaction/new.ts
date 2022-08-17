@@ -3,15 +3,14 @@ import { prisma } from "@utils/prisma";
 import * as Interfaces from "@interfaces";
 import * as Success from "@success";
 import * as Errors from "@errors";
+import { TransactionReason } from "@prisma/client";
 
 const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
   req,
   res,
   next
 ) => {
-  const { eventId } = req.params;
-
-  const { toUserId } =
+  const { toUserId, eventId } =
     req.body as Interfaces.Transaction.CreateAttendanceTransactionBody;
 
   const toUser = await prisma.user.findFirst({
@@ -31,10 +30,13 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
   if (event.isIncentivised) {
     const amount = event.incentive!;
 
+    // Permission class add
+    // Money deduct from admin but API accessible to manager
+
     const transactionCreate = prisma.transaction.create({
       data: {
         amount,
-        reason: "ATTENDANCE",
+        reason: TransactionReason.ATTENDANCE,
         event: {
           connect: {
             id: event.id,
@@ -76,7 +78,7 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
     await prisma.transaction.create({
       data: {
         amount: 0,
-        reason: "ATTENDANCE",
+        reason: TransactionReason.ATTENDANCE,
         event: {
           connect: {
             id: event.id,
@@ -104,9 +106,7 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
   res,
   next
 ) => {
-  const { eventId } = req.params;
-
-  const { amount, toAdminId } =
+  const { amount, toAdminId, eventId } =
     req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
 
   const admin = await prisma.user.findFirst({
@@ -122,8 +122,6 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
   if (!admin || !event) {
     return next(Errors.Transaction.transactionFailed);
   }
-
-  // TODO: Check if event is Shopping Bonanza
 
   // TODO: Check last transaction time and is less than an threshold then fail transaction
 

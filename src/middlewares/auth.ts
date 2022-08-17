@@ -1,10 +1,10 @@
-import * as Interfaces from "@interfaces";
-import * as Utils from "@utils";
-
-import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
 
-const validateUser: Interfaces.Controller.Async = async (req, _res, next) => {
+import * as Utils from "@utils";
+import * as Interfaces from "@interfaces";
+import * as Errors from "@errors";
+
+const validateUser: Interfaces.Middleware.Async = async (req, _res, next) => {
   const auth: string | undefined = req?.headers?.authorization;
 
   if (!auth) {
@@ -15,7 +15,12 @@ const validateUser: Interfaces.Controller.Async = async (req, _res, next) => {
 
   const firebaseAuth = Utils.Firebase.firebaseAdmin.auth();
 
-  const decodedToken = await firebaseAuth.verifyIdToken(idToken);
+  let decodedToken;
+  try {
+    decodedToken = await firebaseAuth.verifyIdToken(idToken);
+  } catch (err) {
+    return next(err);
+  }
 
   if (!decodedToken) {
     return next(Errors.User.userNotAuthenticated);
