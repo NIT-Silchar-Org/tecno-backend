@@ -9,7 +9,8 @@ const router: Router = Router({ mergeParams: true });
 
 router.post(
   "/attendance",
-  Middlewares.Transaction.isSenderAdmin,
+  Middlewares.Transaction.isSenderManager,
+  Middlewares.Auth.getAdmin,
   Controllers.Transaction.createNewAttendanceTransaction
 );
 
