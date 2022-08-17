@@ -10,11 +10,12 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
   res,
   next
 ) => {
-  const { teamId: TID, userId: UID } = req.params;
+  const { teamId: TID } = req.params;
   const teamId = parseInt(TID);
-  const userId = parseInt(UID);
 
-  const { status } = req.body as Interfaces.Team.ResgitrationResponse;
+  const userId = req.user!.id;
+
+  const { status } = req.body as Interfaces.Team.RegistrationResponse;
 
   // Check response
   if (!(status in RegistrationStatus) || status === "PENDING") {

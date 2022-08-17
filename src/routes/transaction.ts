@@ -5,10 +5,10 @@ import * as Controllers from "@controllers";
 
 const router: Router = Router({ mergeParams: true });
 
-// ROOT = /api/module/:id/event/:eventId/transaction
+// ROOT = /api/transaction
 
 router.post(
-  "/",
+  "/attendance",
   Middlewares.Transaction.isSenderAdmin,
   Controllers.Transaction.createNewAttendanceTransaction
 );

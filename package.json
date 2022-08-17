@@ -65,6 +65,9 @@
     ],
     "*.prisma": [
       "pnpm prisma:format"
+    ],
+    "swagger.yaml": [
+      "pnpm prettier --write ."
     ]
   },
   "nodemonConfig": {
