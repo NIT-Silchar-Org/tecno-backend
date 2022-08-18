@@ -365,6 +365,20 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Event'
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+        
         
   /event/{eventId}:
     get:
@@ -374,9 +388,9 @@ paths:
           name: eventId
 
           schema:
-            type: integer
+            type: number
 
-          rsrequired: true
+          required: true
 
           description: Numeric ID of the event requested.
 
@@ -391,19 +405,19 @@ paths:
                 type: object
                 properties:
                   status:
-                    type: integer
+                    type: number
                     example: 200
                   msg:
                     $ref: '#/components/schemas/Event'
         '400':
-          description: A JSON event object.
+          description: Throws if event id is not a number.
           content:  
             application/json:
               schema:
                 type: object
                 properties:
                   status:
-                    type: integer
+                    type: number
                     example: 400
                   msg:
                     type: string
@@ -417,7 +431,7 @@ paths:
                   type: object
                   properties:
                     status:
-                      type: integer
+                      type: number
                       example: 404
                     msg:
                       type: string
@@ -430,7 +444,7 @@ paths:
                   type: object
                   properties:
                     status:
-                      type: integer
+                      type: number
                       example: 500
                     msg:
                       type: string
