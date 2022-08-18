@@ -351,8 +351,91 @@ paths:
                   msg:
                     type: string
                     example: "Invalid amount transaction"
+  /event/all:
+    get:
+      summary: Get an array of all events
+      tags:
+        - Event
+      responses:
+        '200':
+          description: An Array of JSON event objects.
+          content:  
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        
+  /event/{eventId}:
+    get:
+      summary: Get a JSON event object.
+      parameters:
+        - in: path
+          name: eventId
 
-  /event/{eventId}/add:
+          schema:
+            type: integer
+
+          rsrequired: true
+
+          description: Numeric ID of the event requested.
+
+      tags:
+        - Event
+      responses:
+        '200':
+          description: A JSON event object.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Event'
+        '400':
+          description: A JSON event object.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+
+        '404':
+            description: Throws if event does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: integer
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Event not found"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: integer
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+  /event/{eventId}/team/add:
     post:
       description: Register a team for an event
 
