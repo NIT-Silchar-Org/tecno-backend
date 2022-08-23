@@ -9,7 +9,7 @@ export const createModule: Interfaces.Controller.Async = async (
   res,
   next
 ) => {
-  const { description, image, name } = req.body as Module;
+  const { description, image, name, thirdPartyURL } = req.body as Module;
   if (!description || !image || !name) return next(Errors.Module.invalidInput);
 
   const module = await prisma.module.create({
@@ -17,6 +17,7 @@ export const createModule: Interfaces.Controller.Async = async (
       description,
       image,
       name,
+      thirdPartyURL,
     },
   });
   if (!module) return next(Errors.System.serverError);
