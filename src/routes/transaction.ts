@@ -9,14 +9,14 @@ const router: Router = Router({ mergeParams: true });
 
 router.post(
   "/attendance",
-  Middlewares.Transaction.isSenderManager,
+  Middlewares.Transaction.isUserEventManager,
   Middlewares.Auth.getAdmin,
   Controllers.Transaction.createNewAttendanceTransaction
 );
 
 router.post(
   "/purchase",
-  Middlewares.Transaction.isReceiverAdmin,
+  Middlewares.Transaction.isUserAdmin,
   Controllers.Transaction.createNewPurchaseTransaction
 );
 

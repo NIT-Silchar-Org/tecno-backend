@@ -121,8 +121,6 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
     return next(Errors.Transaction.transactionFailed);
   }
 
-  // TODO: Check last transaction time and is less than an threshold then fail transaction
-
   const transaction = await prisma.transaction.findFirst({
     where: {
       from: {

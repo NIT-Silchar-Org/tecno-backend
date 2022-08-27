@@ -3,7 +3,7 @@ import * as Interfaces from "@interfaces";
 import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
 
-const isSenderManager: Interfaces.Middleware.Async = async (
+const isUserEventManager: Interfaces.Middleware.Async = async (
   req,
   _res,
   next
@@ -31,11 +31,7 @@ const isSenderManager: Interfaces.Middleware.Async = async (
   return next();
 };
 
-const isReceiverAdmin: Interfaces.Middleware.Async = async (
-  req,
-  _res,
-  next
-) => {
+const isUserAdmin: Interfaces.Middleware.Async = async (req, _res, next) => {
   const { toAdminId } =
     req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
 
@@ -57,4 +53,4 @@ const isReceiverAdmin: Interfaces.Middleware.Async = async (
   }
 };
 
-export { isReceiverAdmin, isSenderManager };
+export { isUserEventManager, isUserAdmin };
