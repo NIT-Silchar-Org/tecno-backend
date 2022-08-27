@@ -9,8 +9,8 @@ router.post(
   Middlewares.Module.isAdmin,
   Controllers.Module.createModule
 );
-router.get("/all", Controllers.Module.getAllModules);
 router.get("/:moduleId", Controllers.Module.getModuleById);
+router.get("/", Controllers.Module.getAllModules);
 router.delete(
   "/:moduleId/delete",
   Middlewares.Module.isAdmin,

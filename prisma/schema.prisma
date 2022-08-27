@@ -27,6 +27,9 @@ model User {
 
   to   Transaction[] @relation("to")
   from Transaction[] @relation("from")
+
+  manages   Event[] @relation("manager")
+  organizes Event[] @relation("organizer")
 }
 
 model Team {
@@ -99,7 +102,8 @@ model Event {
   lat   String
   lng   String
 
-  // Manager and Organizers add relation
+  managers   User[] @relation("manager")
+  organizers User[] @relation("organizer")
 
   registrationStartTime DateTime
   registrationEndTime   DateTime

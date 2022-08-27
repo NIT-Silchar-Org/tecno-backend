@@ -1,5 +1,6 @@
 import { prisma } from "@utils/prisma";
 
+import * as Constants from "@constants";
 import * as Interfaces from "@interfaces";
 import * as Success from "@success";
 import * as Errors from "@errors";
@@ -15,7 +16,7 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
 
   const toUser = await prisma.user.findFirst({
     where: {
-      id: parseInt(toUserId),
+      firebaseId: toUserId,
     },
   });
 
@@ -30,9 +31,6 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
   if (event.isIncentivised) {
     const amount = event.incentive!;
 
-    // Permission class add
-    // Money deduct from admin but API accessible to manager
-
     const transactionCreate = prisma.transaction.create({
       data: {
         amount,
@@ -44,12 +42,12 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
         },
         from: {
           connect: {
-            id: req.user!.id,
+            firebaseId: req.admin!.firebaseId,
           },
         },
         to: {
           connect: {
-            id: toUser.id,
+            firebaseId: toUser.firebaseId,
           },
         },
       },
@@ -57,16 +55,16 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
 
     const adminUpdate = prisma.user.update({
       where: {
-        id: req.user!.id,
+        firebaseId: req.admin!.firebaseId,
       },
       data: {
-        balance: req.user!.balance - amount,
+        balance: req.admin!.balance - amount,
       },
     });
 
     const toUserUpdate = prisma.user.update({
       where: {
-        id: toUser.id,
+        firebaseId: toUser.firebaseId,
       },
       data: {
         balance: toUser.balance + amount,
@@ -86,12 +84,12 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
         },
         from: {
           connect: {
-            id: req.user!.id,
+            firebaseId: req.admin!.firebaseId,
           },
         },
         to: {
           connect: {
-            id: toUser.id,
+            firebaseId: toUser.firebaseId,
           },
         },
       },
@@ -111,7 +109,7 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
 
   const admin = await prisma.user.findFirst({
     where: {
-      id: parseInt(toAdminId),
+      firebaseId: toAdminId,
     },
   });
 
@@ -123,7 +121,23 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
     return next(Errors.Transaction.transactionFailed);
   }
 
-  // TODO: Check last transaction time and is less than an threshold then fail transaction
+  const transaction = await prisma.transaction.findFirst({
+    where: {
+      from: {
+        firebaseId: req.user!.firebaseId,
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  if (transaction) {
+    if (
+      new Date(transaction.createdAt).getTime() - new Date().getTime() <
+      Constants.Transaction.TRANSACTION_COOLDOWN
+    ) {
+      return next(Errors.Transaction.transactionTooQuick);
+    }
+  }
 
   if (amount < 0) {
     return next(Errors.Transaction.transactionInvalidAmount);
@@ -132,7 +146,7 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
   const transactionCreate = prisma.transaction.create({
     data: {
       amount,
-      reason: "PURCHASE",
+      reason: TransactionReason.PURCHASE,
       event: {
         connect: {
           id: event.id,
@@ -140,12 +154,12 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
       },
       from: {
         connect: {
-          id: req.user!.id,
+          firebaseId: req.user!.firebaseId,
         },
       },
       to: {
         connect: {
-          id: admin.id,
+          firebaseId: admin.firebaseId,
         },
       },
     },
@@ -153,7 +167,7 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
 
   const userUpdate = prisma.user.update({
     where: {
-      id: req.user!.id,
+      firebaseId: req.user!.firebaseId,
     },
     data: {
       balance: req.user!.balance - amount,
@@ -162,7 +176,7 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
 
   const adminUpdate = prisma.user.update({
     where: {
-      id: admin.id,
+      firebaseId: admin.firebaseId,
     },
     data: {
       balance: admin.balance + amount,

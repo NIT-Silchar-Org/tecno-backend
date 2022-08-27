@@ -9,4 +9,12 @@ interface CreatePurchaseTransactionBody {
   eventId: string;
 }
 
-export { CreatePurchaseTransactionBody, CreateAttendanceTransactionBody };
+interface TransactionBody {
+  eventId: string;
+}
+
+export {
+  CreatePurchaseTransactionBody,
+  CreateAttendanceTransactionBody,
+  TransactionBody,
+};

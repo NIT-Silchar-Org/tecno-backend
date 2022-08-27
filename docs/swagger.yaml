@@ -230,10 +230,47 @@ paths:
                 imageUrl:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
-
       responses:
         200:
           description: Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: user created
+        409:
+          description: Conflict user already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 409
+                  msg:
+                    type: string
+                    example: User exist with same parameters
+        401:
+          description: User not authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 401
+                  msg:
+                    type: string
+                    example: User Not authenticated
+
   /transaction/attendance:
     post:
       description: Transaction for attendance, provided the user is manager of the event.
@@ -351,7 +388,7 @@ paths:
                   msg:
                     type: string
                     example: "Invalid amount transaction"
-  /module/all:
+  /module/:
     get:
       summary: Get an array of JSON module objects.
       tags:
@@ -711,7 +748,7 @@ paths:
                   msg:
                     type: string
                     example: "Internal server error."
-  /event/all:
+  /event/:
     get:
       summary: Get an array of all events
       tags:
@@ -1491,4 +1528,112 @@ paths:
                     example: 404
                   msg:
                     type: string
+<<<<<<< HEAD
                     example: User Not Part of Team.
+=======
+                    example: User Not Part of Team.
+  /user:
+    get:
+      tags:
+        - User
+      description: Get all users
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: A JSON object contain all users in an array
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/User'
+    patch:
+      tags:
+        - User
+      description: updates the details of the user loged in
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON object with the updated details of the user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  nullable: true
+                  example: "netra"
+                collegeName:
+                  type: string
+                  nullable: true
+                  example: "National Institute of Technology Silchar"
+                registrationId:
+                  type: string
+                  nullable: true
+                  example: 2012000
+                imageUrl:
+                  type: string
+                  nullable: true
+                  example: https://picsum.photos/200
+      responses:
+        200:
+          description:  A JSON object containing the updated user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/User'  
+
+  /user/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the user to get
+        
+      tags:
+        - User
+      description: Get one user using it's id
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: A JSON object containing the requested user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/User'
+        404:
+          description: User with given id not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: User not found
+>>>>>>> 6f4255cf328c8410d18c54a877ac05782ca239db
