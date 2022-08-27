@@ -43,4 +43,18 @@ const validateUser: Interfaces.Middleware.Async = async (req, _res, next) => {
   return next();
 };
 
-export { validateUser };
+const getAdmin: Interfaces.Middleware.Async = async (req, _res, next) => {
+  const admin = await prisma.user.findFirst({
+    where: {
+      firebaseId: process.env.ADMIN_ID!,
+    },
+  });
+  if (!admin) {
+    return next(Errors.Auth.adminAuthError);
+  }
+
+  req.admin = admin;
+  return next();
+};
+
+export { validateUser, getAdmin };
