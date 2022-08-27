@@ -8,8 +8,11 @@ interface CreateUserBody {
   imageUrl: string | null | undefined;
 }
 
-interface UserImgUpdateBody {
-  imageUrl: string;
+interface UserUpdateBody {
+  name: string | null | undefined;
+  collegeName: string | null | undefined;
+  registrationId: string | null | undefined;
+  imageUrl: string | null | undefined;
 }
 
-export { CreateUserBody, UserImgUpdateBody };
+export { CreateUserBody, UserUpdateBody };

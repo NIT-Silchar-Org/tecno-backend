@@ -10,8 +10,7 @@ const getAllUsersResponse = (users: User[]) => {
 const getOneUserResponse = (user: User) => {
   return Utils.Response.Success<User>(user);
 };
-
-const updateUserImgResponse = (user: User) => {
+const updateUserResponse = (user: User) => {
   return Utils.Response.Success<User>(user);
 };
 
@@ -19,5 +18,5 @@ export {
   userCreated,
   getAllUsersResponse,
   getOneUserResponse,
-  updateUserImgResponse,
+  updateUserResponse,
 };

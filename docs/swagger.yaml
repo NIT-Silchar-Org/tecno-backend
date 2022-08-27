@@ -690,18 +690,31 @@ paths:
     patch:
       tags:
         - User
-      description: Updates the profile image of the user loged in
+      description: updates the details of the user loged in
       security:
         - BearerAuth: []
       requestBody:
-        description: A JSON object with the url of the new image
+        description: A JSON object with the updated details of the user
         content:
           application/json:
             schema:
               type: object
               properties:
+                name:
+                  type: string
+                  nullable: true
+                  example: "netra"
+                collegeName:
+                  type: string
+                  nullable: true
+                  example: "National Institute of Technology Silchar"
+                registrationId:
+                  type: string
+                  nullable: true
+                  example: 2012000
                 imageUrl:
                   type: string
+                  nullable: true
                   example: https://picsum.photos/200
       responses:
         200:
@@ -715,21 +728,7 @@ paths:
                     type: number
                     example: 200
                   msg:
-                    $ref: '#/components/schemas/User'
-        
-        400:
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 400
-                  msg:
-                    type: string
-                    example: bad request
+                    $ref: '#/components/schemas/User'  
 
   /user/{id}:
     get:
