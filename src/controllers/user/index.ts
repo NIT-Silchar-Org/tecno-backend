@@ -1,5 +1,5 @@
 import { getAllUsers } from "./get";
 import { getOneUserById } from "./getOne";
-import { createNewUser } from "./new";
+import { updateUserDetails } from "./update";
 
-export { getAllUsers, getOneUserById, createNewUser };
+export { getAllUsers, getOneUserById, updateUserDetails };
