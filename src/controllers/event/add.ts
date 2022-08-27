@@ -75,6 +75,12 @@ export const createEvent: Interfaces.Controller.Async = async (
       module: {
         connect: { id: moduleId },
       },
+      organizers: {
+        connect: Utils.Event.extractUsername(organisers),
+      },
+      managers: {
+        connect: Utils.Event.extractUsername(managers),
+      },
     },
   });
 

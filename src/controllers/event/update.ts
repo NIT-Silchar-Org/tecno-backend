@@ -1,5 +1,5 @@
 import * as Interfaces from "@interfaces";
-import { Event } from "@prisma/client";
+import { Event, User } from "@prisma/client";
 import { prisma } from "@utils/prisma";
 import * as Errors from "@errors";
 import * as Utils from "@utils";
@@ -35,6 +35,9 @@ export const updateEvent: Interfaces.Controller.Async = async (
   if (!(await prisma.event.findFirst({ where: { id: eventId } })))
     return next(Errors.Module.eventNotFound);
 
+  const { organisers, managers }: { organisers: [User]; managers: [User] } =
+    req.body;
+
   const event = await prisma.event.update({
     where: { id: eventId },
     data: {
@@ -56,6 +59,12 @@ export const updateEvent: Interfaces.Controller.Async = async (
         connect: {
           id: moduleId,
         },
+      },
+      organizers: {
+        connect: Utils.Event.extractUsername(organisers),
+      },
+      managers: {
+        connect: Utils.Event.extractUsername(managers),
       },
     },
   });
