@@ -233,7 +233,6 @@ paths:
       responses:
         200:
           description: Successful
-
           content:
             application/json:
               schema:
@@ -1670,5 +1669,3 @@ paths:
                   msg:
                     type: string
                     example: User not found
-
-
