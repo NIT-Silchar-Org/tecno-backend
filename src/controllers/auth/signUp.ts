@@ -24,7 +24,19 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
 
   const firebaseAuth = Utils.Firebase.firebaseAdmin.auth();
 
-  const decodedToken = await firebaseAuth.verifyIdToken(idToken);
+  let decodedToken;
+
+  try {
+    if (process.env.NODE_ENV === "development") {
+      decodedToken = {
+        uid: idToken,
+      };
+    } else {
+      decodedToken = await firebaseAuth.verifyIdToken(idToken);
+    }
+  } catch (err) {
+    return next(err);
+  }
 
   if (!decodedToken) {
     return next(Errors.User.userNotAuthenticated);
