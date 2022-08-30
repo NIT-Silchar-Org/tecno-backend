@@ -13,18 +13,30 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
   const { username, name, collegeName, registrationId, email, imageUrl } = user;
 
   if (!username || !name || !collegeName || !registrationId || !email) {
-    return next(Errors.User.badRequest);
+    return next(Errors.User.badRequest("Required fields missing"));
   }
 
   if (!auth) {
-    return next(Errors.User.badRequest);
+    return next(Errors.User.badRequest("Auth token is missing"));
   }
 
   const idToken: string = (auth as string).split(" ")[1];
 
   const firebaseAuth = Utils.Firebase.firebaseAdmin.auth();
 
-  const decodedToken = await firebaseAuth.verifyIdToken(idToken);
+  let decodedToken;
+
+  try {
+    if (process.env.NODE_ENV === "development") {
+      decodedToken = {
+        uid: idToken,
+      };
+    } else {
+      decodedToken = await firebaseAuth.verifyIdToken(idToken);
+    }
+  } catch (err) {
+    return next(err);
+  }
 
   if (!decodedToken) {
     return next(Errors.User.userNotAuthenticated);

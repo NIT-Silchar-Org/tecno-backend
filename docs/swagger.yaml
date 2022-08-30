@@ -227,6 +227,9 @@ paths:
                 registrationId:
                   type: string
                   example: "2012001"
+                username:
+                  type: string
+                  example: "josu"
                 imageUrl:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
