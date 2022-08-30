@@ -22,6 +22,6 @@ export const getModuleById: Interfaces.Controller.Async = async (
   if (isNaN(moduleId)) return next(Errors.Module.invalidInput);
 
   const module = await prisma.module.findFirst({ where: { id: moduleId } });
-  if (!module) return next(Errors.System.serverError);
+  if (!module) return next(Errors.Module.moduleNotFound);
   return res.json(Utils.Response.Success(module));
 };

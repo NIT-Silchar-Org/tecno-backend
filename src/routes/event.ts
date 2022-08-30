@@ -12,14 +12,14 @@ router.post(
   Middlewares.Module.isAdmin,
   Controllers.Event.createEvent
 );
-router.get("/all", Controllers.Event.getAllEvents);
 router.get("/module/:moduleid", Controllers.Event.getEventsByModule);
 
 router.use("/:eventId", Team);
 
 router.get("/:eventId", Controllers.Event.getEventById);
+router.get("/", Controllers.Event.getAllEvents);
 router.patch(
-  "/:eventId/update",
+  "/:eventId/",
   Middlewares.Module.isAdmin,
   Controllers.Event.updateEvent
 );
