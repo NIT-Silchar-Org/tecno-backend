@@ -13,11 +13,11 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
   const { username, name, collegeName, registrationId, email, imageUrl } = user;
 
   if (!username || !name || !collegeName || !registrationId || !email) {
-    return next(Errors.User.badRequest);
+    return next(Errors.User.badRequest("Required fields missing"));
   }
 
   if (!auth) {
-    return next(Errors.User.badRequest);
+    return next(Errors.User.badRequest("Auth token is missing"));
   }
 
   const idToken: string = (auth as string).split(" ")[1];

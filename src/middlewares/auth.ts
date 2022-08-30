@@ -8,7 +8,7 @@ const validateUser: Interfaces.Middleware.Async = async (req, _res, next) => {
   const auth: string | undefined = req?.headers?.authorization;
 
   if (!auth) {
-    return next(Errors.User.badRequest);
+    return next(Errors.User.badRequest("Auth token is missing"));
   }
 
   const idToken: string = (auth as string).split(" ")[1];

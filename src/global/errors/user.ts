@@ -7,7 +7,10 @@ const userNotAuthenticated = Utils.Response.Error(
 
 const userNotFound = Utils.Response.Error("User not found", 404);
 
-const badRequest = Utils.Response.Error("bad Request", 400);
+const badRequest = (msg = "Bad request") => {
+  return Utils.Response.Error(msg, 400);
+};
+
 const userAlreadyExists = Utils.Response.Error(
   "User exist with same parameters",
   400
