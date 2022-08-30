@@ -6,7 +6,7 @@ const router: Router = Router({ mergeParams: true });
 
 // ROOT = /api/:eventId
 
-router.post("/add", Controllers.Team.registerTeam);
+router.post("/team/add", Controllers.Team.registerTeam);
 
 // router.delete("/:teamId");
 

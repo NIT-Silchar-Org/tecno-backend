@@ -44,6 +44,6 @@ export const getEventById: Interfaces.Controller.Async = async (
   const event = await prisma.event.findFirst({
     where: { id: eventId },
   });
-  if (!event) return next(Errors.System.serverError);
+  if (!event) return next(Errors.Module.eventNotFound);
   return res.json(Utils.Response.Success(event));
 };

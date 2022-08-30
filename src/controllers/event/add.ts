@@ -1,5 +1,5 @@
 import * as Interfaces from "@interfaces";
-import { Event } from "@prisma/client";
+import { Event, User } from "@prisma/client";
 import { prisma } from "@utils/prisma";
 import * as Errors from "@errors";
 import * as Utils from "@utils";
@@ -26,7 +26,8 @@ export const createEvent: Interfaces.Controller.Async = async (
     stagesDescription,
     venue,
   } = req.body as Event;
-
+  const { organisers, managers }: { organisers: [User]; managers: [User] } =
+    req.body;
   if (
     !(
       description &&
@@ -43,7 +44,9 @@ export const createEvent: Interfaces.Controller.Async = async (
       registrationEndTime &&
       registrationStartTime &&
       stagesDescription &&
-      venue
+      venue &&
+      organisers &&
+      managers
     )
   )
     return next(Errors.Module.invalidInput);
@@ -71,6 +74,12 @@ export const createEvent: Interfaces.Controller.Async = async (
       venue,
       module: {
         connect: { id: moduleId },
+      },
+      organizers: {
+        connect: Utils.Event.extractUsername(organisers),
+      },
+      managers: {
+        connect: Utils.Event.extractUsername(managers),
       },
     },
   });

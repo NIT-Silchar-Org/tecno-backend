@@ -108,7 +108,7 @@ components:
           type: string
           example: "https://avatars.githubusercontent.com/u/74897001"
 
-        thirdPartyUrl:
+        thirdPartyURL:
           type: string
           example: "https://www.google.com"
 
@@ -388,8 +388,908 @@ paths:
                   msg:
                     type: string
                     example: "Invalid amount transaction"
+  /module/:
+    get:
+      summary: Get an array of JSON module objects.
+      tags:
+          - Module
+      responses:
+        '200':
+          description: An Array of JSON event objects.
+          content:  
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+  /module/{moduleId}:
+    get:
+        summary: Get a JSON module object.
+        parameters:
+          - in: path
+            name: moduleId
 
-  /event/{eventId}/add:
+            schema:
+              type: number
+
+            required: true
+
+            description: Numeric ID of the module requested.
+
+        tags:
+          - Module
+        responses:
+          '200':
+            description: A JSON module object.
+            content:  
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 200
+                    msg:
+                      $ref: '#/components/schemas/Module'
+          '400':
+            description: Throws if moduleId is not a number.
+            content:  
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 400
+                    msg:
+                      type: string
+                      example: "Invalid input"
+
+          '404':
+              description: Throws if module does not exist.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      status:
+                        type: number
+                        example: 404
+                      msg:
+                        type: string
+                        example: "Module not found"
+          '500':
+              description: Throws if server is unresponsive.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      status:
+                        type: number
+                        example: 500
+                      msg:
+                        type: string
+                        example: "Internal server error."
+    delete:
+      security:
+        - BearerAuth: []
+      summary: Delete a module.
+      parameters:
+        - in: path
+          name: moduleId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: Numeric ID of the module requested.
+
+      tags:
+        - Module
+      responses:
+        '200':
+          description: A JSON object of the deleted module.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Module'
+        '400':
+          description: Throws if moduleId is not a number.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot delete a module.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+
+        '404':
+            description: Throws if module does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Module not found"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+    patch:
+      security:
+        - BearerAuth: []
+      summary: Edit a module.
+      parameters:
+        - in: path
+          name: moduleId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: Numeric ID of the module requested.
+      requestBody:
+        description: A JSON object containing all the details for a module.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'Big Module 6'
+                description:
+                  type: string
+                  example: '<p>This is an example <strong>module</strong></p>'
+                image:
+                  type: string
+                  example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
+                thirdPartyURL:
+                  type: string
+                  example: 'https://google.com/'
+      tags:
+        - Module
+      responses:
+        '200':
+          description: A JSON object of the edited module.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Module'
+        '400':
+          description: Throws if moduleId is not a number.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot edit a module.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+
+        '404':
+            description: Throws if module does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Module not found"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+                      
+    
+  /module/create:
+    post:
+      requestBody:
+        description: A JSON object containing all the details for a module.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'Big Module 6'
+                description:
+                  type: string
+                  example: '<p>This is an example <strong>module</strong></p>'
+                image:
+                  type: string
+                  example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
+                thirdPartyURL:
+                  type: string
+                  example: 'https://google.com/'
+      security:
+      - BearerAuth: []
+      summary: Create a module
+      tags:
+        - Module
+      responses:
+        '200':
+          description: A JSON object of created module objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Module'
+        '400':
+          description: Throws if response body has empty fields.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot create a module.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+        '500':
+          description: Throws if server is unresponsive.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  msg:
+                    type: string
+                    example: "Internal server error."
+  /event:
+    get:
+      summary: Get an array of all events
+      tags:
+        - Event
+      responses:
+        '200':
+          description: An Array of JSON event objects.
+          content:  
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+  /event/module/{moduleId}:
+    get:
+      summary: Get an array of JSON event objects.
+      parameters:
+        - in: path
+          name: moduleID
+
+          schema:
+            type: number
+
+          required: true
+
+          description: Numeric ID of the module requested.
+      tags: 
+        - Event
+      responses:
+        '200':
+          description: An Array of JSON event objects.
+          content:  
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: Throws if moduleId is not a number.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '404':
+            description: Throws if module does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Module not found"
+
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+
+  /event/{eventId}:
+    get:
+      summary: Get a JSON event object.
+      parameters:
+        - in: path
+          name: eventId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: Numeric ID of the event requested.
+
+      tags:
+        - Event
+      responses:
+        '200':
+          description: A JSON event object.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Event'
+        '400':
+          description: Throws if event id is not a number.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+
+        '404':
+            description: Throws if event does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Event not found"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+    patch:
+      summary: Edit an event
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+      parameters:
+      - in: path
+        name: eventId
+
+        schema:
+          type: number
+
+        required: true
+
+        description: Numeric ID of the event requested.
+      requestBody:
+        description: A JSON Object containg the edits to be made to the event.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                moduleId:
+                  type: integer
+                  example: 43
+
+                name:
+                  type: string
+                  example: "Coding Competition"
+
+                image:
+                  type: string
+                  example: "https://avatars.githubusercontent.com/u/74897001"
+
+                maxTeamSize:
+                  type: integer
+                  example: 5
+
+                minTeamSize:
+                  type: integer
+                  example: 1
+
+                incentive:
+                  type: number
+                  example: 100
+
+                isIncentivised:
+                  type: boolean
+                  example: true
+
+                prizeDescription:
+                  type: string
+                  example: "First prize gets a Lamborghini"
+
+                stagesDescription:
+                  type: string
+                  example: "First round will be a group discussion"
+
+                description:
+                  type: string
+                  example: "Very good competition. Pls register."
+
+                venue:
+                  type: string
+                  example: "Sports Complex"
+
+                lat:
+                  type: string
+                  example: "24.7560907"
+
+                lng:
+                  type: string
+                  example: "92.7823423"
+
+                registrationStartTime:
+                  type: string
+                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+
+                registrationEndTime:
+                  type: string
+                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+
+                organisers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: "mohan"
+                managers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: "rohan"
+      responses:
+        '200':
+          description: A JSON object of the edited event.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Event'
+        '400':
+          description: Throws if event id is not a number.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot create an event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+    delete:
+      summary: Delete an event
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+      parameters:
+      - in: path
+        name: eventId
+
+        schema:
+          type: number
+
+        required: true
+
+        description: Numeric ID of the event requested
+      responses:
+        '200':
+          description: A JSON object of the deleted event.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Event'
+        '400':
+          description: Throws if eventId is not a number.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot delete an event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+
+        '404':
+            description: Throws if event does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Module not found"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+      
+      
+  /event/create:
+    post:
+      summary: Create an event.
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON Object containing details of the event to be created.
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                moduleId:
+                  type: integer
+                  example: 43
+
+                name:
+                  type: string
+                  example: "Coding Competition"
+
+                image:
+                  type: string
+                  example: "https://avatars.githubusercontent.com/u/74897001"
+
+                maxTeamSize:
+                  type: integer
+                  example: 5
+
+                minTeamSize:
+                  type: integer
+                  example: 1
+
+                incentive:
+                  type: number
+                  example: 100
+
+                isIncentivised:
+                  type: boolean
+                  example: true
+
+                prizeDescription:
+                  type: string
+                  example: "First prize gets a Lamborghini"
+
+                stagesDescription:
+                  type: string
+                  example: "First round will be a group discussion"
+
+                description:
+                  type: string
+                  example: "Very good competition. Pls register."
+
+                venue:
+                  type: string
+                  example: "Sports Complex"
+
+                lat:
+                  type: string
+                  example: "24.7560907"
+
+                lng:
+                  type: string
+                  example: "92.7823423"
+
+                registrationStartTime:
+                  type: string
+                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+
+                registrationEndTime:
+                  type: string
+                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+                organisers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: "mohan"
+                managers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: "rohan"
+
+
+
+      responses:
+        '200':
+          description: A JSON object of the created event.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Event'
+        '400':
+          description: Throws if requestbody has empty fields.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot create an event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+                
+  /event/{eventId}/team/add:
     post:
       description: Register a team for an event
 
@@ -444,7 +1344,6 @@ paths:
                         example: MEMBER
 
       responses:
-
         200:
           description: Team Registration Successful.
           content:
@@ -639,7 +1538,6 @@ paths:
                   example: REGISTERED
 
       responses:
-
         200:
           description: User Response Registered.
           content:
