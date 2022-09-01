@@ -229,6 +229,9 @@ paths:
                 registrationId:
                   type: string
                   example: "2012001"
+                username:
+                  type: string
+                  example: "josu"
                 imageUrl:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
@@ -1117,6 +1120,192 @@ paths:
                   msg:
                     type: string
                     example: "User is not authorized to perform the request"
+  /module/:
+    get:
+      summary: Get an array of JSON module objects.
+      tags:
+          - Module
+      responses:
+        '200':
+          description: An Array of JSON event objects.
+          content:  
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+  /module/{moduleId}:
+    get:
+        summary: Get a JSON module object.
+        parameters:
+          - in: path
+            name: moduleId
+
+            schema:
+              type: number
+
+            required: true
+
+            description: Numeric ID of the module requested.
+
+        tags:
+          - Module
+        responses:
+          '200':
+            description: A JSON module object.
+            content:  
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 200
+                    msg:
+                      $ref: '#/components/schemas/Module'
+          '400':
+            description: Throws if moduleId is not a number.
+            content:  
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 400
+                    msg:
+                      type: string
+                      example: "Invalid input"
+
+          '404':
+              description: Throws if module does not exist.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      status:
+                        type: number
+                        example: 404
+                      msg:
+                        type: string
+                        example: "Module not found"
+          '500':
+              description: Throws if server is unresponsive.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      status:
+                        type: number
+                        example: 500
+                      msg:
+                        type: string
+                        example: "Internal server error."
+    delete:
+      security:
+        - BearerAuth: []
+      summary: Delete a module.
+      parameters:
+        - in: path
+          name: moduleId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: Numeric ID of the module requested.
+
+      tags:
+        - Module
+      responses:
+        '200':
+          description: A JSON object of the deleted module.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Module'
+        '400':
+          description: Throws if moduleId is not a number.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot delete a module.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+
+        '404':
+            description: Throws if module does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Module not found"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+    patch:
+      security:
+        - BearerAuth: []
+      summary: Edit a module.
+      parameters:
+        - in: path
+          name: moduleId
 
         '404':
             description: Throws if event does not exist.

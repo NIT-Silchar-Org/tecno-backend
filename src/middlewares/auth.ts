@@ -8,7 +8,7 @@ const validateUser: Interfaces.Middleware.Async = async (req, _res, next) => {
   const auth: string | undefined = req?.headers?.authorization;
 
   if (!auth) {
-    return next(Errors.User.badRequest);
+    return next(Errors.User.badRequest("Auth token is missing"));
   }
 
   const idToken: string = (auth as string).split(" ")[1];
@@ -17,7 +17,13 @@ const validateUser: Interfaces.Middleware.Async = async (req, _res, next) => {
 
   let decodedToken;
   try {
-    decodedToken = await firebaseAuth.verifyIdToken(idToken);
+    if (process.env.NODE_ENV === "development") {
+      decodedToken = {
+        uid: idToken,
+      };
+    } else {
+      decodedToken = await firebaseAuth.verifyIdToken(idToken);
+    }
   } catch (err) {
     return next(err);
   }
