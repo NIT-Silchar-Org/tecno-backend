@@ -778,12 +778,39 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
+  /event/all:
+    get:
+      summary: Get an array of all modules data and array of events nested
+      tags:
+        - Event
+      responses:
+        '200':
+          description: An Array of JSON Module objects.
+          content:  
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Module'
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
   /event/module/{moduleId}:
     get:
       summary: Get an array of JSON event objects.
       parameters:
         - in: path
-          name: moduleID
+          name: moduleId
 
           schema:
             type: number
