@@ -9,13 +9,16 @@ export const createModule: Interfaces.Controller.Async = async (
   res,
   next
 ) => {
-  const { description, image, name, thirdPartyURL } = req.body as Module;
-  if (!description || !image || !name) return next(Errors.Module.invalidInput);
+  const { description, coverImage, iconImage, name, thirdPartyURL } =
+    req.body as Module;
+  if (!description || !coverImage || !iconImage || !name)
+    return next(Errors.Module.invalidInput);
 
   const module = await prisma.module.create({
     data: {
       description,
-      image,
+      iconImage,
+      coverImage,
       name,
       thirdPartyURL,
     },

@@ -104,10 +104,12 @@ components:
           type: string
           example: "A very good event module"
 
-        image:
+        iconImage:
           type: string
           example: "https://avatars.githubusercontent.com/u/74897001"
-
+        coverImage:
+          type: string
+          example: "https://avatars.githubusercontent.com/u/74897001"
         thirdPartyURL:
           type: string
           example: "https://www.google.com"
@@ -123,7 +125,7 @@ components:
           type: string
           example: "Coding Competition"
 
-        image:
+        posterImage:
           type: string
           example: "https://avatars.githubusercontent.com/u/74897001"
 
@@ -233,7 +235,6 @@ paths:
       responses:
         200:
           description: Successful
-
           content:
             application/json:
               schema:

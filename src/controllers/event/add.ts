@@ -11,7 +11,7 @@ export const createEvent: Interfaces.Controller.Async = async (
 ) => {
   const {
     description,
-    image,
+    posterImage,
     incentive,
     isIncentivised,
     lat,
@@ -31,7 +31,7 @@ export const createEvent: Interfaces.Controller.Async = async (
   if (
     !(
       description &&
-      image &&
+      posterImage &&
       // incentive &&
       // isIncentivised &&
       lat &&
@@ -59,7 +59,7 @@ export const createEvent: Interfaces.Controller.Async = async (
   const event = await prisma.event.create({
     data: {
       description,
-      image,
+      posterImage,
       incentive,
       isIncentivised,
       lat,
