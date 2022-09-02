@@ -1657,7 +1657,39 @@ paths:
                     example: 200
                   msg:
                     $ref: '#/components/schemas/User'  
-
+  /user/me:
+    get:
+      tags:
+        - User
+      description: get the loged in User
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: A JSON Object with the loged in user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/User'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: User not found
   /user/{id}:
     get:
       parameters:
@@ -1699,3 +1731,16 @@ paths:
                   msg:
                     type: string
                     example: User not found
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: Incorrect user id
