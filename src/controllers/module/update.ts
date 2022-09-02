@@ -9,7 +9,8 @@ export const updateModule: Interfaces.Controller.Async = async (
   res,
   next
 ) => {
-  const { description, image, name, thirdPartyURL } = req.body as Module;
+  const { description, iconImage, coverImage, name, thirdPartyURL } =
+    req.body as Module;
   const { moduleId: MID } = req.params;
   const moduleId = Number.parseInt(MID);
   if (isNaN(moduleId)) return next(Errors.Module.invalidInput);
@@ -20,7 +21,8 @@ export const updateModule: Interfaces.Controller.Async = async (
     where: { id: moduleId },
     data: {
       description,
-      image,
+      iconImage,
+      coverImage,
       name,
       thirdPartyURL,
     },

@@ -75,7 +75,8 @@ model Module {
   name        String
   description String
 
-  image String
+  iconImage  String
+  coverImage String
 
   thirdPartyURL String?
 
@@ -85,8 +86,8 @@ model Module {
 model Event {
   id Int @id @default(autoincrement())
 
-  name  String
-  image String
+  name        String
+  posterImage String
 
   maxTeamSize Int
   minTeamSize Int

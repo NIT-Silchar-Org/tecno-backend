@@ -6,19 +6,19 @@ const router: Router = Router({ mergeParams: true });
 //TODO:transfer C_UD API to admin pannel
 router.post(
   "/create",
-  Middlewares.Module.isAdmin,
+  Middlewares.Auth.isAdmin,
   Controllers.Module.createModule
 );
 router.get("/:moduleId", Controllers.Module.getModuleById);
 router.get("/", Controllers.Module.getAllModules);
 router.delete(
   "/:moduleId/delete",
-  Middlewares.Module.isAdmin,
+  Middlewares.Auth.isAdmin,
   Controllers.Module.deleteModuleById
 );
 router.patch(
   "/:moduleId",
-  Middlewares.Module.isAdmin,
+  Middlewares.Auth.isAdmin,
   Controllers.Module.updateModule
 );
 
