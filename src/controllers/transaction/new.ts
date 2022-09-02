@@ -11,35 +11,126 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
   res,
   next
 ) => {
-  const { toUserId, eventId } =
-    req.body as Interfaces.Transaction.CreateAttendanceTransactionBody;
+  try {
+    const { toUserId, eventId } =
+      req.body as Interfaces.Transaction.CreateAttendanceTransactionBody;
 
-  const toUser = await prisma.user.findFirst({
-    where: {
-      firebaseId: toUserId,
-    },
-  });
+    const toUser = await prisma.user.findFirst({
+      where: {
+        firebaseId: toUserId,
+      },
+    });
 
-  const event = await prisma.event.findFirst({
-    where: { id: parseInt(eventId) },
-  });
+    const event = await prisma.event.findFirst({
+      where: { id: parseInt(eventId) },
+    });
 
-  if (!toUser || !event) {
+    if (!toUser || !event) {
+      return next(Errors.Transaction.transactionFailed);
+    }
+
+    if (event.isIncentivised) {
+      const amount = event.incentive!;
+
+      const transactionCreate = prisma.transaction.create({
+        data: {
+          amount,
+          reason: TransactionReason.ATTENDANCE,
+          event: {
+            connect: {
+              id: event.id,
+            },
+          },
+          from: {
+            connect: {
+              firebaseId: req.admin!.firebaseId,
+            },
+          },
+          to: {
+            connect: {
+              firebaseId: toUser.firebaseId,
+            },
+          },
+        },
+      });
+
+      const adminUpdate = prisma.user.update({
+        where: {
+          firebaseId: req.admin!.firebaseId,
+        },
+        data: {
+          balance: req.admin!.balance - amount,
+        },
+      });
+
+      const toUserUpdate = prisma.user.update({
+        where: {
+          firebaseId: toUser.firebaseId,
+        },
+        data: {
+          balance: toUser.balance + amount,
+        },
+      });
+
+      await prisma.$transaction([transactionCreate, adminUpdate, toUserUpdate]);
+    } else {
+      await prisma.transaction.create({
+        data: {
+          amount: 0,
+          reason: TransactionReason.ATTENDANCE,
+          event: {
+            connect: {
+              id: event.id,
+            },
+          },
+          from: {
+            connect: {
+              firebaseId: req.admin!.firebaseId,
+            },
+          },
+          to: {
+            connect: {
+              firebaseId: toUser.firebaseId,
+            },
+          },
+        },
+      });
+    }
+
+    return res.json(Success.Transaction.transactionComplete);
+  } catch (err) {
+    console.log(err);
     return next(Errors.Transaction.transactionFailed);
   }
+};
 
-  if (event.isIncentivised) {
-    const amount = event.incentive!;
+const createNewOnlineEventTransaction: Interfaces.Controller.Async = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const { toUserId, amount } =
+      req.body as Interfaces.Transaction.CreateOnlineEventTransaction;
+
+    const toUser = await prisma.user.findFirst({
+      where: {
+        firebaseId: toUserId,
+      },
+    });
+
+    if (amount < 0) {
+      return next(Errors.Transaction.transactionInvalidAmount);
+    }
+
+    if (!toUser) {
+      return next(Errors.Transaction.transactionFailed);
+    }
 
     const transactionCreate = prisma.transaction.create({
       data: {
         amount,
-        reason: TransactionReason.ATTENDANCE,
-        event: {
-          connect: {
-            id: event.id,
-          },
-        },
+        reason: TransactionReason.ONLINE_EVENT,
         from: {
           connect: {
             firebaseId: req.admin!.firebaseId,
@@ -72,31 +163,12 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
     });
 
     await prisma.$transaction([transactionCreate, adminUpdate, toUserUpdate]);
-  } else {
-    await prisma.transaction.create({
-      data: {
-        amount: 0,
-        reason: TransactionReason.ATTENDANCE,
-        event: {
-          connect: {
-            id: event.id,
-          },
-        },
-        from: {
-          connect: {
-            firebaseId: req.admin!.firebaseId,
-          },
-        },
-        to: {
-          connect: {
-            firebaseId: toUser.firebaseId,
-          },
-        },
-      },
-    });
-  }
 
-  return res.json(Success.Transaction.transactionComplete);
+    return res.json(Success.Transaction.transactionComplete);
+  } catch (err) {
+    console.log(err);
+    return next(Errors.Transaction.transactionFailed);
+  }
 };
 
 const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
@@ -104,88 +176,88 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
   res,
   next
 ) => {
-  const { amount, toAdminId, eventId } =
-    req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
+  try {
+    const { amount, toAdminId } =
+      req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
 
-  const admin = await prisma.user.findFirst({
-    where: {
-      firebaseId: toAdminId,
-    },
-  });
-
-  const event = await prisma.event.findFirst({
-    where: { id: parseInt(eventId) },
-  });
-
-  if (!admin || !event) {
-    return next(Errors.Transaction.transactionFailed);
-  }
-
-  const transaction = await prisma.transaction.findFirst({
-    where: {
-      from: {
-        firebaseId: req.user!.firebaseId,
+    const admin = await prisma.user.findFirst({
+      where: {
+        firebaseId: toAdminId,
       },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+    });
 
-  if (transaction) {
-    if (
-      new Date(transaction.createdAt).getTime() - new Date().getTime() <
-      Constants.Transaction.TRANSACTION_COOLDOWN
-    ) {
-      return next(Errors.Transaction.transactionTooQuick);
+    if (!admin) {
+      return next(Errors.Transaction.transactionFailed);
     }
-  }
 
-  if (amount < 0) {
-    return next(Errors.Transaction.transactionInvalidAmount);
-  }
-
-  const transactionCreate = prisma.transaction.create({
-    data: {
-      amount,
-      reason: TransactionReason.PURCHASE,
-      event: {
-        connect: {
-          id: event.id,
-        },
-      },
-      from: {
-        connect: {
+    const transaction = await prisma.transaction.findFirst({
+      where: {
+        from: {
           firebaseId: req.user!.firebaseId,
         },
       },
-      to: {
-        connect: {
-          firebaseId: admin.firebaseId,
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (transaction) {
+      if (
+        new Date(transaction.createdAt).getTime() - new Date().getTime() <
+        Constants.Transaction.TRANSACTION_COOLDOWN
+      ) {
+        return next(Errors.Transaction.transactionTooQuick);
+      }
+    }
+
+    if (amount < 0) {
+      return next(Errors.Transaction.transactionInvalidAmount);
+    }
+
+    const transactionCreate = prisma.transaction.create({
+      data: {
+        amount,
+        reason: TransactionReason.PURCHASE,
+        from: {
+          connect: {
+            firebaseId: req.user!.firebaseId,
+          },
+        },
+        to: {
+          connect: {
+            firebaseId: admin.firebaseId,
+          },
         },
       },
-    },
-  });
+    });
 
-  const userUpdate = prisma.user.update({
-    where: {
-      firebaseId: req.user!.firebaseId,
-    },
-    data: {
-      balance: req.user!.balance - amount,
-    },
-  });
+    const userUpdate = prisma.user.update({
+      where: {
+        firebaseId: req.user!.firebaseId,
+      },
+      data: {
+        balance: req.user!.balance - amount,
+      },
+    });
 
-  const adminUpdate = prisma.user.update({
-    where: {
-      firebaseId: admin.firebaseId,
-    },
-    data: {
-      balance: admin.balance + amount,
-    },
-  });
+    const adminUpdate = prisma.user.update({
+      where: {
+        firebaseId: admin.firebaseId,
+      },
+      data: {
+        balance: admin.balance + amount,
+      },
+    });
 
-  await prisma.$transaction([transactionCreate, userUpdate, adminUpdate]);
+    await prisma.$transaction([transactionCreate, userUpdate, adminUpdate]);
 
-  return res.json(Success.Transaction.transactionComplete);
+    return res.json(Success.Transaction.transactionComplete);
+  } catch (err) {
+    console.log(err);
+    return next(Errors.Transaction.transactionFailed);
+  }
 };
 
-export { createNewAttendanceTransaction, createNewPurchaseTransaction };
+export {
+  createNewAttendanceTransaction,
+  createNewPurchaseTransaction,
+  createNewOnlineEventTransaction,
+};

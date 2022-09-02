@@ -391,6 +391,103 @@ paths:
                   msg:
                     type: string
                     example: "Invalid amount transaction"
+  /transaction/online-event:
+    post:
+      description:
+        Transaction for online event, provided the sender is event manager.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON containing the attendee id and the amount
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toUserId:
+                  type: string
+                  example: "u7dpk73akmjzs765"
+                amount:
+                  type: number
+                  example: 100
+      responses:
+        200:
+          description:
+            Transaction completed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Transaction completed successfully."
+        403:
+          description:
+            Transaction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "Transaction failed."
+        400:
+          description:
+            Transaction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid amount transaction"
+  /transaction/:
+    get:
+      description:
+        An array of all the transactions, provided the user is admin.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description:
+            Transaction completed.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Transaction'
+        500:
+          description:
+            Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  msg:
+                    type: string
+                    example: "Server error"
+    
   /module/:
     get:
       summary: Get an array of JSON module objects.

@@ -119,6 +119,7 @@ model Event {
 enum TransactionReason {
   ATTENDANCE
   PURCHASE
+  ONLINE_EVENT
 }
 
 model Transaction {
@@ -132,10 +133,11 @@ model Transaction {
 
   amount Int
 
-  reason TransactionReason
+  reason      TransactionReason
+  description String?
 
-  eventId Int
-  event   Event @relation(fields: [eventId], references: [id], onDelete: Restrict)
+  eventId Int?
+  event   Event? @relation(fields: [eventId], references: [id], onDelete: Restrict)
 
   createdAt DateTime @default(now())
 }
