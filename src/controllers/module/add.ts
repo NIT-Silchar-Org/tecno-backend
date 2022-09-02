@@ -21,7 +21,6 @@ export const createModule: Interfaces.Controller.Async = async (
       coverImage,
       name,
       thirdPartyURL,
-      thirdPartyURL,
     },
   });
   if (!module) return next(Errors.System.serverError);

@@ -25,7 +25,6 @@ export const updateModule: Interfaces.Controller.Async = async (
       coverImage,
       name,
       thirdPartyURL,
-      thirdPartyURL,
     },
   });
 

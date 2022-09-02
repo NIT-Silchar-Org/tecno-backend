@@ -110,6 +110,7 @@ components:
         coverImage:
           type: string
           example: "https://avatars.githubusercontent.com/u/74897001"
+
         thirdPartyURL:
           type: string
           example: "https://www.google.com"
@@ -396,6 +397,8 @@ paths:
   /module/:
     get:
       summary: Get an array of JSON module objects.
+      security:
+          - BearerAuth: []
       tags:
           - Module
       responses:
@@ -423,6 +426,8 @@ paths:
   /module/{moduleId}:
     get:
         summary: Get a JSON module object.
+        security:
+          - BearerAuth: []
         parameters:
           - in: path
             name: moduleId
@@ -599,7 +604,10 @@ paths:
                 description:
                   type: string
                   example: '<p>This is an example <strong>module</strong></p>'
-                image:
+                iconImage:
+                  type: string
+                  example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
+                coverImage:
                   type: string
                   example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
                 thirdPartyURL:
@@ -690,7 +698,10 @@ paths:
                 description:
                   type: string
                   example: '<p>This is an example <strong>module</strong></p>'
-                image:
+                iconImage:
+                  type: string
+                  example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
+                coverImage:
                   type: string
                   example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
                 thirdPartyURL:
@@ -756,6 +767,8 @@ paths:
   /event:
     get:
       summary: Get an array of all events
+      security:
+        - BearerAuth: []
       tags:
         - Event
       responses:
@@ -780,12 +793,43 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
+  /event/all:
+    get:
+      summary: Get an array of all modules data and array of events nested
+      tags:
+        - Event
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: An Array of JSON Module objects.
+          content:  
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Module'
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
   /event/module/{moduleId}:
     get:
       summary: Get an array of JSON event objects.
+      security:
+      - BearerAuth: []
       parameters:
         - in: path
-          name: moduleID
+          name: moduleId
 
           schema:
             type: number
@@ -848,6 +892,8 @@ paths:
   /event/{eventId}:
     get:
       summary: Get a JSON event object.
+      security:
+      - BearerAuth: []
       parameters:
         - in: path
           name: eventId
@@ -1120,192 +1166,6 @@ paths:
                   msg:
                     type: string
                     example: "User is not authorized to perform the request"
-  /module/:
-    get:
-      summary: Get an array of JSON module objects.
-      tags:
-          - Module
-      responses:
-        '200':
-          description: An Array of JSON event objects.
-          content:  
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Event'
-        '500':
-            description: Throws if server is unresponsive.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: number
-                      example: 500
-                    msg:
-                      type: string
-                      example: "Internal server error."
-  /module/{moduleId}:
-    get:
-        summary: Get a JSON module object.
-        parameters:
-          - in: path
-            name: moduleId
-
-            schema:
-              type: number
-
-            required: true
-
-            description: Numeric ID of the module requested.
-
-        tags:
-          - Module
-        responses:
-          '200':
-            description: A JSON module object.
-            content:  
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: number
-                      example: 200
-                    msg:
-                      $ref: '#/components/schemas/Module'
-          '400':
-            description: Throws if moduleId is not a number.
-            content:  
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: number
-                      example: 400
-                    msg:
-                      type: string
-                      example: "Invalid input"
-
-          '404':
-              description: Throws if module does not exist.
-              content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      status:
-                        type: number
-                        example: 404
-                      msg:
-                        type: string
-                        example: "Module not found"
-          '500':
-              description: Throws if server is unresponsive.
-              content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      status:
-                        type: number
-                        example: 500
-                      msg:
-                        type: string
-                        example: "Internal server error."
-    delete:
-      security:
-        - BearerAuth: []
-      summary: Delete a module.
-      parameters:
-        - in: path
-          name: moduleId
-
-          schema:
-            type: number
-
-          required: true
-
-          description: Numeric ID of the module requested.
-
-      tags:
-        - Module
-      responses:
-        '200':
-          description: A JSON object of the deleted module.
-          content:  
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 200
-                  msg:
-                    $ref: '#/components/schemas/Module'
-        '400':
-          description: Throws if moduleId is not a number.
-          content:  
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 400
-                  msg:
-                    type: string
-                    example: "Invalid input"
-        '403':
-          description: The user is not an admin and cannot delete a module.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 403
-                  msg:
-                    type: string
-                    example: "User is not authorized to perform the request"
-
-        '404':
-            description: Throws if module does not exist.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: number
-                      example: 404
-                    msg:
-                      type: string
-                      example: "Module not found"
-        '500':
-            description: Throws if server is unresponsive.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: number
-                      example: 500
-                    msg:
-                      type: string
-                      example: "Internal server error."
-    patch:
-      security:
-        - BearerAuth: []
-      summary: Edit a module.
-      parameters:
-        - in: path
-          name: moduleId
 
         '404':
             description: Throws if event does not exist.
@@ -1357,7 +1217,7 @@ paths:
                   type: string
                   example: "Coding Competition"
 
-                image:
+                posterImage:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
 
@@ -1860,5 +1720,3 @@ paths:
                   msg:
                     type: string
                     example: User not found
-
-
