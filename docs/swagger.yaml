@@ -991,7 +991,7 @@ paths:
                   type: string
                   example: "Coding Competition"
 
-                image:
+                posterImage:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
 
