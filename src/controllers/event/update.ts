@@ -12,7 +12,7 @@ export const updateEvent: Interfaces.Controller.Async = async (
   console.log("hi");
   const {
     description,
-    image,
+    posterImage,
     incentive,
     isIncentivised,
     lat,
@@ -42,7 +42,7 @@ export const updateEvent: Interfaces.Controller.Async = async (
     where: { id: eventId },
     data: {
       description,
-      image,
+      posterImage,
       incentive,
       isIncentivised,
       lat,

@@ -104,7 +104,10 @@ components:
           type: string
           example: "A very good event module"
 
-        image:
+        iconImage:
+          type: string
+          example: "https://avatars.githubusercontent.com/u/74897001"
+        coverImage:
           type: string
           example: "https://avatars.githubusercontent.com/u/74897001"
 
@@ -123,7 +126,7 @@ components:
           type: string
           example: "Coding Competition"
 
-        image:
+        posterImage:
           type: string
           example: "https://avatars.githubusercontent.com/u/74897001"
 
@@ -491,6 +494,8 @@ paths:
   /module/:
     get:
       summary: Get an array of JSON module objects.
+      security:
+          - BearerAuth: []
       tags:
           - Module
       responses:
@@ -518,6 +523,8 @@ paths:
   /module/{moduleId}:
     get:
         summary: Get a JSON module object.
+        security:
+          - BearerAuth: []
         parameters:
           - in: path
             name: moduleId
@@ -694,7 +701,10 @@ paths:
                 description:
                   type: string
                   example: '<p>This is an example <strong>module</strong></p>'
-                image:
+                iconImage:
+                  type: string
+                  example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
+                coverImage:
                   type: string
                   example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
                 thirdPartyURL:
@@ -785,7 +795,10 @@ paths:
                 description:
                   type: string
                   example: '<p>This is an example <strong>module</strong></p>'
-                image:
+                iconImage:
+                  type: string
+                  example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
+                coverImage:
                   type: string
                   example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
                 thirdPartyURL:
@@ -851,6 +864,8 @@ paths:
   /event:
     get:
       summary: Get an array of all events
+      security:
+        - BearerAuth: []
       tags:
         - Event
       responses:
@@ -880,6 +895,8 @@ paths:
       summary: Get an array of all modules data and array of events nested
       tags:
         - Event
+      security:
+      - BearerAuth: []
       responses:
         '200':
           description: An Array of JSON Module objects.
@@ -905,6 +922,8 @@ paths:
   /event/module/{moduleId}:
     get:
       summary: Get an array of JSON event objects.
+      security:
+      - BearerAuth: []
       parameters:
         - in: path
           name: moduleId
@@ -970,6 +989,8 @@ paths:
   /event/{eventId}:
     get:
       summary: Get a JSON event object.
+      security:
+      - BearerAuth: []
       parameters:
         - in: path
           name: eventId
@@ -1067,7 +1088,7 @@ paths:
                   type: string
                   example: "Coding Competition"
 
-                image:
+                posterImage:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
 
@@ -1293,7 +1314,7 @@ paths:
                   type: string
                   example: "Coding Competition"
 
-                image:
+                posterImage:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
 
@@ -1344,25 +1365,6 @@ paths:
                 registrationEndTime:
                   type: string
                   example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
-                organisers:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      username:
-                        type: string
-                        example: "mohan"
-                managers:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      username:
-                        type: string
-                        example: "rohan"
-
-
-
       responses:
         '200':
           description: A JSON object of the created event.
