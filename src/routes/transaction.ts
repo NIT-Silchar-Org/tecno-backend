@@ -16,8 +16,21 @@ router.post(
 
 router.post(
   "/purchase",
-  Middlewares.Transaction.isUserAdmin,
+  Middlewares.Auth.isUserAdmin,
   Controllers.Transaction.createNewPurchaseTransaction
+);
+
+router.post(
+  "/online-event",
+  Middlewares.Transaction.isUserEventManager,
+  Middlewares.Auth.getAdmin,
+  Controllers.Transaction.createNewOnlineEventTransaction
+);
+
+router.get(
+  "/",
+  Middlewares.Auth.isAdmin,
+  Controllers.Transaction.getAllTransactions
 );
 
 export default router;

@@ -6,7 +6,11 @@ interface CreateAttendanceTransactionBody {
 interface CreatePurchaseTransactionBody {
   toAdminId: string;
   amount: number;
-  eventId: string;
+}
+
+interface CreateOnlineEventTransaction {
+  toUserId: string;
+  amount: number;
 }
 
 interface TransactionBody {
@@ -16,5 +20,6 @@ interface TransactionBody {
 export {
   CreatePurchaseTransactionBody,
   CreateAttendanceTransactionBody,
+  CreateOnlineEventTransaction,
   TransactionBody,
 };

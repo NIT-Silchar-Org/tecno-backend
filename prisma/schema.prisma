@@ -75,7 +75,8 @@ model Module {
   name        String
   description String
 
-  image String
+  iconImage  String
+  coverImage String
 
   thirdPartyURL String?
 
@@ -85,8 +86,8 @@ model Module {
 model Event {
   id Int @id @default(autoincrement())
 
-  name  String
-  image String
+  name        String
+  posterImage String
 
   maxTeamSize Int
   minTeamSize Int
@@ -119,6 +120,7 @@ model Event {
 enum TransactionReason {
   ATTENDANCE
   PURCHASE
+  ONLINE_EVENT
 }
 
 model Transaction {
@@ -132,10 +134,11 @@ model Transaction {
 
   amount Int
 
-  reason TransactionReason
+  reason      TransactionReason
+  description String?
 
-  eventId Int
-  event   Event @relation(fields: [eventId], references: [id], onDelete: Restrict)
+  eventId Int?
+  event   Event? @relation(fields: [eventId], references: [id], onDelete: Restrict)
 
   createdAt DateTime @default(now())
 }
