@@ -63,7 +63,12 @@ const getAdmin: Interfaces.Middleware.Async = async (req, _res, next) => {
 };
 
 const isAdmin: Interfaces.Middleware.Async = async (req, _res, next) => {
-  if (req.user!.firebaseId === process.env.ADMIN_ID!) {
+  const admin = await prisma.user.findFirst({
+    where: {
+      firebaseId: req.user!.firebaseId,
+    },
+  });
+  if (admin && req.user!.firebaseId === process.env.ADMIN_ID!) {
     next();
   } else {
     next(Errors.Auth.adminAuthError);
