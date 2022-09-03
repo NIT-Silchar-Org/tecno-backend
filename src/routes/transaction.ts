@@ -16,13 +16,13 @@ router.post(
 
 router.post(
   "/purchase",
-  Middlewares.Auth.isUserAdmin,
+  Middlewares.Transaction.isReceiverAdmin,
   Controllers.Transaction.createNewPurchaseTransaction
 );
 
 router.post(
   "/online-event",
-  Middlewares.Transaction.isUserEventManager,
+  Middlewares.Auth.isAdmin,
   Middlewares.Auth.getAdmin,
   Controllers.Transaction.createNewOnlineEventTransaction
 );

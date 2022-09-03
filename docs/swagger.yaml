@@ -394,6 +394,20 @@ paths:
                   msg:
                     type: string
                     example: "Invalid amount transaction"
+        429:
+          description:
+            Transaction too quick.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 429
+                  msg:
+                    type: string
+                    example: "Invalid amount transaction"
   /transaction/online-event:
     post:
       description:

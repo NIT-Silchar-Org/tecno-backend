@@ -10,7 +10,8 @@ const transactionInvalidAmount = Utils.Response.Error(
   400
 );
 const transactionTooQuick = Utils.Response.Error(
-  "You have attempted your transaction too quick."
+  "You have attempted your transaction too quick.",
+  429
 );
 
 export {
