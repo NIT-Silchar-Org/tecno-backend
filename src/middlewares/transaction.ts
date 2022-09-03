@@ -17,8 +17,8 @@ const isUserEventManager: Interfaces.Middleware.Async = async (
     where: {
       id: parseInt(eventId),
       managers: {
-        every: {
-          id: req.user.id,
+        some: {
+          id: req.user!.id,
         },
       },
     },

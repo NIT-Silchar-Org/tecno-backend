@@ -14,7 +14,6 @@ const validateUser: Interfaces.Middleware.Async = async (req, _res, next) => {
   const idToken: string = (auth as string).split(" ")[1];
 
   const firebaseAuth = Utils.Firebase.firebaseAdmin.auth();
-
   let decodedToken;
   try {
     if (process.env.NODE_ENV === "development") {
@@ -63,14 +62,8 @@ const getAdmin: Interfaces.Middleware.Async = async (req, _res, next) => {
   return next();
 };
 
-const isAdmin: Interfaces.Middleware.Async = async (_req, _res, next) => {
-  const admin = await prisma.user.findFirst({
-    where: {
-      firebaseId: process.env.ADMIN_ID!,
-    },
-  });
-
-  if (admin) {
+const isAdmin: Interfaces.Middleware.Async = async (req, _res, next) => {
+  if (req.user!.firebaseId === process.env.ADMIN_ID!) {
     next();
   } else {
     next(Errors.Auth.adminAuthError);

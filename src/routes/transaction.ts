@@ -22,7 +22,7 @@ router.post(
 
 router.post(
   "/online-event",
-  Middlewares.Transaction.isUserEventManager,
+  Middlewares.Auth.isAdmin,
   Middlewares.Auth.getAdmin,
   Controllers.Transaction.createNewOnlineEventTransaction
 );

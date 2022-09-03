@@ -9,7 +9,6 @@ export const updateEvent: Interfaces.Controller.Async = async (
   res,
   next
 ) => {
-  console.log("hi");
   const {
     description,
     posterImage,
