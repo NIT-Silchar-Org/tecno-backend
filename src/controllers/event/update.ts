@@ -29,13 +29,68 @@ export const updateEvent: Interfaces.Controller.Async = async (
 
   const { eventId: EID } = req.params;
   const eventId = Number.parseInt(EID);
-  if (isNaN(eventId)) return next(Errors.Module.invalidInput);
+  if (isNaN(Number.parseInt(eventId + "")) || typeof eventId !== "number")
+    return next(Errors.Module.invalidInput);
 
   if (!(await prisma.event.findFirst({ where: { id: eventId } })))
     return next(Errors.Module.eventNotFound);
+  if (moduleId) {
+    if (isNaN(moduleId) || typeof moduleId !== "number")
+      return next(Errors.Module.invalidInput);
+    if (!(await prisma.module.findFirst({ where: { id: moduleId } })))
+      return next(Errors.Module.moduleNotFound);
+  }
 
-  const { organisers, managers }: { organisers: [User]; managers: [User] } =
+  let regStart;
+  if (registrationEndTime) regStart = new Date(registrationEndTime);
+  let regEnd;
+  if (registrationEndTime) regEnd = new Date(registrationEndTime);
+  if (registrationStartTime && JSON.stringify(regStart) == "null")
+    return next(Errors.Module.invalidInput);
+  if (registrationEndTime && JSON.stringify(regEnd) == "null")
+    return next(Errors.Module.invalidInput);
+
+  const { organizers, managers }: { organizers: [User]; managers: [User] } =
     req.body;
+
+  let organizersUsernames;
+  if (organizers) {
+    organizersUsernames = await Utils.Event.extractUsername(organizers);
+    if (!organizersUsernames) return next(Errors.User.userNotFound);
+  }
+  let managersUsernames;
+  if (managers) {
+    managersUsernames = await Utils.Event.extractUsername(managers);
+    if (!managersUsernames) return next(Errors.User.userNotFound);
+  }
+
+  if (
+    (minTeamSize && typeof minTeamSize !== "number") ||
+    (maxTeamSize && typeof maxTeamSize !== "number") ||
+    (incentive && typeof incentive !== "number") ||
+    (isIncentivised && typeof isIncentivised !== "boolean") ||
+    (lat && typeof lat !== "string") ||
+    (lng && typeof lng !== "string") ||
+    (name && typeof name !== "string") ||
+    (description && typeof description !== "string") ||
+    (prizeDescription && typeof prizeDescription !== "string") ||
+    (stagesDescription && typeof stagesDescription !== "string") ||
+    (venue && typeof venue !== "string") ||
+    (posterImage && typeof posterImage !== "string")
+  )
+    return next(Errors.Module.invalidInput);
+
+  if (
+    (typeof lat === "string" && !lat.length) ||
+    (typeof lng === "string" && !lng.length) ||
+    (typeof name === "string" && !name.length) ||
+    (typeof description === "string" && !description.length) ||
+    (typeof prizeDescription === "string" && !prizeDescription.length) ||
+    (typeof stagesDescription === "string" && !stagesDescription.length) ||
+    (typeof venue === "string" && !venue.length) ||
+    (typeof posterImage === "string" && !posterImage.length)
+  )
+    return next(Errors.Module.invalidInput);
 
   const event = await prisma.event.update({
     where: { id: eventId },
@@ -50,20 +105,16 @@ export const updateEvent: Interfaces.Controller.Async = async (
       minTeamSize,
       name,
       prizeDescription,
-      registrationEndTime,
-      registrationStartTime,
+      registrationEndTime: regEnd,
+      registrationStartTime: regStart,
       stagesDescription,
       venue,
-      module: {
-        connect: {
-          id: moduleId,
-        },
-      },
+      moduleId,
       organizers: {
-        connect: Utils.Event.extractUsername(organisers),
+        connect: organizersUsernames,
       },
       managers: {
-        connect: Utils.Event.extractUsername(managers),
+        connect: managersUsernames,
       },
     },
   });
