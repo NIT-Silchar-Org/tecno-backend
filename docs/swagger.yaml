@@ -921,6 +921,9 @@ paths:
                 items:
                   type: object
                   properties:
+                    id:
+                      type: number
+                      example: 1
                     name:
                       type: string
                       example: "Big Event 6"
