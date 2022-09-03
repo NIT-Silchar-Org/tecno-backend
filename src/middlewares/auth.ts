@@ -70,26 +70,4 @@ const isAdmin: Interfaces.Middleware.Async = async (req, _res, next) => {
   }
 };
 
-const isUserAdmin: Interfaces.Middleware.Async = async (req, _res, next) => {
-  const { toAdminId } =
-    req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
-
-  const admin = await prisma.user.findFirst({
-    where: {
-      firebaseId: toAdminId,
-    },
-  });
-
-  if (
-    admin &&
-    toAdminId &&
-    toAdminId.length &&
-    toAdminId === process.env.ADMIN_ID!
-  ) {
-    next();
-  } else {
-    next(Errors.Auth.adminAuthError);
-  }
-};
-
-export { validateUser, getAdmin, isUserAdmin, isAdmin };
+export { validateUser, getAdmin, isAdmin };

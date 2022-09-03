@@ -16,7 +16,7 @@ router.post(
 
 router.post(
   "/purchase",
-  Middlewares.Auth.isUserAdmin,
+  Middlewares.Transaction.isReceiverAdmin,
   Controllers.Transaction.createNewPurchaseTransaction
 );
 
