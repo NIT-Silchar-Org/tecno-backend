@@ -44,10 +44,6 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
 
   const { uid, email: firebaseEmail, picture } = decodedToken;
 
-  if (!firebaseEmail) {
-    return next(Errors.User.badRequest("Email is missing"));
-  }
-
   const userExists: number = await prisma.user.count({
     where: {
       OR: [
@@ -55,7 +51,8 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
           firebaseId: uid,
         },
         {
-          email: firebaseEmail,
+          email:
+            process.env.NODE_ENV === "development" ? email : firebaseEmail!,
         },
         {
           username: username,
@@ -70,7 +67,7 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
 
   await prisma.user.create({
     data: {
-      email: firebaseEmail,
+      email: process.env.NODE_ENV === "development" ? email : firebaseEmail!,
       balance: 0,
       collegeName: collegeName,
       registrationId: registrationId,
