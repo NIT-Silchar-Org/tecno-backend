@@ -506,7 +506,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Event'
+                  $ref: '#/components/schemas/Module'
         '500':
             description: Throws if server is unresponsive.
             content:
