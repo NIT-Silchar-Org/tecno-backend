@@ -11,7 +11,7 @@ import YAML from "yamljs";
 import * as Routers from "@routes";
 import * as Constants from "@constants";
 import * as Utils from "@utils";
-// import * as Middlewares from "@middlewares";
+import * as Middlewares from "@middlewares";
 
 dotenv.config();
 Utils.Firebase.firebaseInit();
@@ -52,7 +52,7 @@ app.use(`${Constants.Server.ROOT}/auth`, Routers.Auth);
 
 app.use(`${Constants.Server.ROOT}/home`, Routers.Home);
 
-// app.use(Middlewares.Auth.validateUser);
+app.use(Middlewares.Auth.validateUser);
 
 app.use(`${Constants.Server.ROOT}/module`, Routers.Module);
 app.use(`${Constants.Server.ROOT}/event`, Routers.Event);
