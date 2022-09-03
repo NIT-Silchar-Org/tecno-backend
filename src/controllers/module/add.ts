@@ -14,6 +14,21 @@ export const createModule: Interfaces.Controller.Async = async (
   if (!description || !coverImage || !iconImage || !name)
     return next(Errors.Module.invalidInput);
 
+  if (
+    typeof description !== "string" ||
+    typeof coverImage !== "string" ||
+    typeof iconImage !== "string" ||
+    typeof name !== "string"
+  )
+    return next(Errors.Module.invalidInput);
+
+  if (
+    thirdPartyURL &&
+    (typeof thirdPartyURL !== "string" || !thirdPartyURL.length)
+  )
+    return next(Errors.Module.invalidInput);
+
+
   const module = await prisma.module.create({
     data: {
       description,
