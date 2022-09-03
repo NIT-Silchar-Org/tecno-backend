@@ -33,4 +33,10 @@ router.get(
   Controllers.Transaction.getAllTransactions
 );
 
+router.get(
+  "/:userId",
+  Middlewares.Transaction.isUserAuthorized,
+  Controllers.Transaction.getAllTransactionsForAUser
+);
+
 export default router;

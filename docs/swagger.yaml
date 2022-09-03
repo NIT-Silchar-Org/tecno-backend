@@ -202,6 +202,8 @@ components:
 servers:
   - url: http://localhost:5000/api
     description: Development Server
+  - url: http://43.205.136.224:5000/api
+    description: Development Server (EC2)
 
 paths:
   /auth/signup:
@@ -472,6 +474,48 @@ paths:
                   msg:
                     type: string
                     example: "Invalid amount transaction"
+  /transaction/{userId}:
+    get:
+      description:
+        An array of all the transactions, provided the user is admin.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: UserId for which Transaction is needed.
+      responses:
+        200:
+          description:
+            Data fetched
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Transaction'
+        500:
+          description:
+            Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  msg:
+                    type: string
+                    example: "Server error"
   /transaction/:
     get:
       description:
