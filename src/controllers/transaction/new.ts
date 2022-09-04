@@ -190,6 +190,10 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
       return next(Errors.Transaction.transactionFailed);
     }
 
+    if (req.user!.balance < amount) {
+      return next(Errors.Transaction.insufficientBalance);
+    }
+
     const transaction = await prisma.transaction.findFirst({
       where: {
         from: {
