@@ -504,6 +504,74 @@ paths:
                   msg:
                     type: string
                     example: "Server error"
+                    
+  /module/{moduleId}/event:
+    get:
+      summary: Get an array of JSON event objects in a module.
+      description: Get all events inside a module.
+      security:
+      - BearerAuth: []
+      parameters:
+        - in: path
+          name: moduleId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: Numeric ID of the module requested.
+      tags: 
+        - Module
+      responses:
+        '200':
+          description: An Array of JSON event objects.
+          content:  
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: Throws if moduleId is not a number.
+          content:  
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '404':
+            description: Throws if module does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Module not found"
+
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
     
   /module/:
     get:
@@ -957,72 +1025,7 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
-  /event/module/{moduleId}:
-    get:
-      summary: Get an array of JSON event objects.
-      security:
-      - BearerAuth: []
-      parameters:
-        - in: path
-          name: moduleId
-
-          schema:
-            type: number
-
-          required: true
-
-          description: Numeric ID of the module requested.
-      tags: 
-        - Event
-      responses:
-        '200':
-          description: An Array of JSON event objects.
-          content:  
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Event'
-        '400':
-          description: Throws if moduleId is not a number.
-          content:  
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 400
-                  msg:
-                    type: string
-                    example: "Invalid input"
-        '404':
-            description: Throws if module does not exist.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: number
-                      example: 404
-                    msg:
-                      type: string
-                      example: "Module not found"
-
-        '500':
-            description: Throws if server is unresponsive.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: number
-                      example: 500
-                    msg:
-                      type: string
-                      example: "Internal server error."
+  
 
   /event/{eventId}:
     get:
