@@ -344,12 +344,9 @@ paths:
             schema:
               type: object
               properties:
-                toAdminId:
+                toUserId:
                   type: string
-                  example: "u7dpk73akmjzs765"
-                eventId:
-                  type: string
-                  example: "pq864mvcx66238njdhfy98"
+                  example: "Hnxp4N7WdYUcb3L3d4WNUx4Xld93"
                 amount:
                   type: number
                   example: 100

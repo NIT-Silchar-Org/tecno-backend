@@ -177,12 +177,12 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
   next
 ) => {
   try {
-    const { amount, toAdminId } =
+    const { amount, toUserId } =
       req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
 
     const admin = await prisma.user.findFirst({
       where: {
-        firebaseId: toAdminId,
+        firebaseId: toUserId,
       },
     });
 

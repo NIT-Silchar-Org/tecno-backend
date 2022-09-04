@@ -4,7 +4,7 @@ interface CreateAttendanceTransactionBody {
 }
 
 interface CreatePurchaseTransactionBody {
-  toAdminId: string;
+  toUserId: string;
   amount: number;
 }
 
