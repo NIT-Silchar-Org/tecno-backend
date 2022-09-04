@@ -28,7 +28,6 @@ export const createModule: Interfaces.Controller.Async = async (
   )
     return next(Errors.Module.invalidInput);
 
-
   const module = await prisma.module.create({
     data: {
       description,
