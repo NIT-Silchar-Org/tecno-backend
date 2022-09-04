@@ -20,6 +20,10 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
     return next(Errors.User.badRequest("Auth token is missing"));
   }
 
+  if (!Utils.User.validateUsername(username)) {
+    return next(Errors.User.usernameNotAcceptable);
+  }
+
   const idToken: string = (auth as string).split(" ")[1];
 
   const firebaseAuth = Utils.Firebase.firebaseAdmin.auth();
