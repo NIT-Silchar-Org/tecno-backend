@@ -5,8 +5,13 @@ const userNotPartOfTeam = Utils.Response.Error(
   409
 );
 
-const userRegistrationNotPending = Utils.Response.Error(
+const userAlreadyResponded = Utils.Response.Error(
   "User already accepted/rejected invitation",
+  409
+);
+
+const teamRegistrationCancelled = Utils.Response.Error(
+  "Team Registration is Cancelled.",
   409
 );
 
@@ -22,18 +27,27 @@ const teamAlreadyExists = Utils.Response.Error(
 
 const invalidResponse = Utils.Response.Error("Invalid Response.");
 
+const memberDuplicates = Utils.Response.Error(
+  "Duplication of Members is not allowed.",
+  409
+);
+
 const teamSizeNotAllowed = Utils.Response.Error(
   "Team size isn't allowed.",
   400
 );
 const teamNotFound = Utils.Response.Error("Team not found.", 404);
+const invalidTeamId = Utils.Response.Error("Team ID is invalid", 404);
 
 export {
   userNotPartOfTeam,
-  userRegistrationNotPending,
+  userAlreadyResponded,
+  teamRegistrationCancelled,
   userAlreadyRegistered,
   teamAlreadyExists,
   invalidResponse,
   teamSizeNotAllowed,
   teamNotFound,
+  memberDuplicates,
+  invalidTeamId,
 };

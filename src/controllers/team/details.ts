@@ -28,6 +28,20 @@ const getTeamDetails: Interfaces.Controller.Async = async (req, res, next) => {
           venue: true,
         },
       },
+      members: {
+        select: {
+          user: {
+            select: {
+              email: true,
+              username: true,
+              imageUrl: true,
+              collegeName: true,
+            },
+          },
+          role: true,
+          registrationStatus: true,
+        },
+      },
     },
   });
 
