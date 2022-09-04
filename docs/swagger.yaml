@@ -1418,7 +1418,7 @@ paths:
                       type: string
                       example: "Internal server error."
 
-  /event/{eventId}/team/add:
+  /team/add:
     post:
       description: Register a team for an event
 
@@ -1458,19 +1458,9 @@ paths:
                   type: array
 
                   items:
-                    type: object
-
-                    properties:
-                      username:
-                        type: string
-                        example: "johnsmittecno22"
-
-                      role:
-                        type: string
-                        enum:
-                          - LEADER
-                          - MEMBER
-                        example: MEMBER
+                    type: string
+                    description: "Array of Usernames"
+                    example: "Hello"
 
       responses:
         200:
@@ -1529,12 +1519,13 @@ paths:
                     type: string
                     example: Team Already Exists.
 
-  /event/{eventId}/team/{teamId}:
+  /team/{teamId}:
     get:
       description: Get the details of a team
 
       tags:
         - Team
+
       security:
         - BearerAuth: []
 
@@ -1602,6 +1593,30 @@ paths:
                           name:
                             type: string
                             example: "Hackathons"
+                  members:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          email:
+                            type: string
+                            example: "hello@world.com"
+                          username:
+                            type: string
+                            example: "helloworld"
+                          imageUrl:
+                            type: string
+                            example: "https://helloworld.com/img.jpg"
+                          collegeName:
+                            type: string
+                            example: "Hello World University"
+                        role:
+                          type: string
+                          enum:
+                            - LEADER
+                            - MEMBER
+
 
         404:
           description: Team Not Found.
@@ -1617,7 +1632,7 @@ paths:
                     type: string
                     example: Team Not Found.
 
-  /event/{eventId}/team/{teamId}/respond:
+  /team/{teamId}/respond:
     patch:
       description: User responding to team invite
 
