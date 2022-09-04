@@ -9,6 +9,7 @@ router.post(
   Middlewares.Auth.isAdmin,
   Controllers.Module.createModule
 );
+router.get("/:moduleId/event", Controllers.Event.getEventsByModule);
 router.get("/:moduleId", Controllers.Module.getModuleById);
 router.get("/", Controllers.Module.getAllModules);
 router.delete(
