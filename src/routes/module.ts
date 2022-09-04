@@ -12,7 +12,7 @@ router.post(
 router.get("/:moduleId", Controllers.Module.getModuleById);
 router.get("/", Controllers.Module.getAllModules);
 router.delete(
-  "/:moduleId/delete",
+  "/:moduleId/",
   Middlewares.Auth.isAdmin,
   Controllers.Module.deleteModuleById
 );

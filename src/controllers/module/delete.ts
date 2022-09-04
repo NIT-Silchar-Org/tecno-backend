@@ -8,6 +8,7 @@ export const deleteModuleById: Interfaces.Controller.Async = async (
   res,
   next
 ) => {
+  console.log("delete");
   const { moduleId: MID } = req.params;
   const moduleId = Number.parseInt(MID);
   if (isNaN(moduleId)) return next(Errors.Module.invalidInput);

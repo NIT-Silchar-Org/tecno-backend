@@ -22,7 +22,7 @@ router.patch(
   Controllers.Event.updateEvent
 );
 router.delete(
-  "/:eventId/delete",
+  "/:eventId/",
   Middlewares.Auth.isAdmin,
   Controllers.Event.deleteEvent
 );
