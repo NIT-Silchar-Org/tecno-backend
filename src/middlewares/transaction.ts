@@ -36,20 +36,20 @@ const isReceiverAdmin: Interfaces.Middleware.Async = async (
   _res,
   next
 ) => {
-  const { toAdminId } =
+  const { toUserId } =
     req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
 
   const admin = await prisma.user.findFirst({
     where: {
-      firebaseId: toAdminId,
+      firebaseId: toUserId,
     },
   });
 
   if (
     admin &&
-    toAdminId &&
-    toAdminId.length &&
-    toAdminId === process.env.ADMIN_ID!
+    toUserId &&
+    toUserId.length &&
+    toUserId === process.env.ADMIN_ID!
   ) {
     next();
   } else {
