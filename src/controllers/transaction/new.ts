@@ -201,7 +201,7 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
 
     if (transaction) {
       if (
-        new Date(transaction.createdAt).getTime() - new Date().getTime() <
+        new Date().getTime() - new Date(transaction.createdAt).getTime() <
         Constants.Transaction.TRANSACTION_COOLDOWN
       ) {
         return next(Errors.Transaction.transactionTooQuick);
