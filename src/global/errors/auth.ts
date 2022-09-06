@@ -4,5 +4,6 @@ const firebaseAuthError = Utils.Response.Error(
   "Firebase authentication error."
 );
 const adminAuthError = Utils.Response.Error("Admin unauthorized.");
+const userUnauthorized = Utils.Response.Error("User unauthorized.");
 
-export { firebaseAuthError, adminAuthError };
+export { firebaseAuthError, adminAuthError, userUnauthorized };
