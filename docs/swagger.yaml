@@ -276,6 +276,19 @@ paths:
                   msg:
                     type: string
                     example: User Not authenticated
+        403:
+          description: Username not acceptable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: Username is not acceptable
 
   /transaction/attendance:
     post:
