@@ -202,6 +202,8 @@ components:
 servers:
   - url: http://localhost:5000/api
     description: Development Server
+  - url: http://43.205.136.224:5000/api
+    description: Development Server (EC2)
 
 paths:
   /auth/signup:
@@ -342,12 +344,9 @@ paths:
             schema:
               type: object
               properties:
-                toAdminId:
+                toUserId:
                   type: string
-                  example: "u7dpk73akmjzs765"
-                eventId:
-                  type: string
-                  example: "pq864mvcx66238njdhfy98"
+                  example: "Hnxp4N7WdYUcb3L3d4WNUx4Xld93"
                 amount:
                   type: number
                   example: 100
@@ -472,6 +471,67 @@ paths:
                   msg:
                     type: string
                     example: "Invalid amount transaction"
+  /transaction/{userId}:
+    get:
+      description:
+        An array of all the transactions, provided the user is admin.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: UserId for which Transaction is needed.
+      responses:
+        200:
+          description:
+            Data fetched
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id: 
+                      type: number
+                      example: 65
+                    amount:
+                      type: number
+                      example: 1000
+                    reason:
+                      type: string
+                      example: "PURCHASE"
+                    description: 
+                      type: string
+                      example: "Transaction is for purchase"
+                    type:
+                      type: string
+                      example: "DEBIT"
+                    createdAt:
+                      type: string
+                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"     
+        500:
+          description:
+            Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  msg:
+                    type: string
+                    example: "Server error"
   /transaction/:
     get:
       description:
