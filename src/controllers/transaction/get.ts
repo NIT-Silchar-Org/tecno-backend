@@ -55,7 +55,14 @@ const getAllAttendanceOfUser: Interfaces.Controller.Async = async (
       ],
       reason: TransactionReason.ATTENDANCE,
     },
-    include: {
+    select: {
+      id: true,
+      fromUserId: true,
+      toUserId: true,
+      amount: true,
+      description: true,
+      reason: true,
+      createdAt: true,
       event: {
         select: {
           id: true,
