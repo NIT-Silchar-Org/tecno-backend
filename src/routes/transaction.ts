@@ -14,6 +14,13 @@ router.post(
   Controllers.Transaction.createNewAttendanceTransaction
 );
 
+// userId must be the firebase Id
+router.get(
+  "/attendance/:userId",
+  Middlewares.Auth.isAdmin,
+  Controllers.Transaction.getAllAttendanceOfUser
+);
+
 router.post(
   "/purchase",
   Middlewares.Transaction.isReceiverAdmin,

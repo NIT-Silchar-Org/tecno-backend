@@ -29,8 +29,19 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
       return next(Errors.Transaction.transactionFailed);
     }
 
-    if (event.isIncentivised) {
-      const amount = event.incentive!;
+    const userTransaction = await prisma.transaction.findFirst({
+      where: {
+        toUserId: toUser.id,
+        eventId: event.id,
+      },
+    });
+
+    if (userTransaction) {
+      return next(Errors.Transaction.alreadyAttended);
+    }
+
+    if (event.attendanceIncentive > 0) {
+      const amount = event.attendanceIncentive;
 
       if (req.admin!.balance < amount) {
         next(Errors.Transaction.insufficientBalance);
