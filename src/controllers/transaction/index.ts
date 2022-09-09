@@ -1,8 +1,4 @@
-import {
-  getAllTransactions,
-  getAllTransactionsForAUser,
-  getAllAttendanceOfUser,
-} from "./get";
+import { getAllTransactions, getAllTransactionsForAUser } from "./get";
 import {
   createNewAttendanceTransaction,
   createNewPurchaseTransaction,
@@ -12,7 +8,6 @@ import {
 export {
   getAllTransactions,
   getAllTransactionsForAUser,
-  getAllAttendanceOfUser,
   createNewAttendanceTransaction,
   createNewPurchaseTransaction,
   createNewOnlineEventTransaction,

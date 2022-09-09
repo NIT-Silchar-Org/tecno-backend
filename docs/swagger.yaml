@@ -138,13 +138,13 @@ components:
           type: integer
           example: 1
 
-        incentive:
+        attendanceIncentive:
           type: number
           example: 100
 
-        isIncentivised:
-          type: boolean
-          example: true
+        registrationIncentive:
+          type: number
+          example: 100
 
         prizeDescription:
           type: string
@@ -184,16 +184,33 @@ components:
         id:
           type: number
           example: 65
+          
+        fromUserId:
+          type: number
+          example: 2
+
+        toUserId:
+          type: number
+          example: 3
 
         amount:
           type: number
           example: 2000
+          
+        description: 
+          type: string
+          example: "Purchase"
 
         reason:
           type: string
           enum:
             - ATTENDANCE
             - PURCHASE
+            - ONLINE_EVENT
+        
+        eventId:
+          type: number
+          example: 2
 
         createdAt:
           type: string
@@ -471,79 +488,6 @@ paths:
                   msg:
                     type: string
                     example: "Invalid amount transaction"
-  /transaction/attendance/{userId}:
-    get:
-      description:
-        An array of all the attendance of an event given to the given user, provided the user is admin.
-      tags:
-        - Transaction
-      security:
-        - BearerAuth: []
-      parameters:
-        - in: path
-          name: userId
-
-          schema:
-            type: number
-
-          required: true
-
-          description: UserId for which attendance detail is needed.
-      responses:
-        200:
-          description:
-            Data fetched
-          content:
-            application/json:
-              schema:
-                type: array
-                items: 
-                  type: object
-                  properties:
-                    id: 
-                      type: number
-                      example: 65
-                    fromUserId:
-                      type: number
-                      example: 2
-                    toUserId:
-                      type: number
-                      example: 3
-                    amount:
-                      type: number
-                      example: 1000
-                    reason:
-                      type: string
-                      example: "ATTENDANCE"
-                    description: 
-                      type: string
-                      example: "Transaction is for purchase"
-                    createdAt:
-                      type: string
-                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"     
-                    event:
-                      type: object
-                      properties:
-                        id:
-                          type: number
-                          example: 1
-                        name:
-                          type: string
-                          example: "Coding Competition"
-        500:
-          description:
-            Server error.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 500
-                  msg:
-                    type: string
-                    example: "Server error"
   /transaction/{userId}:
     get:
       description:
@@ -1929,7 +1873,64 @@ paths:
                     type: number
                     example: 200
                   msg:
-                    $ref: '#/components/schemas/User'  
+                    $ref: '#/components/schemas/User'
+  /user/me/attended_events:
+    get:
+      description:
+        An array of all the attendance of an event given to the given user, provided the user is admin.
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description:
+            Data fetched
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id: 
+                      type: number
+                      example: 65
+                    amount:
+                      type: number
+                      example: 1000
+                    reason:
+                      type: string
+                      example: "ATTENDANCE"
+                    description: 
+                      type: string
+                      example: "Transaction is for purchase"
+                    createdAt:
+                      type: string
+                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"     
+                    event:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        name:
+                          type: string
+                          example: "Coding Competition"
+        500:
+          description:
+            Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  msg:
+                    type: string
+                    example: "Server error"
   /user/me:
     get:
       tags:
