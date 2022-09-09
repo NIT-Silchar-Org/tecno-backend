@@ -31,4 +31,4 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key_path: ${{ secrets.EC2_SSH_KEY }}
           envs: TARGET
-          script: ${{ secrets.TARGET_DIR_DEV }}/tecno-backend/.github/scripts/update.sh
+          script: ${{ secrets.TARGET_DIR_DEV }}/.github/scripts/update.sh
