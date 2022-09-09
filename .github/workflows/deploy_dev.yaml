@@ -24,7 +24,7 @@ jobs:
       
       - name: Build and Redeploy Code
         uses: appleboy/ssh-action@master
-        env:TARGET_DIR
+        env:
           TARGET: ${{ secrets.TARGET_DIR_DEV }}
         with:
           host: ${{ secrets.HOST }}
