@@ -47,17 +47,3 @@ export const getEventById: Interfaces.Controller.Async = async (
   if (!event) return next(Errors.Module.eventNotFound);
   return res.json(Utils.Response.Success(event));
 };
-
-export const getAllEventsNested: Interfaces.Controller.Async = async (
-  _req,
-  res,
-  next
-) => {
-  const module = await prisma.module.findMany({
-    include: {
-      events: true,
-    },
-  });
-  if (!module) return next(Errors.Module.moduleNotFound);
-  return res.json(Utils.Response.Success(module));
-};
