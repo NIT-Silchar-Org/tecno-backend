@@ -20,16 +20,15 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.EC2_HOST_DNS }}
           REMOTE_USER: ${{ secrets.EC2_USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
+          TARGET: ${{ secrets.TARGET_DIR_DEV }}
       
       - name: Build and Redeploy Code
         uses: appleboy/ssh-action@master
-        env:
-          TARGET: ${{ secrets.TARGET_DIR }}
+        env:TARGET_DIR
+          TARGET: ${{ secrets.TARGET_DIR_DEV }}
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          username: ${{ secrets.EC2_USERNAME }}
           key_path: ${{ secrets.EC2_SSH_KEY }}
           envs: TARGET
-          script: ${{ secrets.TARGET_DIR }}/.github/scripts/update.sh
+          script: ${{ secrets.TARGET_DIR_DEV }}/.github/scripts/update.sh
