@@ -652,7 +652,7 @@ paths:
     
   /module/:
     get:
-      summary: Get an array of JSON module objects.
+      summary: Get an array of JSON module objects with nested events.
       security:
           - BearerAuth: []
       tags:
@@ -665,7 +665,64 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Module'
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 200
+                    msg:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                            example: 1
+                          name:
+                            type: string
+                            example: "module1"
+                          description:
+                            type: string
+                            example: "its a good module"
+                          iconImage:
+                            type: string
+                            example: "http://iconImage.com"
+                          coverImage: 
+                            type: string
+                            example: "http://coverImage.com"
+                          thridPartyUrl:
+                            type: string
+                            example: "http://thridPartyUrl.com"
+                          events:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                  example: 1
+                                name:
+                                  type: string
+                                  example: "roborobo"
+                                posterImage: 
+                                  type: string
+                                  example: "http://posterImage.com"
+                                attendanceIncentive:
+                                  type: number
+                                  example: 10000
+                                registrationIncentive:
+                                  type: number
+                                  example: 10000
+                                description:
+                                  type: string
+                                  example: "very very good event"
+                                registrationEndTime:
+                                  type: string
+                                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+                                registrationStartTime:
+                                  type: string
+                                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+                    
         '500':
             description: Throws if server is unresponsive.
             content:
@@ -1049,61 +1106,6 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
-  /event/all:
-    get:
-      summary: Get an array of all modules data and array of events nested
-      tags:
-        - Event
-      security:
-      - BearerAuth: []
-      responses:
-        '200':
-          description: An Array of JSON Module objects.
-          content:  
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                      example: 1
-                    name:
-                      type: string
-                      example: "Big Event 6"
-                    description:
-                      type: string
-                      example: "A very good event module"
-                    iconImage:
-                      type: string
-                      example: "https://avatars.githubusercontent.com/u/74897001"
-                    coverImage:
-                      type: string
-                      example: "https://avatars.githubusercontent.com/u/74897001"
-                    thirdPartyURL:
-                      type: string
-                      example: "https://www.google.com"
-                    events:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/Event'
-
-        '500':
-            description: Throws if server is unresponsive.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: number
-                      example: 500
-                    msg:
-                      type: string
-                      example: "Internal server error."
-  
-
   /event/{eventId}:
     get:
       summary: Get a JSON event object.
@@ -1646,6 +1648,64 @@ paths:
                   msg:
                     type: string
                     example: Team Already Exists.
+                    
+  /event/{eventId}/registered_teams:
+    get:
+      description: Get the details of all the teams registered in a particular event
+      security:
+        - BearerAuth: []
+      tags:
+        - Team
+
+      parameters:
+
+        - in: path
+          name: eventId
+
+          schema:
+            type: integer
+
+          required: true
+
+          description: Numeric ID of the event
+      
+      responses:
+        200:
+          description: Get a JSON Object with all the registered teams in event
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 200
+                    msg:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 34
+                        fireabaseId:
+                          type: string
+                          example: "YiuqYLtElLTNGaNy9vistAz3u663"
+                        name:
+                          type: string
+                          example: "john"
+                        username:
+                          type: string
+                          example: "josu"
+                        email:
+                          type: string
+                          example: "hello@nits.ac.in"
+                        collegeName:
+                          type: string
+                          example: "NITS"
+                        registrationId:
+                          type: string
+                          example: "2012000"
 
   /event/{eventId}/team/{teamId}:
     get:
