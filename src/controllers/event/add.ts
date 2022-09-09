@@ -12,8 +12,8 @@ export const createEvent: Interfaces.Controller.Async = async (
   const {
     description,
     posterImage,
-    incentive,
-    isIncentivised,
+    attendanceIncentive,
+    registrationIncentive,
     lat,
     lng,
     maxTeamSize,
@@ -49,14 +49,17 @@ export const createEvent: Interfaces.Controller.Async = async (
   )
     return next(Errors.Module.invalidInput);
 
-  if (!!incentive !== !!isIncentivised) return next(Errors.Module.invalidInput);
+  if (
+    !(registrationIncentive && typeof registrationIncentive === "number") ||
+    !(attendanceIncentive && typeof attendanceIncentive === "number")
+  ) {
+    return next(Errors.Module.invalidInput);
+  }
   if (isNaN(Number.parseInt(moduleId + "")))
     return next(Errors.Module.invalidInput);
   if (
     typeof maxTeamSize !== "number" ||
     typeof minTeamSize !== "number" ||
-    typeof incentive !== "number" ||
-    typeof isIncentivised !== "boolean" ||
     typeof lat !== "string" ||
     typeof lng !== "string" ||
     typeof name !== "string" ||
@@ -70,7 +73,7 @@ export const createEvent: Interfaces.Controller.Async = async (
 
   const regStart = new Date(registrationEndTime);
   const regEnd = new Date(registrationEndTime);
-  if (JSON.stringify(regStart) == "null" || JSON.stringify(regEnd) == "null")
+  if (JSON.stringify(regStart) === "null" || JSON.stringify(regEnd) === "null")
     return next(Errors.Module.invalidInput);
 
   if (
@@ -84,8 +87,8 @@ export const createEvent: Interfaces.Controller.Async = async (
     data: {
       description,
       posterImage,
-      incentive,
-      isIncentivised,
+      attendanceIncentive,
+      registrationIncentive,
       lat,
       lng,
       maxTeamSize,

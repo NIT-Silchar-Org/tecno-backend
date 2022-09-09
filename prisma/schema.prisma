@@ -92,8 +92,8 @@ model Event {
   maxTeamSize Int
   minTeamSize Int
 
-  incentive      Int?
-  isIncentivised Boolean
+  registrationIncentive Int @default(0)
+  attendanceIncentive   Int @default(0)
 
   prizeDescription  String
   stagesDescription String
