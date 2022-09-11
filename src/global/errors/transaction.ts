@@ -17,8 +17,10 @@ const transactionTooQuick = Utils.Response.Error(
   "You have attempted your transaction too quick.",
   429
 );
+const alreadyAttended = Utils.Response.Error("Already attended the event.");
 
 export {
+  alreadyAttended,
   insufficientBalance,
   transactionUnauthenticated,
   transactionFailed,

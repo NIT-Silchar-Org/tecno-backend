@@ -28,6 +28,10 @@ const teamSizeNotAllowed = Utils.Response.Error(
 );
 const teamNotFound = Utils.Response.Error("Team not found.", 404);
 
+const badRequest = (msg = "Bad request") => {
+  return Utils.Response.Error(msg, 400);
+};
+
 export {
   userNotPartOfTeam,
   userRegistrationNotPending,
@@ -36,4 +40,5 @@ export {
   invalidResponse,
   teamSizeNotAllowed,
   teamNotFound,
+  badRequest,
 };

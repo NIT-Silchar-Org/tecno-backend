@@ -11,6 +11,7 @@ router.post("/team/add", Controllers.Team.registerTeam);
 // router.delete("/:teamId");
 
 router.get("/team/:teamId", Controllers.Team.getTeamDetails);
+router.get("/registered_teams/", Controllers.Team.getAllTeamsOfEvent);
 router.patch(
   // "/team/:teamId/:userId/respond",
   "/team/:teamId/respond",
