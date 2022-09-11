@@ -599,8 +599,6 @@ paths:
     get:
       summary: Get an array of JSON event objects in a module.
       description: Get all events inside a module.
-      security:
-      - BearerAuth: []
       parameters:
         - in: path
           name: moduleId
@@ -666,8 +664,6 @@ paths:
   /module/:
     get:
       summary: Get an array of JSON module objects with nested events.
-      security:
-          - BearerAuth: []
       tags:
           - Module
       responses:
@@ -752,8 +748,6 @@ paths:
   /module/{moduleId}:
     get:
         summary: Get a JSON module object.
-        security:
-          - BearerAuth: []
         parameters:
           - in: path
             name: moduleId
