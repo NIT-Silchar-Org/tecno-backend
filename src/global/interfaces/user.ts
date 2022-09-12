@@ -4,6 +4,7 @@ interface CreateUserBody {
   collegeName: string;
   registrationId: string;
   username: string;
+  phoneNumber: string;
 
   imageUrl: string | null | undefined;
 }
