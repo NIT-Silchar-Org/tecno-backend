@@ -121,6 +121,7 @@ model Event {
 enum TransactionReason {
   ATTENDANCE
   PURCHASE
+  REGISTRATION
   ONLINE_EVENT
 }
 

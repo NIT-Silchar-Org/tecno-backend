@@ -93,12 +93,41 @@ const getAdmin: Interfaces.Middleware.Async = async (req, _res, next) => {
 };
 
 const isAdmin: Interfaces.Middleware.Async = async (req, _res, next) => {
+  const auth: string | undefined = req?.headers?.authorization;
+
+  if (!auth) {
+    return next(Errors.User.badRequest("Auth token is missing"));
+  }
+
+  const idToken: string = (auth as string).split(" ")[1];
+
+  const firebaseAuth = Utils.Firebase.firebaseAdmin.auth();
+  let decodedToken;
+  try {
+    if (process.env.NODE_ENV === "development") {
+      decodedToken = {
+        uid: idToken,
+      };
+    } else {
+      decodedToken = await firebaseAuth.verifyIdToken(idToken);
+    }
+  } catch (err) {
+    return next(err);
+  }
+
+  if (!decodedToken) {
+    return next(Errors.User.userNotAuthenticated);
+  }
+
+  const { uid } = decodedToken;
+
   const admin = await prisma.user.findFirst({
     where: {
-      firebaseId: req.user!.firebaseId,
+      firebaseId: uid,
     },
   });
-  if (admin && req.user!.firebaseId === process.env.ADMIN_ID!) {
+
+  if (admin && admin.firebaseId === process.env.ADMIN_ID!) {
     next();
   } else {
     next(Errors.Auth.adminAuthError);

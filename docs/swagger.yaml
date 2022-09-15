@@ -299,6 +299,19 @@ paths:
                   msg:
                     type: string
                     example: User Not authenticated
+        403:
+          description: Username not acceptable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: Username is not acceptable
 
   /transaction/attendance:
     post:
@@ -590,8 +603,6 @@ paths:
     get:
       summary: Get an array of JSON event objects in a module.
       description: Get all events inside a module.
-      security:
-      - BearerAuth: []
       parameters:
         - in: path
           name: moduleId
@@ -657,8 +668,6 @@ paths:
   /module/:
     get:
       summary: Get an array of JSON module objects with nested events.
-      security:
-          - BearerAuth: []
       tags:
           - Module
       responses:
@@ -743,8 +752,6 @@ paths:
   /module/{moduleId}:
     get:
         summary: Get a JSON module object.
-        security:
-          - BearerAuth: []
         parameters:
           - in: path
             name: moduleId
@@ -1084,8 +1091,6 @@ paths:
   /event:
     get:
       summary: Get an array of all events
-      security:
-        - BearerAuth: []
       tags:
         - Event
       responses:
@@ -1113,8 +1118,6 @@ paths:
   /event/{eventId}:
     get:
       summary: Get a JSON event object.
-      security:
-      - BearerAuth: []
       parameters:
         - in: path
           name: eventId
@@ -1717,7 +1720,8 @@ paths:
   /event/{eventId}/team/{teamId}:
     get:
       description: Get the details of a team
-
+      security:
+        - BearerAuth: []
       tags:
         - Team
 
