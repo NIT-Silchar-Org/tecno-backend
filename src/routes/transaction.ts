@@ -9,6 +9,7 @@ const router: Router = Router({ mergeParams: true });
 
 router.post(
   "/attendance",
+  Middlewares.Auth.validateUser,
   Middlewares.Transaction.isUserEventManager,
   Middlewares.Auth.getAdmin,
   Controllers.Transaction.createNewAttendanceTransaction
@@ -16,6 +17,7 @@ router.post(
 
 router.post(
   "/purchase",
+  Middlewares.Auth.validateUser,
   Middlewares.Transaction.isReceiverAdmin,
   Controllers.Transaction.createNewPurchaseTransaction
 );
@@ -35,6 +37,7 @@ router.get(
 
 router.get(
   "/:userId",
+  Middlewares.Auth.validateUser,
   Middlewares.Transaction.isUserAuthorized,
   Controllers.Transaction.getAllTransactionsForAUser
 );
