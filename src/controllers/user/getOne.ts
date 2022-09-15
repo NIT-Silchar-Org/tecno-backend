@@ -16,6 +16,13 @@ const getOneUserById: Interfaces.Controller.Async = async (req, res, next) => {
     where: {
       id: id,
     },
+    include: {
+      manages: true,
+      organizes: true,
+      to: true,
+      from: true,
+      teamsRegistered: true,
+    },
   });
 
   if (!user) {

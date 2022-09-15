@@ -79,6 +79,7 @@ const getAllTeamsOfEvent: Interfaces.Controller.Async = async (
               email: true,
               imageUrl: true,
               username: true,
+              phoneNumber: true,
             },
           },
         },

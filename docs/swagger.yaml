@@ -39,6 +39,10 @@ components:
           type: integer
           example: 1000
 
+        phoneNumber:
+          type: string
+          example: "1231231233"
+
         collegeName:
           type: string
           example: "National Institute of Technology, Silchar"
@@ -1706,6 +1710,9 @@ paths:
                         registrationId:
                           type: string
                           example: "2012000"
+                        phoneNumber:
+                          type: string
+                          example: "1231231230"
 
   /event/{eventId}/team/{teamId}:
     get:
@@ -1891,7 +1898,11 @@ paths:
                     type: number
                     example: 200
                   msg:
-                    $ref: '#/components/schemas/User'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+
+
     patch:
       tags:
         - User
@@ -2010,7 +2021,138 @@ paths:
                     type: number
                     example: 200
                   msg:
-                    $ref: '#/components/schemas/User'
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 38
+              
+                      firebaseId:
+                        type: string
+                        example: "YiuqYLtElLTNGaNy9vistAz3u663"
+              
+                      name:
+                        type: string
+                        example: "John Smith"
+              
+                      username:
+                        type: string
+                        example: "helloworldxxx69"
+              
+                      email:
+                        type: string
+                        example: "helloworld@nits.ac.in"
+              
+                      balance:
+                        type: integer
+                        example: 1000
+              
+                      phoneNumber:
+                        type: string
+                        example: "1231231233"
+              
+                      collegeName:
+                        type: string
+                        example: "National Institute of Technology, Silchar"
+              
+                      registrationId:
+                        type: string
+                        example: "2012001"
+              
+                      imageUrl:
+                        type: string
+                        example: "https://avatars.githubusercontent.com/u/74897001"
+                      
+                      manages:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 43
+                    
+                            name:
+                              type: string
+                              example: "Coding Competition"
+                              
+                            maxTeamSize:
+                              type: integer
+                              example: 5
+                            
+                            minTeamSize:
+                              type: integer
+                              example: 1
+                    
+                            attendanceIncentive:
+                              type: number
+                              example: 100
+                    
+                            registrationIncentive:
+                              type: number
+                              example: 100
+                    
+                            prizeDescription:
+                              type: string
+                              example: "First prize gets a Lamborghini"
+                    
+                            stagesDescription:
+                              type: string
+                              example: "First round will be a group discussion"
+                    
+                            description:
+                              type: string
+                              example: "Very good competition. Pls register."
+                    
+                            venue:
+                              type: string
+                              example: "Sports Complex"
+                              
+                      organizes:
+                        type: array
+                        items: 
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 43
+                    
+                            name:
+                              type: string
+                              example: "Coding Competition"
+                              
+                            maxTeamSize:
+                              type: integer
+                              example: 5
+                            
+                            minTeamSize:
+                              type: integer
+                              example: 1
+                    
+                            attendanceIncentive:
+                              type: number
+                              example: 100
+                    
+                            registrationIncentive:
+                              type: number
+                              example: 100
+                    
+                            prizeDescription:
+                              type: string
+                              example: "First prize gets a Lamborghini"
+                    
+                            stagesDescription:
+                              type: string
+                              example: "First round will be a group discussion"
+                    
+                            description:
+                              type: string
+                              example: "Very good competition. Pls register."
+                    
+                            venue:
+                              type: string
+                              example: "Sports Complex"
+                            
         404:
           description: User not found
           content:
@@ -2051,7 +2193,65 @@ paths:
                     type: number
                     example: 200
                   msg:
-                    $ref: '#/components/schemas/User'
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 38
+              
+                      firebaseId:
+                        type: string
+                        example: "YiuqYLtElLTNGaNy9vistAz3u663"
+              
+                      name:
+                        type: string
+                        example: "John Smith"
+              
+                      username:
+                        type: string
+                        example: "helloworldxxx69"
+              
+                      email:
+                        type: string
+                        example: "helloworld@nits.ac.in"
+              
+                      balance:
+                        type: integer
+                        example: 1000
+              
+                      phoneNumber:
+                        type: string
+                        example: "1231231233"
+              
+                      collegeName:
+                        type: string
+                        example: "National Institute of Technology, Silchar"
+              
+                      registrationId:
+                        type: string
+                        example: "2012001"
+              
+                      imageUrl:
+                        type: string
+                        example: "https://avatars.githubusercontent.com/u/74897001"
+                      manages:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Event'
+                      organizes:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Event'
+                      to:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Transaction'
+                      from:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Transaction'
+
+
         404:
           description: User with given id not found
           content:
