@@ -65,8 +65,8 @@ export const updateEvent: Interfaces.Controller.Async = async (
   }
 
   if (
-    !(registrationIncentive && typeof registrationIncentive === "number") ||
-    !(attendanceIncentive && typeof attendanceIncentive === "number")
+    (registrationIncentive && !(typeof registrationIncentive === "number")) ||
+    (attendanceIncentive && !(typeof attendanceIncentive === "number"))
   ) {
     return next(Errors.Module.invalidInput);
   }

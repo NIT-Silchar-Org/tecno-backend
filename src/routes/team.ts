@@ -13,7 +13,6 @@ router.post(
   Controllers.Team.registerTeam
 );
 
-// router.delete("/:teamId");
 
 router.get(
   "/team/:teamId",
@@ -26,9 +25,9 @@ router.get(
   Controllers.Team.getAllTeamsOfEvent
 );
 router.patch(
-  // "/team/:teamId/:userId/respond",
   "/team/:teamId/respond",
   Middlewares.Auth.validateUser,
+  Middlewares.Auth.getAdmin,
   Controllers.Team.teamRegistrationResponse
 ); // check user middleware // Get userId from auth
 
