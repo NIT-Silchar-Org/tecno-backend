@@ -11,6 +11,7 @@
     "db:pull": "prisma db pull",
     "db:generate": "prisma generate",
     "db:update": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
     "prisma:format": "prisma format",
     "lint": "eslint . --ext .ts --fix",
     "pre-commit": "lint-staged",

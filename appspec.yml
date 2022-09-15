@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: /
-    destination: ~/dev
+    destination: /home/ubuntu/tecno-backend
 file_exists_behavior: OVERWRITE
 
 hooks:
