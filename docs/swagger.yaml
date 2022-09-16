@@ -223,7 +223,7 @@ components:
 servers:
   - url: http://localhost:5000/api
     description: Development Server
-  - url: http://43.205.136.224:5000/api
+  - url: https://api.dev.tecnoesis.org/api
     description: Development Server (EC2)
 
 paths:
