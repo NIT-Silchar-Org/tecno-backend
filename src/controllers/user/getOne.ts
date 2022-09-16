@@ -8,7 +8,7 @@ import { User } from "@prisma/client";
 const getOneUserById: Interfaces.Controller.Async = async (req, res, next) => {
   const id = parseInt(req?.params?.id);
 
-  if (!id) {
+  if (isNaN(id)) {
     return next(Error.User.badRequest("Incorrect user id"));
   }
 
