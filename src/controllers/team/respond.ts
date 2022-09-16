@@ -1,5 +1,11 @@
 import { prisma } from "@utils/prisma";
-import { RegistrationStatus } from "@prisma/client";
+import {
+  Prisma,
+  RegistrationStatus,
+  Transaction,
+  TransactionReason,
+  User,
+} from "@prisma/client";
 
 import * as Interfaces from "@interfaces";
 import * as Errors from "@errors";
@@ -18,7 +24,10 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
   const { status } = req.body as Interfaces.Team.RegistrationResponse;
 
   // Check response
-  if (!(status in RegistrationStatus) || status === "PENDING") {
+  if (
+    !(status in RegistrationStatus) ||
+    status === RegistrationStatus.PENDING
+  ) {
     return next(Errors.Team.invalidResponse);
   }
 
@@ -38,6 +47,12 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
           userId: true,
           registrationStatus: true,
           role: true,
+          user: {
+            select: {
+              firebaseId: true,
+              balance: true,
+            },
+          },
         },
       },
     },
@@ -48,7 +63,7 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
   }
 
   // Check cancellation status of Team
-  if (team.registrationStatus === "CANCELLED") {
+  if (team.registrationStatus === RegistrationStatus.CANCELLED) {
     return next(Errors.Team.teamRegistrationCancelled);
   }
 
@@ -57,17 +72,27 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
     (member) => member.userId === userId
   );
 
-  if (team.members[indexOfMember].registrationStatus !== "PENDING") {
+  if (
+    team.members[indexOfMember].registrationStatus !==
+    RegistrationStatus.PENDING
+  ) {
     return next(Errors.Team.userAlreadyResponded);
   }
+
+  const event = await prisma.event.findFirst({
+    where: {
+      id: team.eventId,
+    },
+  });
 
   // Check if status is registered in another team in the event
   const otherTeam = await prisma.team.findFirst({
     where: {
+      eventId: team.eventId,
       members: {
         some: {
           userId,
-          registrationStatus: "REGISTERED",
+          registrationStatus: RegistrationStatus.REGISTERED,
         },
       },
     },
@@ -78,27 +103,27 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
   }
 
   // Update Status
-  if (status === "CANCELLED") {
+  if (status === RegistrationStatus.CANCELLED) {
     // Cancel Team Registration
     await prisma.team.update({
       where: {
         id: teamId,
       },
       data: {
-        registrationStatus: "CANCELLED",
+        registrationStatus: RegistrationStatus.CANCELLED,
         members: {
           updateMany: {
             where: {
               teamId,
             },
             data: {
-              registrationStatus: "CANCELLED",
+              registrationStatus: RegistrationStatus.CANCELLED,
             },
           },
         },
       },
     });
-  } else if (status === "REGISTERED") {
+  } else if (status === RegistrationStatus.REGISTERED) {
     // Update team and member status.
     // Complete it in a single transaction.
 
@@ -115,7 +140,7 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
                 id: userId,
               },
               data: {
-                registrationStatus: "REGISTERED",
+                registrationStatus: RegistrationStatus.REGISTERED,
               },
             },
           },
@@ -127,7 +152,8 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
 
       team.members.forEach((member) => {
         if (member.userId !== userId) {
-          allMembersRegistered &&= member.registrationStatus === "REGISTERED";
+          allMembersRegistered &&=
+            member.registrationStatus === RegistrationStatus.REGISTERED;
         }
       });
 
@@ -138,7 +164,69 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
             id: teamId,
           },
           data: {
-            registrationStatus: "REGISTERED",
+            registrationStatus: RegistrationStatus.REGISTERED,
+          },
+        });
+
+        // Add registration trasaction here
+        if (
+          req.admin!.balance <
+          event!.registrationIncentive * team.members.length
+        ) {
+          next(Errors.Transaction.insufficientBalance);
+        }
+
+        const transactions: Prisma.Prisma__TransactionClient<Transaction>[] =
+          [];
+        const userUpdate: Prisma.Prisma__UserClient<User>[] = [];
+
+        team.members.forEach((member) => {
+          transactions.push(
+            prisma.transaction.create({
+              data: {
+                amount: event!.registrationIncentive,
+                reason: TransactionReason.REGISTRATION,
+                event: {
+                  connect: {
+                    id: event!.id,
+                  },
+                },
+                from: {
+                  connect: {
+                    firebaseId: req.admin!.firebaseId,
+                  },
+                },
+                to: {
+                  connect: {
+                    firebaseId: member.user.firebaseId,
+                  },
+                },
+              },
+            })
+          );
+          userUpdate.push(
+            prisma.user.update({
+              where: {
+                id: member.userId,
+              },
+              data: {
+                balance: member.user.balance + event!.registrationIncentive,
+              },
+            })
+          );
+        });
+
+        await Promise.all(transactions);
+        await Promise.all(userUpdate);
+
+        await prisma.user.update({
+          where: {
+            firebaseId: req.admin!.firebaseId,
+          },
+          data: {
+            balance:
+              req.admin!.balance -
+              event!.registrationIncentive * team.members.length,
           },
         });
       }

@@ -37,7 +37,7 @@ const teamSizeNotAllowed = Utils.Response.Error(
   400
 );
 const teamNotFound = Utils.Response.Error("Team not found.", 404);
-const invalidTeamId = Utils.Response.Error("Team ID is invalid", 404);
+const invalidTeamId = Utils.Response.Error("Invalid Team ID", 401);
 
 export {
   userNotPartOfTeam,

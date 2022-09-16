@@ -1,5 +1,5 @@
 import { prisma } from "@utils/prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma, RegistrationStatus, TeamMemberRole } from "@prisma/client";
 
 import * as Interfaces from "@interfaces";
 import * as Success from "@success";
@@ -31,6 +31,10 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
     },
   });
 
+  if (!event) {
+    return next(Errors.Event.eventDoesntExist);
+  }
+
   // Check member limit
   if (event!.minTeamSize > members.size || event!.maxTeamSize < members.size) {
     return next(Errors.Team.teamSizeNotAllowed);
@@ -43,10 +47,10 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
       teamName: name,
       OR: [
         {
-          registrationStatus: "REGISTERED",
+          registrationStatus: RegistrationStatus.REGISTERED,
         },
         {
-          registrationStatus: "PENDING",
+          registrationStatus: RegistrationStatus.PENDING,
         },
       ],
     },
@@ -70,7 +74,7 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
 
     const belongsToTeam = await prisma.teamRegistration.count({
       where: {
-        registrationStatus: "REGISTERED",
+        registrationStatus: RegistrationStatus.REGISTERED,
         user: {
           username: member,
         },
@@ -95,8 +99,13 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
   members.forEach((member) => {
     memberRegistration.push({
       registrationStatus:
-        member === req.user!.username ? "REGISTERED" : "PENDING",
-      role: member === req.user!.username ? "LEADER" : "MEMBER",
+        member === req.user!.username
+          ? RegistrationStatus.REGISTERED
+          : RegistrationStatus.PENDING,
+      role:
+        member === req.user!.username
+          ? TeamMemberRole.LEADER
+          : TeamMemberRole.MEMBER,
       user: {
         connect: {
           username: member,
@@ -108,7 +117,10 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
   await prisma.team.create({
     data: {
       teamName: name,
-      registrationStatus: members.size === 1 ? "REGISTERED" : "PENDING",
+      registrationStatus:
+        members.size === 1
+          ? RegistrationStatus.REGISTERED
+          : RegistrationStatus.PENDING,
       event: {
         connect: {
           id: eventId,

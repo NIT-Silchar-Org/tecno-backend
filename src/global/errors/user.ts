@@ -12,8 +12,19 @@ const badRequest = (msg = "Bad request") => {
 };
 
 const userAlreadyExists = Utils.Response.Error(
-  "User exist with same parameters",
-  400
+  "User exist with same username",
+  409
 );
 
-export { userNotAuthenticated, userNotFound, badRequest, userAlreadyExists };
+const usernameNotAcceptable = Utils.Response.Error(
+  "username is not acceptable",
+  403
+);
+
+export {
+  userNotAuthenticated,
+  userNotFound,
+  badRequest,
+  userAlreadyExists,
+  usernameNotAcceptable,
+};

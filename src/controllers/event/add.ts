@@ -12,8 +12,8 @@ export const createEvent: Interfaces.Controller.Async = async (
   const {
     description,
     posterImage,
-    incentive,
-    isIncentivised,
+    attendanceIncentive,
+    registrationIncentive,
     lat,
     lng,
     maxTeamSize,
@@ -49,7 +49,32 @@ export const createEvent: Interfaces.Controller.Async = async (
   )
     return next(Errors.Module.invalidInput);
 
-  if (!!incentive !== !!isIncentivised) return next(Errors.Module.invalidInput);
+  if (
+    !(registrationIncentive && typeof registrationIncentive === "number") ||
+    !(attendanceIncentive && typeof attendanceIncentive === "number")
+  ) {
+    return next(Errors.Module.invalidInput);
+  }
+  if (isNaN(Number.parseInt(moduleId + "")))
+    return next(Errors.Module.invalidInput);
+  if (
+    typeof maxTeamSize !== "number" ||
+    typeof minTeamSize !== "number" ||
+    typeof lat !== "string" ||
+    typeof lng !== "string" ||
+    typeof name !== "string" ||
+    typeof description !== "string" ||
+    typeof prizeDescription !== "string" ||
+    typeof stagesDescription !== "string" ||
+    typeof venue !== "string" ||
+    typeof posterImage !== "string"
+  )
+    return next(Errors.Module.invalidInput);
+
+  const regStart = new Date(registrationEndTime);
+  const regEnd = new Date(registrationEndTime);
+  if (JSON.stringify(regStart) === "null" || JSON.stringify(regEnd) === "null")
+    return next(Errors.Module.invalidInput);
 
   if (
     !(await prisma.module.findFirst({
@@ -62,16 +87,16 @@ export const createEvent: Interfaces.Controller.Async = async (
     data: {
       description,
       posterImage,
-      incentive,
-      isIncentivised,
+      attendanceIncentive,
+      registrationIncentive,
       lat,
       lng,
       maxTeamSize,
       minTeamSize,
       name,
       prizeDescription,
-      registrationEndTime: new Date(registrationEndTime),
-      registrationStartTime: new Date(registrationStartTime),
+      registrationEndTime: regEnd,
+      registrationStartTime: regStart,
       stagesDescription,
       venue,
       module: {

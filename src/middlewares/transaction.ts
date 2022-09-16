@@ -17,8 +17,8 @@ const isUserEventManager: Interfaces.Middleware.Async = async (
     where: {
       id: parseInt(eventId),
       managers: {
-        every: {
-          id: req.user.id,
+        some: {
+          id: req.user!.id,
         },
       },
     },
@@ -31,4 +31,39 @@ const isUserEventManager: Interfaces.Middleware.Async = async (
   return next();
 };
 
-export { isUserEventManager };
+const isReceiverAdmin: Interfaces.Middleware.Async = async (
+  req,
+  _res,
+  next
+) => {
+  const { toUserId } =
+    req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
+
+  const admin = await prisma.user.findFirst({
+    where: {
+      firebaseId: toUserId,
+    },
+  });
+
+  if (
+    admin &&
+    toUserId &&
+    toUserId.length &&
+    toUserId === process.env.ADMIN_ID!
+  ) {
+    next();
+  } else {
+    next(Errors.Auth.adminAuthError);
+  }
+};
+
+const isUserAuthorized: Interfaces.Middleware.Sync = (req, _res, next) => {
+  const { userId } = req.params;
+  if (req.user!.id === parseInt(userId)) {
+    next();
+  } else {
+    next(Errors.Auth.userUnauthorized);
+  }
+};
+
+export { isUserEventManager, isReceiverAdmin, isUserAuthorized };

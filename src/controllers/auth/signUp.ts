@@ -20,6 +20,10 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
     return next(Errors.User.badRequest("Auth token is missing"));
   }
 
+  if (!Utils.User.validateUsername(username)) {
+    return next(Errors.User.usernameNotAcceptable);
+  }
+
   const idToken: string = (auth as string).split(" ")[1];
 
   const firebaseAuth = Utils.Firebase.firebaseAdmin.auth();
@@ -44,10 +48,6 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
 
   const { uid, email: firebaseEmail, picture } = decodedToken;
 
-  // if (!firebaseEmail) {
-  //   return next(Errors.User.badRequest("Email is missing"));
-  // }
-
   const userExists: number = await prisma.user.count({
     where: {
       OR: [
@@ -55,7 +55,8 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
           firebaseId: uid,
         },
         {
-          email: process.env.NODE_ENV === "development" ? email : firebaseEmail,
+          email:
+            process.env.NODE_ENV === "development" ? email : firebaseEmail!,
         },
         {
           username: username,
