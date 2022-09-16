@@ -25,8 +25,8 @@ router.get(
 );
 router.patch(
   "/team/:teamId/respond",
-  Middlewares.Auth.getAdmin,
   Middlewares.Auth.validateUser,
+  Middlewares.Auth.getAdmin,
   Controllers.Team.teamRegistrationResponse
 );
 
