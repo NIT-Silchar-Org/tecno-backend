@@ -12,7 +12,9 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
 
   const {
     username,
-    name,
+    firstName,
+    middleName,
+    lastName,
     collegeName,
     registrationId,
     email,
@@ -22,9 +24,9 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
 
   if (
     !username ||
-    !name ||
+    !firstName ||
+    !lastName ||
     !collegeName ||
-    !registrationId ||
     !email ||
     !phoneNumber
   ) {
@@ -36,9 +38,11 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
   }
 
   username.trim();
-  name.trim();
+  firstName.trim();
+  lastName.trim();
+  middleName?.trim();
   collegeName.trim();
-  registrationId.trim();
+  registrationId?.trim();
   email.trim();
   imageUrl?.trim();
   phoneNumber.trim();
@@ -87,9 +91,6 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
         {
           username: username,
         },
-        {
-          phoneNumber: phoneNumber,
-        },
       ],
     },
   });
@@ -105,7 +106,9 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
       collegeName: collegeName,
       registrationId: registrationId,
       firebaseId: uid,
-      name: name,
+      firstName: firstName,
+      middleName: middleName ? middleName : "",
+      lastName: lastName,
       phoneNumber: phoneNumber,
       imageUrl: imageUrl || picture || "https://picsum.photos/200",
       username: username,

@@ -1,8 +1,10 @@
 interface CreateUserBody {
-  name: string;
+  firstName: string;
+  middleName: string | "" | null | undefined;
+  lastName: string;
   email: string;
   collegeName: string;
-  registrationId: string;
+  registrationId: string | null | undefined;
   username: string;
   phoneNumber: string;
 
@@ -10,7 +12,9 @@ interface CreateUserBody {
 }
 
 interface UserUpdateBody {
-  name: string | null | undefined;
+  firstName: string | null | undefined;
+  lastName: string | null | undefined;
+  middleName: string | null | undefined;
   collegeName: string | null | undefined;
   registrationId: string | null | undefined;
   imageUrl: string | null | undefined;

@@ -12,7 +12,9 @@ model User {
 
   firebaseId String @unique
 
-  name        String
+  firstName   String
+  middleName  String @default("")
+  lastName    String
   username    String @unique
   email       String @unique
   phoneNumber String

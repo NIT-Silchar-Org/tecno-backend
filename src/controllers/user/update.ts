@@ -8,8 +8,14 @@ const updateUserDetails: Interfaces.Controller.Async = async (
   res,
   _next
 ) => {
-  const { name, collegeName, registrationId, imageUrl } =
-    req.body as Interfaces.User.UserUpdateBody;
+  const {
+    firstName,
+    lastName,
+    middleName,
+    collegeName,
+    registrationId,
+    imageUrl,
+  } = req.body as Interfaces.User.UserUpdateBody;
 
   const user = req?.user;
 
@@ -18,10 +24,12 @@ const updateUserDetails: Interfaces.Controller.Async = async (
       firebaseId: req?.user?.firebaseId,
     },
     data: {
-      name: name || user?.name,
-      collegeName: collegeName || user?.collegeName,
-      registrationId: registrationId || user?.registrationId,
-      imageUrl: imageUrl || user?.imageUrl,
+      firstName: firstName || user!.firstName,
+      lastName: lastName || user!.lastName,
+      middleName: middleName === "" ? "" : middleName || user!.middleName,
+      collegeName: collegeName || user!.collegeName,
+      registrationId: registrationId || user!.registrationId,
+      imageUrl: imageUrl || user!.imageUrl,
     },
   });
 
