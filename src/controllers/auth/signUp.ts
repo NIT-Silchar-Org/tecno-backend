@@ -10,9 +10,26 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
 
   const user: Interfaces.User.CreateUserBody = req.body;
 
-  const { username, name, collegeName, registrationId, email, imageUrl } = user;
+  const {
+    username,
+    firstName,
+    middleName,
+    lastName,
+    collegeName,
+    registrationId,
+    email,
+    imageUrl,
+    phoneNumber,
+  } = user;
 
-  if (!username || !name || !collegeName || !registrationId || !email) {
+  if (
+    !username ||
+    !firstName ||
+    !lastName ||
+    !collegeName ||
+    !email ||
+    !phoneNumber
+  ) {
     return next(Errors.User.badRequest("Required fields missing"));
   }
 
@@ -20,10 +37,23 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
     return next(Errors.User.badRequest("Auth token is missing"));
   }
 
+  username.trim();
+  firstName.trim();
+  lastName.trim();
+  middleName?.trim();
+  collegeName.trim();
+  registrationId?.trim();
+  email.trim();
+  imageUrl?.trim();
+  phoneNumber.trim();
+
   if (!Utils.User.validateUsername(username)) {
-    return next(Errors.User.usernameNotAcceptable);
+    return next(Errors.User.notAcceptable("Username not Acceptable"));
   }
 
+  if (!Utils.User.validatePhoneNumber(phoneNumber)) {
+    return next(Errors.User.notAcceptable("Phone number not Acceptable"));
+  }
   const idToken: string = (auth as string).split(" ")[1];
 
   const firebaseAuth = Utils.Firebase.firebaseAdmin.auth();
@@ -76,7 +106,10 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
       collegeName: collegeName,
       registrationId: registrationId,
       firebaseId: uid,
-      name: name,
+      firstName: firstName,
+      middleName: middleName ? middleName : "",
+      lastName: lastName,
+      phoneNumber: phoneNumber,
       imageUrl: imageUrl || picture || "https://picsum.photos/200",
       username: username,
     },
