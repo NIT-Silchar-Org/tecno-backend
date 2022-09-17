@@ -1,1 +1,1 @@
-web: pnpm start:aws
+web: npm run start:aws
