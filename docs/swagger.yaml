@@ -360,12 +360,12 @@ paths:
             schema:
               type: object
               properties:
-                toUserId:
+                toUserName:
                   type: string
-                  example: "u7dpk73akmjzs765"
+                  example: "tecnouser"
                 eventId:
                   type: string
-                  example: "pq864mvcx66238njdhfy98"
+                  example: "1"
 
       responses:
         200:
@@ -411,9 +411,9 @@ paths:
             schema:
               type: object
               properties:
-                toUserId:
+                toUserName:
                   type: string
-                  example: "Hnxp4N7WdYUcb3L3d4WNUx4Xld93"
+                  example: "tecnouser"
                 amount:
                   type: number
                   example: 100
@@ -477,7 +477,7 @@ paths:
   /transaction/online-event:
     post:
       description:
-        Transaction for online event, provided the sender is event manager.
+        Transaction for online event, provided the sender is admin.
       tags:
         - Transaction
       security:
@@ -489,9 +489,9 @@ paths:
             schema:
               type: object
               properties:
-                toUserId:
+                toUserName:
                   type: string
-                  example: "u7dpk73akmjzs765"
+                  example: "tecnouser"
                 amount:
                   type: number
                   example: 100
@@ -538,24 +538,14 @@ paths:
                   msg:
                     type: string
                     example: "Invalid amount transaction"
-  /transaction/{userId}:
+  /transaction:
     get:
       description:
-        An array of all the transactions, provided the user is admin.
+        An array of all your transactions, provided you are authorized.
       tags:
         - Transaction
       security:
         - BearerAuth: []
-      parameters:
-        - in: path
-          name: userId
-
-          schema:
-            type: number
-
-          required: true
-
-          description: UserId for which Transaction is needed.
       responses:
         200:
           description:
@@ -599,7 +589,7 @@ paths:
                   msg:
                     type: string
                     example: "Server error"
-  /transaction/:
+  /transaction/all:
     get:
       description:
         An array of all the transactions, provided the user is admin.
@@ -1752,17 +1742,6 @@ paths:
         - Team
 
       parameters:
-
-        - in: path
-          name: eventId
-
-          schema:
-            type: integer
-
-          required: true
-
-          description: Numeric ID of the event in which the team is registering
-
         - in: path
           name: teamId
 
@@ -1841,17 +1820,6 @@ paths:
         - BearerAuth: []
 
       parameters:
-
-        - in: path
-          name: eventId
-
-          schema:
-            type: integer
-
-          required: true
-
-          description: Numeric ID of the event in which the team is registering
-
         - in: path
           name: teamId
 
