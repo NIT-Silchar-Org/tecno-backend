@@ -3,5 +3,6 @@
   "semi": true,
   "singleQuote": false,
   "trailingComma": "es5",
-  "bracketSameLine": true
+  "bracketSameLine": true,
+  "proseWrap": "always"
 }
