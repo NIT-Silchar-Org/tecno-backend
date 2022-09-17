@@ -13,9 +13,12 @@ model User {
 
   firebaseId String @unique
 
-  name     String
-  username String @unique
-  email    String @unique
+  firstName   String
+  middleName  String @default("")
+  lastName    String
+  username    String @unique
+  email       String @unique
+  phoneNumber String
 
   balance Int
 
@@ -143,4 +146,9 @@ model Transaction {
   event   Event? @relation(fields: [eventId], references: [id], onDelete: Restrict)
 
   createdAt DateTime @default(now())
+}
+
+model Statics {
+  name String @id
+  json Json
 }

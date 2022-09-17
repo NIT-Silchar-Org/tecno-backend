@@ -23,9 +23,17 @@ components:
           type: string
           example: "YiuqYLtElLTNGaNy9vistAz3u663"
 
-        name:
+        firstName:
           type: string
-          example: "John Smith"
+          example: "John"
+          
+        middleName:
+          type: string
+          example: "Doe"
+
+        lastName:
+          type: string
+          example: "Smith"
 
         username:
           type: string
@@ -38,6 +46,10 @@ components:
         balance:
           type: integer
           example: 1000
+
+        phoneNumber:
+          type: string
+          example: "1231231233"
 
         collegeName:
           type: string
@@ -215,6 +227,19 @@ components:
         createdAt:
           type: string
           example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+    Statics:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "TecnoTeam"
+        json:
+          type: object
+          properties:
+            teamName:
+              type: string
+            totalMembers:
+              type: integer
 
 servers:
   - url: http://localhost:5000/api
@@ -237,9 +262,15 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                firstName:
                   type: string
-                  example: "John Smith"
+                  example: "John"
+                middleName:
+                  type: string
+                  example: "Doe"
+                lastName:
+                  type: string
+                  example: "Smith"
                 email:
                   type: string
                   example: "awesomeguy@nits.ac.in"
@@ -255,6 +286,12 @@ paths:
                 imageUrl:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
+              required:
+                - firstName
+                - lastName
+                - email
+                - collegeName
+                - username
       responses:
         200:
           description: Successful
@@ -1223,13 +1260,13 @@ paths:
                   type: integer
                   example: 1
 
-                incentive:
+                attendanceIncentive:
                   type: number
                   example: 100
 
-                isIncentivised:
-                  type: boolean
-                  example: true
+                registrationIncentive:
+                  type: number
+                  example: 100
 
                 prizeDescription:
                   type: string
@@ -1449,13 +1486,13 @@ paths:
                   type: integer
                   example: 1
 
-                incentive:
+                attendanceIncentive:
                   type: number
                   example: 100
 
-                isIncentivised:
-                  type: boolean
-                  example: true
+                registrationIncentive:
+                  type: number
+                  example: 200
 
                 prizeDescription:
                   type: string
@@ -1686,7 +1723,13 @@ paths:
                         fireabaseId:
                           type: string
                           example: "YiuqYLtElLTNGaNy9vistAz3u663"
-                        name:
+                        firstName:
+                          type: string
+                          example: "john"
+                        lastName:
+                          type: string
+                          example: "john"
+                        middleName:
                           type: string
                           example: "john"
                         username:
@@ -1701,6 +1744,9 @@ paths:
                         registrationId:
                           type: string
                           example: "2012001"
+                        phoneNumber:
+                          type: string
+                          example: "1231231230"
 
         404:
           description: Conflict
@@ -1901,7 +1947,11 @@ paths:
                     type: number
                     example: 200
                   msg:
-                    $ref: '#/components/schemas/User'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+
+
     patch:
       tags:
         - User
@@ -1915,7 +1965,15 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                firstName:
+                  type: string
+                  nullable: true
+                  example: "netra"
+                middleName:
+                  type: string
+                  nullable: true
+                  example: "netra"
+                lastName:
                   type: string
                   nullable: true
                   example: "netra"
@@ -1924,6 +1982,10 @@ paths:
                   nullable: true
                   example: "National Institute of Technology Silchar"
                 registrationId:
+                  type: string
+                  nullable: true
+                  example: 2012000
+                phoneNumber:
                   type: string
                   nullable: true
                   example: 2012000
@@ -2020,7 +2082,138 @@ paths:
                     type: number
                     example: 200
                   msg:
-                    $ref: '#/components/schemas/User'
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 38
+              
+                      firebaseId:
+                        type: string
+                        example: "YiuqYLtElLTNGaNy9vistAz3u663"
+              
+                      name:
+                        type: string
+                        example: "John Smith"
+              
+                      username:
+                        type: string
+                        example: "helloworldxxx69"
+              
+                      email:
+                        type: string
+                        example: "helloworld@nits.ac.in"
+              
+                      balance:
+                        type: integer
+                        example: 1000
+              
+                      phoneNumber:
+                        type: string
+                        example: "1231231233"
+              
+                      collegeName:
+                        type: string
+                        example: "National Institute of Technology, Silchar"
+              
+                      registrationId:
+                        type: string
+                        example: "2012001"
+              
+                      imageUrl:
+                        type: string
+                        example: "https://avatars.githubusercontent.com/u/74897001"
+                      
+                      manages:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 43
+                    
+                            name:
+                              type: string
+                              example: "Coding Competition"
+                              
+                            maxTeamSize:
+                              type: integer
+                              example: 5
+                            
+                            minTeamSize:
+                              type: integer
+                              example: 1
+                    
+                            attendanceIncentive:
+                              type: number
+                              example: 100
+                    
+                            registrationIncentive:
+                              type: number
+                              example: 100
+                    
+                            prizeDescription:
+                              type: string
+                              example: "First prize gets a Lamborghini"
+                    
+                            stagesDescription:
+                              type: string
+                              example: "First round will be a group discussion"
+                    
+                            description:
+                              type: string
+                              example: "Very good competition. Pls register."
+                    
+                            venue:
+                              type: string
+                              example: "Sports Complex"
+                              
+                      organizes:
+                        type: array
+                        items: 
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 43
+                    
+                            name:
+                              type: string
+                              example: "Coding Competition"
+                              
+                            maxTeamSize:
+                              type: integer
+                              example: 5
+                            
+                            minTeamSize:
+                              type: integer
+                              example: 1
+                    
+                            attendanceIncentive:
+                              type: number
+                              example: 100
+                    
+                            registrationIncentive:
+                              type: number
+                              example: 100
+                    
+                            prizeDescription:
+                              type: string
+                              example: "First prize gets a Lamborghini"
+                    
+                            stagesDescription:
+                              type: string
+                              example: "First round will be a group discussion"
+                    
+                            description:
+                              type: string
+                              example: "Very good competition. Pls register."
+                    
+                            venue:
+                              type: string
+                              example: "Sports Complex"
+                            
         404:
           description: User not found
           content:
@@ -2061,7 +2254,65 @@ paths:
                     type: number
                     example: 200
                   msg:
-                    $ref: '#/components/schemas/User'
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 38
+              
+                      firebaseId:
+                        type: string
+                        example: "YiuqYLtElLTNGaNy9vistAz3u663"
+              
+                      name:
+                        type: string
+                        example: "John Smith"
+              
+                      username:
+                        type: string
+                        example: "helloworldxxx69"
+              
+                      email:
+                        type: string
+                        example: "helloworld@nits.ac.in"
+              
+                      balance:
+                        type: integer
+                        example: 1000
+              
+                      phoneNumber:
+                        type: string
+                        example: "1231231233"
+              
+                      collegeName:
+                        type: string
+                        example: "National Institute of Technology, Silchar"
+              
+                      registrationId:
+                        type: string
+                        example: "2012001"
+              
+                      imageUrl:
+                        type: string
+                        example: "https://avatars.githubusercontent.com/u/74897001"
+                      manages:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Event'
+                      organizes:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Event'
+                      to:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Transaction'
+                      from:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Transaction'
+
+
         404:
           description: User with given id not found
           content:
@@ -2088,3 +2339,220 @@ paths:
                   msg:
                     type: string
                     example: Incorrect user id
+  /statics/:
+    get:
+      tags: 
+        - Statics
+      description: Get all statics data
+      responses:
+        200:
+          description: A JSON object containing all the statics data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Statics'
+    post:
+      tags: 
+        - Statics
+      security:
+        - BearerAuth: []
+      description: Create particular static 
+      requestBody:
+
+        description: A JSON Object for the user's response to an invitation
+
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "TecnoTeam"
+                json:
+                  type: object
+                  properties:
+                    teamName: 
+                      type: string
+                    totalMember: 
+                      type: integer
+      responses: 
+        200:
+          description: Successfull creation of static
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Static created successfully"
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: Invalid input
+  /statics/{name}:
+    get:
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: The name of the static data requested
+      tags: 
+        - Statics
+      description: Get particular static data
+      responses: 
+        200:
+          description: A JSON object containing the requested static data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Statics'
+        404:
+          description: Static with the given name doesn't exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: Static not found
+    put:
+      tags: 
+        - Statics
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: The name of the static data requested
+      security:
+        - BearerAuth: []
+      description: Update particular static 
+      requestBody:
+
+        description: A JSON Object for the user's response to an invitation
+
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                json:
+                  type: object
+                  properties:
+                    teamName: 
+                      type: string
+                    totalMember: 
+                      type: integer
+      responses: 
+        200:
+          description: Successfull creation of static
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Static Updated successfully"
+        404:
+          description: Could not find static with given name 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: Could not find static with given name
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: Invalid input
+    delete:
+      tags: 
+        - Statics
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: The name of the static data requested
+      security:
+        - BearerAuth: []
+      description: Delete particular static   
+      responses: 
+        200:
+          description: Successfull creation of static
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Static Deleted successfully"
+        404:
+          description: Could not find static with given name 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: Could not find static with given name

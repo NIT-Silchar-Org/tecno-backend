@@ -153,7 +153,9 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
     if (member === req.user!.username) {
       html = `
         <p>
-          <h3>Dear <b>${user.name}</b>,</h3>
+          <h3>Dear <b>${user.firstName} ${
+        user.middleName ? user.middleName + " " : ""
+      }${user.lastName}</b>,</h3>
           Thank you for taking an interest in </b>${process.env.NAME}</b>'s
           </b>${event!.name}</b> event.
 
@@ -170,7 +172,9 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
     } else {
       html = `
         <p>
-          <h3>Dear <b>${user.name}</b>,</h3>
+          <h3>Dear <b>${user.firstName} ${
+        user.middleName ? user.middleName + " " : ""
+      }${user.lastName}</b>,</h3>
           You've been invited to join the team <b>${name}</b> at
           </b>${process.env.NAME}</b>'s </b>${event!.name}</b> event.
           <br>
