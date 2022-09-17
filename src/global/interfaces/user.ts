@@ -1,9 +1,4 @@
-import {
-  Prisma,
-  RegistrationStatus,
-  TeamMemberRole,
-  TeamRegistration,
-} from "@prisma/client";
+import { Prisma, RegistrationStatus, TeamMemberRole } from "@prisma/client";
 
 interface CreateUserBody {
   firstName: string;

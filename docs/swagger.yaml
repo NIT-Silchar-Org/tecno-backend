@@ -1991,6 +1991,75 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        role: 
+                          type: string
+                          example: "MEMBER"
+                        registrationStatus:
+                          type: string
+                          example: "CANCELLED"
+                        team: 
+                          type: object
+                          properties:
+                            id: 
+                              type: number
+                              example: 1
+                            registrationStatus:
+                              type: string
+                              example: "CANCELLED"
+                            teamName:
+                              type: string
+                              example: "hello"
+                            extraInformation:
+                              type: object
+                            members:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                    example: 1
+                                  registrationStatus:
+                                    type: string
+                                    example: "CANCELLED"
+                                  role:
+                                    type: string
+                                    example: "MEMBER"
+                                  user:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: number
+                                        example: 1
+                                      username:
+                                        type: string
+                                        example: "josu"
+                                      firstName:
+                                        type: string
+                                        example: "net"
+                                      middleName:
+                                        type: string
+                                        example: "kk"
+                                      lastName:
+                                        type: string
+                                        example: "bar"
+                                      imageUrl:
+                                        type: string
+                                        example: "https://"
+                                
+                      
 
   /user/me/attended_events:
     get:
