@@ -1,11 +1,9 @@
-import { TeamMemberRole, RegistrationStatus } from "@prisma/client";
+import { RegistrationStatus } from "@prisma/client";
 
 interface RegisterTeamBody {
   name: string;
-  members: {
-    username: string;
-    role: TeamMemberRole;
-  }[];
+  members: string[];
+  extraInformation: object;
 }
 
 interface RegistrationResponse {

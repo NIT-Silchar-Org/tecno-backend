@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 datasource db {
@@ -12,9 +13,12 @@ model User {
 
   firebaseId String @unique
 
-  name     String
-  username String @unique
-  email    String @unique
+  firstName   String
+  middleName  String @default("")
+  lastName    String
+  username    String @unique
+  email       String @unique
+  phoneNumber String
 
   balance Int
 
@@ -40,6 +44,8 @@ model Team {
   registrationStatus RegistrationStatus
 
   members TeamRegistration[]
+
+  extraInformation Json[]
 
   eventId Int
   event   Event @relation(fields: [eventId], references: [id])
@@ -109,6 +115,8 @@ model Event {
   registrationStartTime DateTime
   registrationEndTime   DateTime
 
+  extraQuestions Json[] @default([])
+
   moduleId Int
   module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
@@ -142,4 +150,9 @@ model Transaction {
   event   Event? @relation(fields: [eventId], references: [id], onDelete: Restrict)
 
   createdAt DateTime @default(now())
+}
+
+model Statics {
+  name String @id
+  json Json
 }

@@ -1,3 +1,5 @@
+import { RegistrationStatus } from "@prisma/client";
+
 import { prisma } from "@utils/prisma";
 
 import * as Interfaces from "@interfaces";
@@ -28,6 +30,20 @@ const getTeamDetails: Interfaces.Controller.Async = async (req, res, next) => {
           venue: true,
         },
       },
+      members: {
+        select: {
+          user: {
+            select: {
+              email: true,
+              username: true,
+              imageUrl: true,
+              collegeName: true,
+            },
+          },
+          role: true,
+          registrationStatus: true,
+        },
+      },
     },
   });
 
@@ -52,8 +68,8 @@ const getAllTeamsOfEvent: Interfaces.Controller.Async = async (
 
   const eventId = parseInt(EID);
 
-  if (!eventId) {
-    return next(Errors.Team.badRequest("Incorrect event Id"));
+  if (isNaN(eventId)) {
+    return next(Errors.Event.eventDoesntExist);
   }
 
   const teams = await prisma.team.findMany({
@@ -63,7 +79,7 @@ const getAllTeamsOfEvent: Interfaces.Controller.Async = async (
           eventId: eventId,
         },
         {
-          registrationStatus: "REGISTERED",
+          registrationStatus: RegistrationStatus.REGISTERED,
         },
       ],
     },
@@ -76,9 +92,13 @@ const getAllTeamsOfEvent: Interfaces.Controller.Async = async (
               firebaseId: true,
               collegeName: true,
               registrationId: true,
+              firstName: true,
+              lastName: true,
+              middleName: true,
               email: true,
               imageUrl: true,
               username: true,
+              phoneNumber: true,
             },
           },
         },
@@ -86,7 +106,7 @@ const getAllTeamsOfEvent: Interfaces.Controller.Async = async (
     },
   });
 
-  res.json(Utils.Response.Success(teams));
+  return res.json(Utils.Response.Success(teams));
 };
 
 export { getTeamDetails, getAllTeamsOfEvent };

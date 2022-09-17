@@ -4,11 +4,7 @@ import { prisma } from "@utils/prisma";
 import * as Errors from "@errors";
 import * as Utils from "@utils";
 
-export const updateEvent: Interfaces.Controller.Async = async (
-  req,
-  res,
-  next
-) => {
+const updateEvent: Interfaces.Controller.Async = async (req, res, next) => {
   const {
     description,
     posterImage,
@@ -25,6 +21,7 @@ export const updateEvent: Interfaces.Controller.Async = async (
     registrationStartTime,
     stagesDescription,
     venue,
+    extraQuestions,
   } = req.body as Event;
 
   const { eventId: EID } = req.params;
@@ -42,7 +39,7 @@ export const updateEvent: Interfaces.Controller.Async = async (
   }
 
   let regStart;
-  if (registrationEndTime) regStart = new Date(registrationEndTime);
+  if (registrationStartTime) regStart = new Date(registrationStartTime);
   let regEnd;
   if (registrationEndTime) regEnd = new Date(registrationEndTime);
   if (registrationStartTime && JSON.stringify(regStart) === "null")
@@ -121,9 +118,12 @@ export const updateEvent: Interfaces.Controller.Async = async (
       managers: {
         connect: managersUsernames,
       },
+      extraQuestions: extraQuestions,
     },
   });
 
   if (!event) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(event));
 };
+
+export { updateEvent };

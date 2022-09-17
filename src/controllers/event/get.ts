@@ -4,17 +4,18 @@ import { prisma } from "@utils/prisma";
 import success from "@utils/response/success";
 import * as Utils from "@utils";
 
-export const getAllEvents: Interfaces.Controller.Async = async (
-  _req,
-  res,
-  next
-) => {
-  const events = await prisma.event.findMany();
+const getAllEvents: Interfaces.Controller.Async = async (_req, res, next) => {
+  const events = await prisma.event.findMany({
+    include: {
+      module: true,
+    },
+  });
+
   if (!events) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(events));
 };
 
-export const getEventsByModule: Interfaces.Controller.Async = async (
+const getEventsByModule: Interfaces.Controller.Async = async (
   req,
   res,
   next
@@ -31,11 +32,7 @@ export const getEventsByModule: Interfaces.Controller.Async = async (
   return res.json(success(events));
 };
 
-export const getEventById: Interfaces.Controller.Async = async (
-  req,
-  res,
-  next
-) => {
+const getEventById: Interfaces.Controller.Async = async (req, res, next) => {
   const { eventId: EID } = req.params;
   const eventId = Number.parseInt(EID);
 
@@ -43,7 +40,11 @@ export const getEventById: Interfaces.Controller.Async = async (
 
   const event = await prisma.event.findFirst({
     where: { id: eventId },
+    include: { module: true },
   });
   if (!event) return next(Errors.Module.eventNotFound);
   return res.json(Utils.Response.Success(event));
 };
+
+
+export { getAllEvents, getEventsByModule, getEventById };
