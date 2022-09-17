@@ -3,11 +3,18 @@ import * as Interfaces from "@interfaces";
 import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
 
-const isEventExist: Interfaces.Middleware.Async = async (req, _res, next) => {
-  const { eventId } = req.body as Interfaces.Transaction.TransactionBody;
+const isEventValid: Interfaces.Middleware.Async = async (req, _res, next) => {
+  const { eventId: EID } = req.body as Interfaces.Transaction.TransactionBody;
+  const eventId = parseInt(EID);
+
+  if (isNaN(eventId)) {
+    return next(Errors.Event.eventDoesntExist);
+  }
 
   const event = await prisma.event.findFirst({
-    where: { id: parseInt(eventId) },
+    where: {
+      id: eventId,
+    },
   });
 
   if (!event) {
@@ -17,4 +24,4 @@ const isEventExist: Interfaces.Middleware.Async = async (req, _res, next) => {
   return next();
 };
 
-export { isEventExist };
+export { isEventValid };

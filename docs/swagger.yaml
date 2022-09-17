@@ -196,7 +196,7 @@ components:
         id:
           type: number
           example: 65
-          
+
         fromUserId:
           type: number
           example: 2
@@ -208,8 +208,8 @@ components:
         amount:
           type: number
           example: 2000
-          
-        description: 
+
+        description:
           type: string
           example: "Purchase"
 
@@ -219,7 +219,7 @@ components:
             - ATTENDANCE
             - PURCHASE
             - ONLINE_EVENT
-        
+
         eventId:
           type: number
           example: 2
@@ -243,9 +243,9 @@ components:
 
 servers:
   - url: http://localhost:5000/api
-    description: Development Server
+    description: Dev Server (Local)
   - url: https://api.dev.tecnoesis.org/api
-    description: Development Server (EC2)
+    description: Dev Server (EC2)
 
 paths:
   /auth/signup:
@@ -564,10 +564,10 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   type: object
                   properties:
-                    id: 
+                    id:
                       type: number
                       example: 65
                     amount:
@@ -576,7 +576,7 @@ paths:
                     reason:
                       type: string
                       example: "PURCHASE"
-                    description: 
+                    description:
                       type: string
                       example: "Transaction is for purchase"
                     type:
@@ -584,7 +584,7 @@ paths:
                       example: "DEBIT"
                     createdAt:
                       type: string
-                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"     
+                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
         500:
           description:
             Server error.
@@ -615,7 +615,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Transaction'
         500:
           description:
@@ -631,7 +631,7 @@ paths:
                   msg:
                     type: string
                     example: "Server error"
-                    
+
   /module/{moduleId}/event:
     get:
       summary: Get an array of JSON event objects in a module.
@@ -646,12 +646,12 @@ paths:
           required: true
 
           description: Numeric ID of the module requested.
-      tags: 
+      tags:
         - Module
       responses:
         '200':
           description: An Array of JSON event objects.
-          content:  
+          content:
             application/json:
               schema:
                 type: array
@@ -659,7 +659,7 @@ paths:
                   $ref: '#/components/schemas/Event'
         '400':
           description: Throws if moduleId is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -697,7 +697,7 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
-    
+
   /module/:
     get:
       summary: Get an array of JSON module objects with nested events.
@@ -706,7 +706,7 @@ paths:
       responses:
         '200':
           description: An Array of JSON module objects.
-          content:  
+          content:
             application/json:
               schema:
                 type: array
@@ -733,7 +733,7 @@ paths:
                           iconImage:
                             type: string
                             example: "http://iconImage.com"
-                          coverImage: 
+                          coverImage:
                             type: string
                             example: "http://coverImage.com"
                           thridPartyUrl:
@@ -750,7 +750,7 @@ paths:
                                 name:
                                   type: string
                                   example: "roborobo"
-                                posterImage: 
+                                posterImage:
                                   type: string
                                   example: "http://posterImage.com"
                                 attendanceIncentive:
@@ -768,7 +768,7 @@ paths:
                                 registrationStartTime:
                                   type: string
                                   example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
-                    
+
         '500':
             description: Throws if server is unresponsive.
             content:
@@ -801,7 +801,7 @@ paths:
         responses:
           '200':
             description: A JSON module object.
-            content:  
+            content:
               application/json:
                 schema:
                   type: object
@@ -813,7 +813,7 @@ paths:
                       $ref: '#/components/schemas/Module'
           '400':
             description: Throws if moduleId is not a number.
-            content:  
+            content:
               application/json:
                 schema:
                   type: object
@@ -871,7 +871,7 @@ paths:
       responses:
         '200':
           description: A JSON object of the deleted module.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -883,7 +883,7 @@ paths:
                     $ref: '#/components/schemas/Module'
         '400':
           description: Throws if moduleId is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -975,7 +975,7 @@ paths:
       responses:
         '200':
           description: A JSON object of the edited module.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -987,7 +987,7 @@ paths:
                     $ref: '#/components/schemas/Module'
         '400':
           description: Throws if moduleId is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1038,8 +1038,8 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
-                      
-    
+
+
   /module/create:
     post:
       requestBody:
@@ -1084,7 +1084,7 @@ paths:
                     $ref: '#/components/schemas/Module'
         '400':
           description: Throws if response body has empty fields.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1129,7 +1129,7 @@ paths:
       responses:
         '200':
           description: An Array of JSON event objects.
-          content:  
+          content:
             application/json:
               schema:
                 type: array
@@ -1167,7 +1167,7 @@ paths:
       responses:
         '200':
           description: A JSON event object.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1179,7 +1179,7 @@ paths:
                     $ref: '#/components/schemas/Event'
         '400':
           description: Throws if event id is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1319,7 +1319,7 @@ paths:
       responses:
         '200':
           description: A JSON object of the edited event.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1331,7 +1331,7 @@ paths:
                     $ref: '#/components/schemas/Event'
         '400':
           description: Throws if event id is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1387,7 +1387,7 @@ paths:
       responses:
         '200':
           description: A JSON object of the deleted event.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1399,7 +1399,7 @@ paths:
                     $ref: '#/components/schemas/Event'
         '400':
           description: Throws if eventId is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1450,8 +1450,8 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
-      
-      
+
+
   /event/create:
     post:
       summary: Create an event.
@@ -1461,7 +1461,7 @@ paths:
         - BearerAuth: []
       requestBody:
         description: A JSON Object containing details of the event to be created.
-        content: 
+        content:
           application/json:
             schema:
               type: object
@@ -1528,7 +1528,7 @@ paths:
       responses:
         '200':
           description: A JSON object of the created event.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1540,7 +1540,7 @@ paths:
                     $ref: '#/components/schemas/Event'
         '400':
           description: Throws if requestbody has empty fields.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1577,8 +1577,8 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
-                
-  /event/{eventId}/team/add:
+
+  /team/event/{eventId}/add:
     post:
       description: Register a team for an event
 
@@ -1612,25 +1612,15 @@ paths:
               properties:
                 name:
                   type: string
-                  example: "John Smith"
+                  example: "404 Coders"
 
                 members:
                   type: array
 
                   items:
-                    type: object
-
-                    properties:
-                      username:
-                        type: string
-                        example: "johnsmittecno22"
-
-                      role:
-                        type: string
-                        enum:
-                          - LEADER
-                          - MEMBER
-                        example: MEMBER
+                    type: string
+                    example: ["john_smith99", "b4dg4m3r55"]
+                    description: "Array of usernames of members. No need to put leader's username"
 
       responses:
         200:
@@ -1688,8 +1678,8 @@ paths:
                   msg:
                     type: string
                     example: Team Already Exists.
-                    
-  /event/{eventId}/registered_teams:
+
+  /team/event/{eventId}/registered_teams:
     get:
       description: Get the details of all the teams registered in a particular event
       security:
@@ -1708,7 +1698,7 @@ paths:
           required: true
 
           description: Numeric ID of the event
-      
+
       responses:
         200:
           description: Get a JSON Object with all the registered teams in event
@@ -1718,10 +1708,12 @@ paths:
                 type: array
                 items:
                   type: object
+
                   properties:
                     status:
                       type: number
                       example: 200
+
                     msg:
                       type: object
                       properties:
@@ -1742,7 +1734,7 @@ paths:
                           example: "john"
                         username:
                           type: string
-                          example: "josu"
+                          example: "john_smith29"
                         email:
                           type: string
                           example: "hello@nits.ac.in"
@@ -1751,12 +1743,26 @@ paths:
                           example: "NITS"
                         registrationId:
                           type: string
-                          example: "2012000"
+                          example: "2012001"
                         phoneNumber:
                           type: string
                           example: "1231231230"
 
-  /event/{eventId}/team/{teamId}:
+        404:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: Event not found.
+
+  /team/{teamId}:
     get:
       description: Get the details of a team
       security:
@@ -1843,7 +1849,7 @@ paths:
                     type: string
                     example: Team Not Found.
 
-  /event/{eventId}/team/{teamId}/respond:
+  /team/{teamId}/respond:
     patch:
       description: User responding to team invite
 
@@ -1932,7 +1938,7 @@ paths:
       responses:
         200:
           description: A JSON object contain all users in an array
-          content: 
+          content:
             application/json:
               schema:
                 type: object
@@ -2016,10 +2022,10 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   type: object
                   properties:
-                    id: 
+                    id:
                       type: number
                       example: 65
                     amount:
@@ -2028,12 +2034,12 @@ paths:
                     reason:
                       type: string
                       example: "ATTENDANCE"
-                    description: 
+                    description:
                       type: string
                       example: "Transaction is for purchase"
                     createdAt:
                       type: string
-                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"     
+                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
                     event:
                       type: object
                       properties:
@@ -2230,7 +2236,7 @@ paths:
             type: integer
           required: true
           description: Numeric ID of the user to get
-        
+
       tags:
         - User
       description: Get one user using it's id

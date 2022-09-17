@@ -1,5 +1,5 @@
 import { prisma } from "@utils/prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma, RegistrationStatus, TeamMemberRole } from "@prisma/client";
 
 import * as Interfaces from "@interfaces";
 import * as Success from "@success";
@@ -10,7 +10,18 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
   const { eventId: EID } = req.params;
   const eventId = parseInt(EID);
 
-  const { name, members } = req.body as Interfaces.Team.RegisterTeamBody;
+  const { name, members: memberArray } =
+    req.body as Interfaces.Team.RegisterTeamBody;
+
+  memberArray.push(req.user!.username);
+
+  const members = new Set(memberArray);
+  // Any duplicate members, including leader,
+  // if duplicate is present, gets removed.
+
+  if (members.size !== memberArray.length) {
+    return next(Errors.Team.memberDuplicates);
+  }
 
   // Get event
   const event = await prisma.event.findFirst({
@@ -24,11 +35,12 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
     },
   });
 
+  if (!event) {
+    return next(Errors.Event.eventDoesntExist);
+  }
+
   // Check member limit
-  if (
-    event!.minTeamSize > members.length ||
-    event!.maxTeamSize < members.length
-  ) {
+  if (event!.minTeamSize > members.size || event!.maxTeamSize < members.size) {
     return next(Errors.Team.teamSizeNotAllowed);
   }
 
@@ -39,10 +51,10 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
       teamName: name,
       OR: [
         {
-          registrationStatus: "REGISTERED",
+          registrationStatus: RegistrationStatus.REGISTERED,
         },
         {
-          registrationStatus: "PENDING",
+          registrationStatus: RegistrationStatus.PENDING,
         },
       ],
     },
@@ -53,10 +65,10 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
     return next(Errors.Team.teamAlreadyExists);
   }
 
-  // Check if users exist
+  // Check if users exist and if registered in another team.
   for await (const member of members) {
     const user = await prisma.user.count({
-      where: { username: member.username },
+      where: { username: member },
       take: 1,
     });
 
@@ -66,9 +78,9 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
 
     const belongsToTeam = await prisma.teamRegistration.count({
       where: {
-        registrationStatus: "REGISTERED",
+        registrationStatus: RegistrationStatus.REGISTERED,
         user: {
-          username: member.username,
+          username: member,
         },
         team: {
           event: {
@@ -90,11 +102,17 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
 
   members.forEach((member) => {
     memberRegistration.push({
-      registrationStatus: "PENDING",
-      role: member.role,
+      registrationStatus:
+        member === req.user!.username
+          ? RegistrationStatus.REGISTERED
+          : RegistrationStatus.PENDING,
+      role:
+        member === req.user!.username
+          ? TeamMemberRole.LEADER
+          : TeamMemberRole.MEMBER,
       user: {
         connect: {
-          username: member.username,
+          username: member,
         },
       },
     });
@@ -103,7 +121,10 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
   await prisma.team.create({
     data: {
       teamName: name,
-      registrationStatus: "PENDING",
+      registrationStatus:
+        members.size === 1
+          ? RegistrationStatus.REGISTERED
+          : RegistrationStatus.PENDING,
       event: {
         connect: {
           id: eventId,
@@ -119,7 +140,7 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
   for await (const member of members) {
     const user = await prisma.user.findFirst({
       where: {
-        username: member.username,
+        username: member,
       },
     });
 
@@ -129,7 +150,7 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
 
     let html;
     let subject;
-    if (member.role === "LEADER") {
+    if (member === req.user!.username) {
       html = `
         <p>
           <h3>Dear <b>${user.firstName} ${
@@ -164,7 +185,7 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
       subject = `Team Invitation for ${name} | ${process.env.NAME}`;
     }
 
-    Utils.Email.sendMail(user.email, html, subject); // meant to not use await
+    Utils.Email.sendMail(user.email, html, subject); // Await Avoided On Purpose
   }
 
   return res.json(Success.Team.teamCreated);
