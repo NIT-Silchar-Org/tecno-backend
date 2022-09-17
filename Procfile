@@ -1,1 +1,1 @@
-web: npm run start:aws
+web: npm i && npm run start:aws
