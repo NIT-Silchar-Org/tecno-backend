@@ -3,7 +3,7 @@ import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
 import * as Utils from "@utils";
 
-export const deleteModuleById: Interfaces.Controller.Async = async (
+const deleteModuleById: Interfaces.Controller.Async = async (
   req,
   res,
   next
@@ -18,3 +18,5 @@ export const deleteModuleById: Interfaces.Controller.Async = async (
   if (!module) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(module));
 };
+
+export { deleteModuleById };

@@ -3,11 +3,7 @@ import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
 import * as Utils from "@utils";
 
-export const getAllModules: Interfaces.Controller.Async = async (
-  _req,
-  res,
-  next
-) => {
+const getAllModules: Interfaces.Controller.Async = async (_req, res, next) => {
   const modules = await prisma.module.findMany({
     select: {
       id: true,
@@ -34,11 +30,7 @@ export const getAllModules: Interfaces.Controller.Async = async (
   if (!modules) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(modules));
 };
-export const getModuleById: Interfaces.Controller.Async = async (
-  req,
-  res,
-  next
-) => {
+const getModuleById: Interfaces.Controller.Async = async (req, res, next) => {
   const { moduleId: MID } = req.params;
   const moduleId = Number.parseInt(MID);
   if (isNaN(moduleId)) return next(Errors.Module.invalidInput);
@@ -47,3 +39,5 @@ export const getModuleById: Interfaces.Controller.Async = async (
   if (!module) return next(Errors.Module.moduleNotFound);
   return res.json(Utils.Response.Success(module));
 };
+
+export { getAllModules, getModuleById };

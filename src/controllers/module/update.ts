@@ -4,11 +4,7 @@ import { prisma } from "@utils/prisma";
 import * as Errors from "@errors";
 import * as Utils from "@utils";
 
-export const updateModule: Interfaces.Controller.Async = async (
-  req,
-  res,
-  next
-) => {
+const updateModule: Interfaces.Controller.Async = async (req, res, next) => {
   const { description, iconImage, coverImage, name, thirdPartyURL } =
     req.body as Module;
   const { moduleId: MID } = req.params;
@@ -49,3 +45,5 @@ export const updateModule: Interfaces.Controller.Async = async (
   if (!module) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(module));
 };
+
+export { updateModule };
