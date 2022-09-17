@@ -21,6 +21,7 @@ const createEvent: Interfaces.Controller.Async = async (req, res, next) => {
     registrationStartTime,
     stagesDescription,
     venue,
+    extraQuestions,
   } = req.body as Event;
   // const { organisers, managers }: { organisers: [User]; managers: [User] } =
   //   req.body;
