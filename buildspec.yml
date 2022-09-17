@@ -20,3 +20,4 @@ artifacts:
     - dist/**/*
     - node_modules/**/*
     - package.json
+    - Procfile
