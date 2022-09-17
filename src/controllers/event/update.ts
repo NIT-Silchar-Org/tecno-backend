@@ -25,6 +25,7 @@ export const updateEvent: Interfaces.Controller.Async = async (
     registrationStartTime,
     stagesDescription,
     venue,
+    extraQuestions,
   } = req.body as Event;
 
   const { eventId: EID } = req.params;
@@ -42,7 +43,7 @@ export const updateEvent: Interfaces.Controller.Async = async (
   }
 
   let regStart;
-  if (registrationEndTime) regStart = new Date(registrationEndTime);
+  if (registrationStartTime) regStart = new Date(registrationStartTime);
   let regEnd;
   if (registrationEndTime) regEnd = new Date(registrationEndTime);
   if (registrationStartTime && JSON.stringify(regStart) === "null")
@@ -121,6 +122,7 @@ export const updateEvent: Interfaces.Controller.Async = async (
       managers: {
         connect: managersUsernames,
       },
+      extraQuestions: extraQuestions,
     },
   });
 

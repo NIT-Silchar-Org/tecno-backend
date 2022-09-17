@@ -4,9 +4,8 @@ import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
 
 const isEventValid: Interfaces.Middleware.Async = async (req, _res, next) => {
-  const { eventId: EID } = req.body as Interfaces.Transaction.TransactionBody;
+  const { eventId: EID } = req.params;
   const eventId = parseInt(EID);
-
   if (isNaN(eventId)) {
     return next(Errors.Event.eventDoesntExist);
   }

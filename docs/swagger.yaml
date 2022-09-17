@@ -283,6 +283,9 @@ paths:
                 username:
                   type: string
                   example: "josu"
+                phoneNumber:
+                  type: string
+                  example: "1212312312"
                 imageUrl:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
@@ -292,6 +295,7 @@ paths:
                 - email
                 - collegeName
                 - username
+                - phoneNumber
       responses:
         200:
           description: Successful
@@ -1525,6 +1529,8 @@ paths:
                 registrationEndTime:
                   type: string
                   example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+                extraQuestions:
+                  type: object
       responses:
         '200':
           description: A JSON object of the created event.
@@ -1616,10 +1622,9 @@ paths:
 
                 members:
                   type: array
-
                   items:
                     type: string
-                    example: ["john_smith99", "b4dg4m3r55"]
+                    example: john_smith99"
                     description: "Array of usernames of members. No need to put leader's username"
 
       responses:
