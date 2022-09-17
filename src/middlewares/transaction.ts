@@ -13,6 +13,10 @@ const isUserEventManager: Interfaces.Middleware.Async = async (
   }
   const { eventId } = req.body as Interfaces.Transaction.TransactionBody;
 
+  if (isNaN(parseInt(eventId))) {
+    return next(Errors.Event.eventDoesntExist);
+  }
+
   const isManager = await prisma.event.count({
     where: {
       id: parseInt(eventId),
@@ -36,20 +40,20 @@ const isReceiverAdmin: Interfaces.Middleware.Async = async (
   _res,
   next
 ) => {
-  const { toUserId } =
+  const { toUserName } =
     req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
 
   const admin = await prisma.user.findFirst({
     where: {
-      firebaseId: toUserId,
+      username: toUserName,
     },
   });
 
   if (
+    toUserName &&
+    toUserName.length &&
     admin &&
-    toUserId &&
-    toUserId.length &&
-    toUserId === process.env.ADMIN_ID!
+    admin.firebaseId === process.env.ADMIN_ID!
   ) {
     next();
   } else {
@@ -57,13 +61,4 @@ const isReceiverAdmin: Interfaces.Middleware.Async = async (
   }
 };
 
-const isUserAuthorized: Interfaces.Middleware.Sync = (req, _res, next) => {
-  const { userId } = req.params;
-  if (req.user!.id === parseInt(userId)) {
-    next();
-  } else {
-    next(Errors.Auth.userUnauthorized);
-  }
-};
-
-export { isUserEventManager, isReceiverAdmin, isUserAuthorized };
+export { isUserEventManager, isReceiverAdmin };

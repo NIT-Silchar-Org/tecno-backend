@@ -14,22 +14,24 @@ const getAllTransactionsForAUser: Interfaces.Controller.Async = async (
   req,
   res
 ) => {
-  const { userId } = req.params;
-
   const transactions = await prisma.transaction.findMany({
     where: {
       OR: [
         {
-          fromUserId: parseInt(userId),
+          fromUserId: req.user!.id,
         },
         {
-          toUserId: parseInt(userId),
+          toUserId: req.user!.id,
         },
       ],
     },
   });
 
-  return res.json(Utils.Transaction.transactionsResponse(transactions, userId));
+  return res.json(
+    Utils.Response.Success(
+      Utils.Transaction.transactionsResponse(transactions, req.user!.id)
+    )
+  );
 };
 
 export { getAllTransactions, getAllTransactionsForAUser };

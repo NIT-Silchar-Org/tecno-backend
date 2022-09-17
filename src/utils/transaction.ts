@@ -1,6 +1,6 @@
 import { Transaction } from "@prisma/client";
 
-const transactionsResponse = (transactions: Transaction[], userId: string) => {
+const transactionsResponse = (transactions: Transaction[], userId: number) => {
   return transactions.map((transaction) => ({
     ...transaction,
     amount: transaction.amount,
@@ -9,7 +9,7 @@ const transactionsResponse = (transactions: Transaction[], userId: string) => {
     reason: transaction.reason,
     id: transaction.id,
     eventId: transaction.eventId,
-    type: transaction.fromUserId === parseInt(userId) ? "DEBIT" : "CREDIT",
+    type: transaction.fromUserId === userId ? "DEBIT" : "CREDIT",
   }));
 };
 

@@ -3,11 +3,7 @@ import * as Errors from "@errors";
 import { prisma } from "@utils/prisma";
 import * as Utils from "@utils";
 
-export const deleteEvent: Interfaces.Controller.Async = async (
-  req,
-  res,
-  next
-) => {
+const deleteEvent: Interfaces.Controller.Async = async (req, res, next) => {
   const { eventId: EID } = req.params;
   const eventId = Number.parseInt(EID);
   if (isNaN(eventId)) return next(Errors.Module.invalidInput);
@@ -19,3 +15,5 @@ export const deleteEvent: Interfaces.Controller.Async = async (
   if (!event) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(event));
 };
+
+export { deleteEvent };
