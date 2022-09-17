@@ -1247,13 +1247,13 @@ paths:
                   type: integer
                   example: 1
 
-                incentive:
+                attendanceIncentive:
                   type: number
                   example: 100
 
-                isIncentivised:
-                  type: boolean
-                  example: true
+                registrationIncentive:
+                  type: number
+                  example: 100
 
                 prizeDescription:
                   type: string
@@ -1473,13 +1473,13 @@ paths:
                   type: integer
                   example: 1
 
-                incentive:
+                attendanceIncentive:
                   type: number
                   example: 100
 
-                isIncentivised:
-                  type: boolean
-                  example: true
+                registrationIncentive:
+                  type: number
+                  example: 200
 
                 prizeDescription:
                   type: string
