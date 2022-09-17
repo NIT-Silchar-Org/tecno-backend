@@ -30,13 +30,13 @@ router.post(
 );
 
 router.get(
-  "/",
+  "/all",
   Middlewares.Auth.isAdmin,
   Controllers.Transaction.getAllTransactions
 );
 
 router.get(
-  "/:userId",
+  "/",
   Middlewares.Auth.validateUser,
   Middlewares.Transaction.isUserAuthorized,
   Controllers.Transaction.getAllTransactionsForAUser

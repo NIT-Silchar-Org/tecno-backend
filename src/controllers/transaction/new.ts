@@ -12,12 +12,12 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
   next
 ) => {
   try {
-    const { toUserId, eventId } =
+    const { toUserName, eventId } =
       req.body as Interfaces.Transaction.CreateAttendanceTransactionBody;
 
     const toUser = await prisma.user.findFirst({
       where: {
-        firebaseId: toUserId,
+        username: toUserName,
       },
     });
 
@@ -125,12 +125,12 @@ const createNewOnlineEventTransaction: Interfaces.Controller.Async = async (
   next
 ) => {
   try {
-    const { toUserId, amount } =
+    const { toUserName, amount } =
       req.body as Interfaces.Transaction.CreateOnlineEventTransaction;
 
     const toUser = await prisma.user.findFirst({
       where: {
-        firebaseId: toUserId,
+        username: toUserName,
       },
     });
 
@@ -196,12 +196,12 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
   next
 ) => {
   try {
-    const { amount, toUserId } =
+    const { amount, toUserName } =
       req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
 
     const admin = await prisma.user.findFirst({
       where: {
-        firebaseId: toUserId,
+        username: toUserName,
       },
     });
 
