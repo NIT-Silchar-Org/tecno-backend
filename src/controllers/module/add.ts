@@ -4,11 +4,7 @@ import { prisma } from "@utils/prisma";
 import * as Errors from "@errors";
 import * as Utils from "@utils";
 
-export const createModule: Interfaces.Controller.Async = async (
-  req,
-  res,
-  next
-) => {
+const createModule: Interfaces.Controller.Async = async (req, res, next) => {
   const { description, coverImage, iconImage, name, thirdPartyURL } =
     req.body as Module;
   if (!description || !coverImage || !iconImage || !name)
@@ -40,3 +36,5 @@ export const createModule: Interfaces.Controller.Async = async (
   if (!module) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(module));
 };
+
+export { createModule };

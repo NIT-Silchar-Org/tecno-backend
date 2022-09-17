@@ -3,7 +3,6 @@ import * as Controllers from "@controllers";
 import * as Middlewares from "@middlewares";
 const router: Router = Router({ mergeParams: true });
 
-//TODO:transfer C_UD API to admin pannel
 router.post(
   "/create",
   Middlewares.Auth.isAdmin,
