@@ -114,6 +114,7 @@ const createEvent: Interfaces.Controller.Async = async (req, res, next) => {
       registrationStartTime: regStart,
       stagesDescription,
       venue,
+      extraQuestions,
       module: {
         connect: { id: moduleId },
       },
