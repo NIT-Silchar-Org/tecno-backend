@@ -143,3 +143,8 @@ model Transaction {
 
   createdAt DateTime @default(now())
 }
+
+model Statics {
+  name String @id
+  json Json
+}

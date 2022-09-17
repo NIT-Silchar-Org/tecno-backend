@@ -47,7 +47,7 @@ app.use(
 
 //----------------------- HEALTH CHECK ----------------------------
 
-app.get(`${Constants.Server.ROOT}/`, ((_req, res, _next) => {
+app.get(`${Constants.Server.ROOT}/`, ((_req, res) => {
   res.json({
     status: 200,
     msg: "Health check OK",
@@ -64,6 +64,7 @@ app.use(`${Constants.Server.ROOT}/module`, Routers.Module);
 app.use(`${Constants.Server.ROOT}/event`, Routers.Event);
 app.use(`${Constants.Server.ROOT}/user`, Routers.User);
 app.use(`${Constants.Server.ROOT}/transaction`, Routers.Transaction);
+app.use(`${Constants.Server.ROOT}/statics`, Routers.Statics);
 
 //----------------------- ERROR HANDLERS ---------------------
 
