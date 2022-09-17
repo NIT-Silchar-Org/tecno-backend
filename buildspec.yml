@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+  pre_build:
+    commands:
+      - npm i -g pnpm
+      - pnpm install
+  build:
+    commands:
+      - pnpm db:deploy
+      - pnpm build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - dist/**/*
+    - node_modules/**/*
+    - package.json
