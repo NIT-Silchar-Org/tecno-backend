@@ -13,7 +13,6 @@ router.post(
   Controllers.Team.registerTeam
 );
 
-
 router.get(
   "/team/:teamId",
   Middlewares.Auth.validateUser,
@@ -29,6 +28,6 @@ router.patch(
   Middlewares.Auth.validateUser,
   Middlewares.Auth.getAdmin,
   Controllers.Team.teamRegistrationResponse
-); // check user middleware // Get userId from auth
+);
 
 export default router;

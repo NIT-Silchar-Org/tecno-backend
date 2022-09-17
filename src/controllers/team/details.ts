@@ -52,7 +52,7 @@ const getAllTeamsOfEvent: Interfaces.Controller.Async = async (
 
   const eventId = parseInt(EID);
 
-  if (!eventId) {
+  if (isNaN(eventId)) {
     return next(Errors.Team.badRequest("Incorrect event Id"));
   }
 
@@ -76,9 +76,13 @@ const getAllTeamsOfEvent: Interfaces.Controller.Async = async (
               firebaseId: true,
               collegeName: true,
               registrationId: true,
+              firstName: true,
+              lastName: true,
+              middleName: true,
               email: true,
               imageUrl: true,
               username: true,
+              phoneNumber: true,
             },
           },
         },

@@ -1,27 +1,43 @@
 import * as Interfaces from "@interfaces";
 import * as Success from "@success";
+import * as Utils from "@utils";
+import * as Errors from "@errors";
 
 import { prisma } from "@utils/prisma";
 
 const updateUserDetails: Interfaces.Controller.Async = async (
   req,
   res,
-  _next
+  next
 ) => {
-  const { name, collegeName, registrationId, imageUrl } =
-    req.body as Interfaces.User.UserUpdateBody;
+  const {
+    firstName,
+    lastName,
+    middleName,
+    collegeName,
+    registrationId,
+    phoneNumber,
+    imageUrl,
+  } = req.body as Interfaces.User.UserUpdateBody;
 
   const user = req?.user;
+
+  if (phoneNumber && !Utils.User.validatePhoneNumber(phoneNumber)) {
+    return next(Errors.User.notAcceptable("Phone number not acceptable"));
+  }
 
   const updatedUser = await prisma.user.update({
     where: {
       firebaseId: req?.user?.firebaseId,
     },
     data: {
-      name: name || user?.name,
-      collegeName: collegeName || user?.collegeName,
-      registrationId: registrationId || user?.registrationId,
-      imageUrl: imageUrl || user?.imageUrl,
+      firstName: firstName || user!.firstName,
+      lastName: lastName || user!.lastName,
+      middleName: middleName === "" ? "" : middleName || user!.middleName,
+      collegeName: collegeName || user!.collegeName,
+      registrationId: registrationId || user!.registrationId,
+      phoneNumber: phoneNumber || user!.phoneNumber,
+      imageUrl: imageUrl || user!.imageUrl,
     },
   });
 
