@@ -38,4 +38,55 @@ const getTeamDetails: Interfaces.Controller.Async = async (req, res, next) => {
   return res.json(Utils.Response.Success(team));
 };
 
-export { getTeamDetails };
+/**
+ *
+ * @description sends all the teams and their details that are registered for that perticular event
+ */
+
+const getAllTeamsOfEvent: Interfaces.Controller.Async = async (
+  req,
+  res,
+  next
+) => {
+  const { eventId: EID } = req.params;
+
+  const eventId = parseInt(EID);
+
+  if (!eventId) {
+    return next(Errors.Team.badRequest("Incorrect event Id"));
+  }
+
+  const teams = await prisma.team.findMany({
+    where: {
+      AND: [
+        {
+          eventId: eventId,
+        },
+        {
+          registrationStatus: "REGISTERED",
+        },
+      ],
+    },
+    select: {
+      members: {
+        select: {
+          user: {
+            select: {
+              id: true,
+              firebaseId: true,
+              collegeName: true,
+              registrationId: true,
+              email: true,
+              imageUrl: true,
+              username: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  res.json(Utils.Response.Success(teams));
+};
+
+export { getTeamDetails, getAllTeamsOfEvent };

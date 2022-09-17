@@ -29,8 +29,23 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
       return next(Errors.Transaction.transactionFailed);
     }
 
-    if (event.isIncentivised) {
-      const amount = event.incentive!;
+    const userTransaction = await prisma.transaction.findFirst({
+      where: {
+        toUserId: toUser.id,
+        eventId: event.id,
+      },
+    });
+
+    if (userTransaction) {
+      return next(Errors.Transaction.alreadyAttended);
+    }
+
+    if (event.attendanceIncentive > 0) {
+      const amount = event.attendanceIncentive;
+
+      if (req.admin!.balance < amount) {
+        next(Errors.Transaction.insufficientBalance);
+      }
 
       const transactionCreate = prisma.transaction.create({
         data: {
@@ -127,6 +142,10 @@ const createNewOnlineEventTransaction: Interfaces.Controller.Async = async (
       return next(Errors.Transaction.transactionFailed);
     }
 
+    if (req.admin!.balance < amount) {
+      next(Errors.Transaction.insufficientBalance);
+    }
+
     const transactionCreate = prisma.transaction.create({
       data: {
         amount,
@@ -177,17 +196,21 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
   next
 ) => {
   try {
-    const { amount, toAdminId } =
+    const { amount, toUserId } =
       req.body as Interfaces.Transaction.CreatePurchaseTransactionBody;
 
     const admin = await prisma.user.findFirst({
       where: {
-        firebaseId: toAdminId,
+        firebaseId: toUserId,
       },
     });
 
     if (!admin) {
       return next(Errors.Transaction.transactionFailed);
+    }
+
+    if (req.user!.balance < amount) {
+      return next(Errors.Transaction.insufficientBalance);
     }
 
     const transaction = await prisma.transaction.findFirst({
@@ -201,7 +224,7 @@ const createNewPurchaseTransaction: Interfaces.Controller.Async = async (
 
     if (transaction) {
       if (
-        new Date(transaction.createdAt).getTime() - new Date().getTime() <
+        new Date().getTime() - new Date(transaction.createdAt).getTime() <
         Constants.Transaction.TRANSACTION_COOLDOWN
       ) {
         return next(Errors.Transaction.transactionTooQuick);

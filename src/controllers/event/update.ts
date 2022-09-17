@@ -12,8 +12,8 @@ export const updateEvent: Interfaces.Controller.Async = async (
   const {
     description,
     posterImage,
-    incentive,
-    isIncentivised,
+    attendanceIncentive,
+    registrationIncentive,
     lat,
     lng,
     maxTeamSize,
@@ -45,9 +45,9 @@ export const updateEvent: Interfaces.Controller.Async = async (
   if (registrationEndTime) regStart = new Date(registrationEndTime);
   let regEnd;
   if (registrationEndTime) regEnd = new Date(registrationEndTime);
-  if (registrationStartTime && JSON.stringify(regStart) == "null")
+  if (registrationStartTime && JSON.stringify(regStart) === "null")
     return next(Errors.Module.invalidInput);
-  if (registrationEndTime && JSON.stringify(regEnd) == "null")
+  if (registrationEndTime && JSON.stringify(regEnd) === "null")
     return next(Errors.Module.invalidInput);
 
   const { organizers, managers }: { organizers: [User]; managers: [User] } =
@@ -65,10 +65,15 @@ export const updateEvent: Interfaces.Controller.Async = async (
   }
 
   if (
+    (registrationIncentive && !(typeof registrationIncentive === "number")) ||
+    (attendanceIncentive && !(typeof attendanceIncentive === "number"))
+  ) {
+    return next(Errors.Module.invalidInput);
+  }
+
+  if (
     (minTeamSize && typeof minTeamSize !== "number") ||
     (maxTeamSize && typeof maxTeamSize !== "number") ||
-    (incentive && typeof incentive !== "number") ||
-    (isIncentivised && typeof isIncentivised !== "boolean") ||
     (lat && typeof lat !== "string") ||
     (lng && typeof lng !== "string") ||
     (name && typeof name !== "string") ||
@@ -97,8 +102,8 @@ export const updateEvent: Interfaces.Controller.Async = async (
     data: {
       description,
       posterImage,
-      incentive,
-      isIncentivised,
+      attendanceIncentive,
+      registrationIncentive,
       lat,
       lng,
       maxTeamSize,
