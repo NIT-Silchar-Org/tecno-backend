@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "16"
+  },
   "scripts": {
     "start:aws": "node --experimental-specifier-resolution=node ./dist/server.js",
     "dev": "pnpm db:update && nodemon --exec ts-node server.ts",
