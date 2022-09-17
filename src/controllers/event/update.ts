@@ -21,6 +21,7 @@ const updateEvent: Interfaces.Controller.Async = async (req, res, next) => {
     registrationStartTime,
     stagesDescription,
     venue,
+    extraQuestions,
   } = req.body as Event;
 
   const { eventId: EID } = req.params;
@@ -117,6 +118,7 @@ const updateEvent: Interfaces.Controller.Async = async (req, res, next) => {
       managers: {
         connect: managersUsernames,
       },
+      extraQuestions: extraQuestions,
     },
   });
 

@@ -9,9 +9,11 @@ import * as Utils from "@utils";
 const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
   const { eventId: EID } = req.params;
   const eventId = parseInt(EID);
-
-  const { name, members: memberArray } =
-    req.body as Interfaces.Team.RegisterTeamBody;
+  const {
+    name,
+    members: memberArray,
+    extraInformation,
+  } = req.body as Interfaces.Team.RegisterTeamBody;
 
   memberArray.push(req.user!.username);
 
@@ -133,6 +135,7 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
       members: {
         create: memberRegistration,
       },
+      extraInformation: extraInformation,
     },
   });
 
