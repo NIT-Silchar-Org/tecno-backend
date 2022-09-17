@@ -38,7 +38,7 @@ const updateEvent: Interfaces.Controller.Async = async (req, res, next) => {
   }
 
   let regStart;
-  if (registrationEndTime) regStart = new Date(registrationEndTime);
+  if (registrationStartTime) regStart = new Date(registrationStartTime);
   let regEnd;
   if (registrationEndTime) regEnd = new Date(registrationEndTime);
   if (registrationStartTime && JSON.stringify(regStart) === "null")

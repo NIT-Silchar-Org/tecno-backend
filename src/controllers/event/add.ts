@@ -1,5 +1,5 @@
 import * as Interfaces from "@interfaces";
-import { Event } from "@prisma/client";
+import { Event, User } from "@prisma/client";
 import { prisma } from "@utils/prisma";
 import * as Errors from "@errors";
 import * as Utils from "@utils";
@@ -67,7 +67,7 @@ const createEvent: Interfaces.Controller.Async = async (req, res, next) => {
   )
     return next(Errors.Module.invalidInput);
 
-  const regStart = new Date(registrationEndTime);
+  const regStart = new Date(registrationStartTime);
   const regEnd = new Date(registrationEndTime);
   if (JSON.stringify(regStart) === "null" || JSON.stringify(regEnd) === "null")
     return next(Errors.Module.invalidInput);
@@ -78,6 +78,20 @@ const createEvent: Interfaces.Controller.Async = async (req, res, next) => {
     }))
   )
     return next(Errors.Module.moduleNotFound);
+
+  const { organizers, managers }: { organizers: [User]; managers: [User] } =
+    req.body;
+
+  let organizersUsernames;
+  if (organizers) {
+    organizersUsernames = await Utils.Event.extractUsername(organizers);
+    if (!organizersUsernames) return next(Errors.User.userNotFound);
+  }
+  let managersUsernames;
+  if (managers) {
+    managersUsernames = await Utils.Event.extractUsername(managers);
+    if (!managersUsernames) return next(Errors.User.userNotFound);
+  }
 
   const event = await prisma.event.create({
     data: {
@@ -97,6 +111,12 @@ const createEvent: Interfaces.Controller.Async = async (req, res, next) => {
       venue,
       module: {
         connect: { id: moduleId },
+      },
+      organizers: {
+        connect: organizersUsernames,
+      },
+      managers: {
+        connect: managersUsernames,
       },
     },
   });
