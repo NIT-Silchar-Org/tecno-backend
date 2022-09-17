@@ -45,6 +45,8 @@ model Team {
 
   members TeamRegistration[]
 
+  extraInformation Json[]
+
   eventId Int
   event   Event @relation(fields: [eventId], references: [id])
 }
@@ -112,6 +114,8 @@ model Event {
 
   registrationStartTime DateTime
   registrationEndTime   DateTime
+
+  extraQuestions Json[] @default([])
 
   moduleId Int
   module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
