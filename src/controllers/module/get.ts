@@ -8,7 +8,29 @@ export const getAllModules: Interfaces.Controller.Async = async (
   res,
   next
 ) => {
-  const modules = await prisma.module.findMany();
+  const modules = await prisma.module.findMany({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      iconImage: true,
+      coverImage: true,
+      thirdPartyURL: true,
+
+      events: {
+        select: {
+          id: true,
+          name: true,
+          posterImage: true,
+          attendanceIncentive: true,
+          registrationIncentive: true,
+          description: true,
+          registrationEndTime: true,
+          registrationStartTime: true,
+        },
+      },
+    },
+  });
   if (!modules) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(modules));
 };

@@ -1,6 +1,13 @@
 import { getAllUsers } from "./get";
 import { getOneUserById } from "./getOne";
-import { updateUserDetails } from "./update";
 import { getLogedInUser } from "./getLogedInUser";
+import { getAllAttendedEventsOfUser } from "./getAllAttendedEvents";
+import { updateUserDetails } from "./update";
 
-export { getAllUsers, getOneUserById, updateUserDetails, getLogedInUser };
+export {
+  getAllUsers,
+  getOneUserById,
+  getAllAttendedEventsOfUser,
+  updateUserDetails,
+  getLogedInUser,
+};
