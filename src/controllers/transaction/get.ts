@@ -30,7 +30,7 @@ const getAllTransactionsForAUser: Interfaces.Controller.Async = async (
 
   return res.json(
     Utils.Response.Success(
-      Utils.Transaction.transactionsResponse(transactions, req.user!.firebaseId)
+      Utils.Transaction.transactionsResponse(transactions, req.user!.id)
     )
   );
 };

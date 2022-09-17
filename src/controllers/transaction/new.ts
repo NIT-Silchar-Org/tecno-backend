@@ -44,7 +44,7 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
       const amount = event.attendanceIncentive;
 
       if (req.admin!.balance < amount) {
-        next(Errors.Transaction.insufficientBalance);
+        return next(Errors.Transaction.insufficientBalance);
       }
 
       const transactionCreate = prisma.transaction.create({
@@ -143,7 +143,7 @@ const createNewOnlineEventTransaction: Interfaces.Controller.Async = async (
     }
 
     if (req.admin!.balance < amount) {
-      next(Errors.Transaction.insufficientBalance);
+      return next(Errors.Transaction.insufficientBalance);
     }
 
     const transactionCreate = prisma.transaction.create({
