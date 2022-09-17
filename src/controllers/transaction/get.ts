@@ -14,7 +14,6 @@ const getAllTransactionsForAUser: Interfaces.Controller.Async = async (
   req,
   res
 ) => {
-  console.log(req.user);
   const transactions = await prisma.transaction.findMany({
     where: {
       OR: [
