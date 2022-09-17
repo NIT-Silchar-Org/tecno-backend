@@ -21,6 +21,7 @@ const createEvent: Interfaces.Controller.Async = async (req, res, next) => {
     registrationStartTime,
     stagesDescription,
     venue,
+    extraQuestions,
   } = req.body as Event;
   // const { organisers, managers }: { organisers: [User]; managers: [User] } =
   //   req.body;
@@ -40,7 +41,8 @@ const createEvent: Interfaces.Controller.Async = async (req, res, next) => {
       registrationEndTime &&
       registrationStartTime &&
       stagesDescription &&
-      venue
+      venue &&
+      extraQuestions
     )
   )
     return next(Errors.Module.invalidInput);
@@ -109,6 +111,7 @@ const createEvent: Interfaces.Controller.Async = async (req, res, next) => {
       registrationStartTime: regStart,
       stagesDescription,
       venue,
+      extraQuestions: extraQuestions,
       module: {
         connect: { id: moduleId },
       },
