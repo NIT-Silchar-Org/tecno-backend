@@ -5,29 +5,34 @@ import * as Middlewares from "@middlewares";
 
 const router: Router = Router({ mergeParams: true });
 
-// ROOT = /api/:eventId
+// ROOT = /api/team
 
 router.post(
-  "/team/add",
+  "/event/:eventId/add",
   Middlewares.Auth.validateUser,
+  Middlewares.Event.isEventValid,
   Controllers.Team.registerTeam
 );
 
 router.get(
-  "/team/:teamId",
+  "/:teamId",
   Middlewares.Auth.validateUser,
+  Middlewares.Team.isValidTeamId,
   Controllers.Team.getTeamDetails
 );
+
 router.get(
-  "/registered_teams/",
+  "/event/:eventId/registered_teams",
   Middlewares.Auth.isAdmin,
+  Middlewares.Event.isEventValid,
   Controllers.Team.getAllTeamsOfEvent
 );
+
 router.patch(
-  "/team/:teamId/respond",
+  "/:teamId/respond",
   Middlewares.Auth.validateUser,
   Middlewares.Auth.getAdmin,
   Controllers.Team.teamRegistrationResponse
-); // check user middleware // Get userId from auth
+);
 
 export default router;

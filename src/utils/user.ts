@@ -12,4 +12,14 @@ const validateUsername = (username: string): boolean => {
   return result;
 };
 
-export { validateUsername };
+const validatePhoneNumber = (phoneNumber: string): boolean => {
+  const checkPhoneNumber = new RegExp("^[0-9]+$");
+
+  if (phoneNumber.length !== 10) return false;
+
+  const result = checkPhoneNumber.test(phoneNumber);
+
+  return result;
+};
+
+export { validateUsername, validatePhoneNumber };

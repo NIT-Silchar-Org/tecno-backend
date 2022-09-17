@@ -2,13 +2,9 @@ import { Router } from "express";
 import * as Controllers from "@controllers";
 import * as Middlewares from "@middlewares";
 
-import Team from "./team";
-
 const router: Router = Router({ mergeParams: true });
 
 router.post("/create", Middlewares.Auth.isAdmin, Controllers.Event.createEvent);
-
-router.use("/:eventId", Team);
 
 router.get("/:eventId", Controllers.Event.getEventById);
 router.get("/", Controllers.Event.getAllEvents);

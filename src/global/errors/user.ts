@@ -16,15 +16,14 @@ const userAlreadyExists = Utils.Response.Error(
   409
 );
 
-const usernameNotAcceptable = Utils.Response.Error(
-  "username is not acceptable",
-  403
-);
+const notAcceptable = (msg = "Some fields are not acceptable") => {
+  return Utils.Response.Error(msg, 403);
+};
 
 export {
   userNotAuthenticated,
   userNotFound,
   badRequest,
   userAlreadyExists,
-  usernameNotAcceptable,
+  notAcceptable,
 };

@@ -10,6 +10,7 @@ const getAllEvents: Interfaces.Controller.Async = async (_req, res, next) => {
       module: true,
     },
   });
+
   if (!events) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(events));
 };
@@ -45,4 +46,5 @@ const getEventById: Interfaces.Controller.Async = async (req, res, next) => {
   return res.json(Utils.Response.Success(event));
 };
 
-export { getAllEvents, getEventById, getEventsByModule };
+
+export { getAllEvents, getEventsByModule, getEventById };
