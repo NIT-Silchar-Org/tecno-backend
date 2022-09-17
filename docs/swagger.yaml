@@ -1278,19 +1278,13 @@ paths:
                 organizers:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      username:
-                        type: string
-                        example: "mohan"
+                    type: string
+                    example: "rohan"
                 managers:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      username:
-                        type: string
-                        example: "rohan"
+                    type: string
+                    example: "rohan"
       responses:
         '200':
           description: A JSON object of the edited event.
