@@ -17,6 +17,7 @@ interface UserUpdateBody {
   middleName: string | null | undefined;
   collegeName: string | null | undefined;
   registrationId: string | null | undefined;
+  phoneNumber: string | null | undefined;
   imageUrl: string | null | undefined;
 }
 

@@ -1,12 +1,14 @@
 import * as Interfaces from "@interfaces";
 import * as Success from "@success";
+import * as Utils from "@utils";
+import * as Errors from "@errors";
 
 import { prisma } from "@utils/prisma";
 
 const updateUserDetails: Interfaces.Controller.Async = async (
   req,
   res,
-  _next
+  next
 ) => {
   const {
     firstName,
@@ -14,10 +16,15 @@ const updateUserDetails: Interfaces.Controller.Async = async (
     middleName,
     collegeName,
     registrationId,
+    phoneNumber,
     imageUrl,
   } = req.body as Interfaces.User.UserUpdateBody;
 
   const user = req?.user;
+
+  if (phoneNumber && !Utils.User.validatePhoneNumber(phoneNumber)) {
+    return next(Errors.User.notAcceptable("Phone number not acceptable"));
+  }
 
   const updatedUser = await prisma.user.update({
     where: {
@@ -29,6 +36,7 @@ const updateUserDetails: Interfaces.Controller.Async = async (
       middleName: middleName === "" ? "" : middleName || user!.middleName,
       collegeName: collegeName || user!.collegeName,
       registrationId: registrationId || user!.registrationId,
+      phoneNumber: phoneNumber || user!.phoneNumber,
       imageUrl: imageUrl || user!.imageUrl,
     },
   });

@@ -23,9 +23,17 @@ components:
           type: string
           example: "YiuqYLtElLTNGaNy9vistAz3u663"
 
-        name:
+        firstName:
           type: string
-          example: "John Smith"
+          example: "John"
+          
+        middleName:
+          type: string
+          example: "Doe"
+
+        lastName:
+          type: string
+          example: "Smith"
 
         username:
           type: string
@@ -241,9 +249,15 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                firstName:
                   type: string
-                  example: "John Smith"
+                  example: "John"
+                middleName:
+                  type: string
+                  example: "Doe"
+                lastName:
+                  type: string
+                  example: "Smith"
                 email:
                   type: string
                   example: "awesomeguy@nits.ac.in"
@@ -259,6 +273,12 @@ paths:
                 imageUrl:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
+              required:
+                - firstName
+                - lastName
+                - email
+                - collegeName
+                - username
       responses:
         200:
           description: Successful
@@ -1920,7 +1940,15 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                firstName:
+                  type: string
+                  nullable: true
+                  example: "netra"
+                middleName:
+                  type: string
+                  nullable: true
+                  example: "netra"
+                lastName:
                   type: string
                   nullable: true
                   example: "netra"
@@ -1929,6 +1957,10 @@ paths:
                   nullable: true
                   example: "National Institute of Technology Silchar"
                 registrationId:
+                  type: string
+                  nullable: true
+                  example: 2012000
+                phoneNumber:
                   type: string
                   nullable: true
                   example: 2012000
