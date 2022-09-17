@@ -1,3 +1,5 @@
+import { Prisma, TeamRegistration } from "@prisma/client";
+
 interface CreateUserBody {
   firstName: string;
   middleName: string | "" | null | undefined;
@@ -21,4 +23,20 @@ interface UserUpdateBody {
   imageUrl: string | null | undefined;
 }
 
-export { CreateUserBody, UserUpdateBody };
+interface getMyTeamsResponseTeamRegistration {
+  id: number;
+  registrationStatus: string;
+  role: string;
+  team: {
+    id: number;
+    registrationStatus: string;
+    teamName: string;
+    extraInformation: Prisma.JsonValue[];
+    members: TeamRegistration[];
+    event: {
+      name: string;
+    };
+  };
+}
+
+export { CreateUserBody, UserUpdateBody, getMyTeamsResponseTeamRegistration };

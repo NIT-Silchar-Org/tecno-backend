@@ -80,6 +80,11 @@ components:
             - REGISTERED
             - PENDING
             - CANCELLED
+        
+        extraInformation:
+          type: array
+          items:
+            type: object
 
     TeamRegistration:
       type: object
@@ -189,7 +194,10 @@ components:
         registrationEndTime:
           type: string
           example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
-
+        extraQuestions:
+          type: array
+          items:
+            type: object
     Transaction:
       type: object
       properties:
@@ -243,9 +251,9 @@ components:
 
 servers:
   - url: http://localhost:5000/api
-    description: Dev Server (Local)
+    description: Development Server
   - url: https://api.dev.tecnoesis.org/api
-    description: Dev Server (EC2)
+    description: Development Server (EC2)
 
 paths:
   /auth/signup:
@@ -296,6 +304,7 @@ paths:
                 - collegeName
                 - username
                 - phoneNumber
+
       responses:
         200:
           description: Successful
@@ -309,7 +318,7 @@ paths:
                     example: 200
                   msg:
                     type: string
-                    example: user created
+                    example: User Created
         409:
           description: Conflict user already exists
           content:
@@ -1278,19 +1287,17 @@ paths:
                 organizers:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      username:
-                        type: string
-                        example: "mohan"
+                    type: string
+                    example: "mohan"
                 managers:
                   type: array
                   items:
+                    type: string
+                    example: "rohan"
+                extraQuestions: 
+                  type: array
+                  items:
                     type: object
-                    properties:
-                      username:
-                        type: string
-                        example: "rohan"
       responses:
         '200':
           description: A JSON object of the edited event.
@@ -1501,7 +1508,9 @@ paths:
                   type: string
                   example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
                 extraQuestions:
-                  type: object
+                  type: array
+                  items: 
+                    type: object
       responses:
         '200':
           description: A JSON object of the created event.
@@ -1595,8 +1604,13 @@ paths:
                   type: array
                   items:
                     type: string
-                    example: john_smith99"
+                    example: "john_smith99"
                     description: "Array of usernames of members. No need to put leader's username"
+                
+                extraInformation:
+                  type: array
+                  items: 
+                    type: object
 
       responses:
         200:
@@ -1906,6 +1920,8 @@ paths:
                       $ref: '#/components/schemas/User'
 
 
+
+
     patch:
       tags:
         - User
@@ -1960,6 +1976,22 @@ paths:
                     example: 200
                   msg:
                     $ref: '#/components/schemas/User'
+  /user/me/my_teams:
+    get:
+      description: get Array of all teams the  user is registered
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description:
+            Data fetched
+          content:
+            application/json:
+              schema:
+                type: object
+
   /user/me/attended_events:
     get:
       description:

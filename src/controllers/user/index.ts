@@ -3,6 +3,7 @@ import { getOneUserById } from "./getOne";
 import { getLogedInUser } from "./getLogedInUser";
 import { getAllAttendedEventsOfUser } from "./getAllAttendedEvents";
 import { updateUserDetails } from "./update";
+import { getMyTeams } from "./getMyTeams";
 
 export {
   getAllUsers,
@@ -10,4 +11,5 @@ export {
   getAllAttendedEventsOfUser,
   updateUserDetails,
   getLogedInUser,
+  getMyTeams,
 };
