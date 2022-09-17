@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 import * as Utils from "@utils";
 
-const userCreated = Utils.Response.Success("user Created");
+const userCreated = Utils.Response.Success("User Created");
 
 const getAllUsersResponse = (users: User[]) => {
   return Utils.Response.Success<User[]>(users);

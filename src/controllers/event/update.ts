@@ -68,6 +68,10 @@ const updateEvent: Interfaces.Controller.Async = async (req, res, next) => {
     return next(Errors.Module.invalidInput);
   }
 
+  if (extraQuestions && !Array.isArray(extraQuestions)) {
+    return next(Errors.Module.invalidInput);
+  }
+
   if (
     (minTeamSize && typeof minTeamSize !== "number") ||
     (maxTeamSize && typeof maxTeamSize !== "number") ||

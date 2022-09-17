@@ -45,6 +45,10 @@ const createEvent: Interfaces.Controller.Async = async (req, res, next) => {
   )
     return next(Errors.Module.invalidInput);
 
+  if (extraQuestions && !Array.isArray(extraQuestions)) {
+    return next(Errors.Module.invalidInput);
+  }
+
   if (
     !(registrationIncentive && typeof registrationIncentive === "number") ||
     !(attendanceIncentive && typeof attendanceIncentive === "number")
