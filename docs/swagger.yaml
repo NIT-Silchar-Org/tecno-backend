@@ -1718,7 +1718,13 @@ paths:
                         fireabaseId:
                           type: string
                           example: "YiuqYLtElLTNGaNy9vistAz3u663"
-                        name:
+                        firstName:
+                          type: string
+                          example: "john"
+                        lastName:
+                          type: string
+                          example: "john"
+                        middleName:
                           type: string
                           example: "john"
                         username:
