@@ -8,6 +8,30 @@ const getAllEvents: Interfaces.Controller.Async = async (_req, res, next) => {
   const events = await prisma.event.findMany({
     include: {
       module: true,
+      organizers: {
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          middleName: true,
+          lastName: true,
+          username: true,
+          phoneNumber: true,
+          imageUrl: true,
+        },
+      },
+      managers: {
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          middleName: true,
+          lastName: true,
+          username: true,
+          phoneNumber: true,
+          imageUrl: true,
+        },
+      },
     },
   });
 
@@ -25,7 +49,37 @@ const getEventsByModule: Interfaces.Controller.Async = async (
   if (isNaN(moduleId)) return next(Errors.Module.invalidInput);
 
   let events = null;
-  if (moduleId) events = await prisma.event.findMany({ where: { moduleId } });
+  if (moduleId)
+    events = await prisma.event.findMany({
+      where: { moduleId },
+      include: {
+        module: true,
+        organizers: {
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            middleName: true,
+            lastName: true,
+            username: true,
+            phoneNumber: true,
+            imageUrl: true,
+          },
+        },
+        managers: {
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            middleName: true,
+            lastName: true,
+            username: true,
+            phoneNumber: true,
+            imageUrl: true,
+          },
+        },
+      },
+    });
   else events = await prisma.event.findMany();
 
   if (!events) return next(Errors.System.serverError);
@@ -40,11 +94,36 @@ const getEventById: Interfaces.Controller.Async = async (req, res, next) => {
 
   const event = await prisma.event.findFirst({
     where: { id: eventId },
-    include: { module: true },
+    include: {
+      module: true,
+      organizers: {
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          middleName: true,
+          lastName: true,
+          username: true,
+          phoneNumber: true,
+          imageUrl: true,
+        },
+      },
+      managers: {
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          middleName: true,
+          lastName: true,
+          username: true,
+          phoneNumber: true,
+          imageUrl: true,
+        },
+      },
+    },
   });
   if (!event) return next(Errors.Module.eventNotFound);
   return res.json(Utils.Response.Success(event));
 };
-
 
 export { getAllEvents, getEventsByModule, getEventById };
