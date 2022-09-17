@@ -39,6 +39,8 @@ const teamSizeNotAllowed = Utils.Response.Error(
 const teamNotFound = Utils.Response.Error("Team not found.", 404);
 const invalidTeamId = Utils.Response.Error("Invalid Team ID", 401);
 
+const timeNotRight = Utils.Response.Error("Can not register now.", 401);
+
 export {
   userNotPartOfTeam,
   userAlreadyResponded,
@@ -50,4 +52,5 @@ export {
   teamNotFound,
   memberDuplicates,
   invalidTeamId,
+  timeNotRight,
 };
