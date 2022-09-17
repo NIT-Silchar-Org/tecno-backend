@@ -61,13 +61,4 @@ const isReceiverAdmin: Interfaces.Middleware.Async = async (
   }
 };
 
-const isUserAuthorized: Interfaces.Middleware.Sync = (req, _res, next) => {
-  const { userId } = req.params;
-  if (req.user!.id === parseInt(userId)) {
-    next();
-  } else {
-    next(Errors.Auth.userUnauthorized);
-  }
-};
-
-export { isUserEventManager, isReceiverAdmin, isUserAuthorized };
+export { isUserEventManager, isReceiverAdmin };

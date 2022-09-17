@@ -38,7 +38,6 @@ router.get(
 router.get(
   "/",
   Middlewares.Auth.validateUser,
-  Middlewares.Transaction.isUserAuthorized,
   Controllers.Transaction.getAllTransactionsForAUser
 );
 

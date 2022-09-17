@@ -14,14 +14,15 @@ const getAllTransactionsForAUser: Interfaces.Controller.Async = async (
   req,
   res
 ) => {
+  console.log(req.user);
   const transactions = await prisma.transaction.findMany({
     where: {
       OR: [
         {
-          fromUserId: parseInt(req.user!.firebaseId),
+          fromUserId: req.user!.id,
         },
         {
-          toUserId: parseInt(req.user!.firebaseId),
+          toUserId: req.user!.id,
         },
       ],
     },
