@@ -4,11 +4,7 @@ import { prisma } from "@utils/prisma";
 import * as Errors from "@errors";
 import * as Utils from "@utils";
 
-export const createEvent: Interfaces.Controller.Async = async (
-  req,
-  res,
-  next
-) => {
+const createEvent: Interfaces.Controller.Async = async (req, res, next) => {
   const {
     description,
     posterImage,
@@ -108,3 +104,5 @@ export const createEvent: Interfaces.Controller.Async = async (
   if (!event) return next(Errors.System.serverError);
   return res.json(Utils.Response.Success(event));
 };
+
+export { createEvent };
