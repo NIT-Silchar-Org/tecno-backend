@@ -218,9 +218,9 @@ components:
 
 servers:
   - url: http://localhost:5000/api
-    description: Development Server
-  - url: http://43.205.136.224:5000/api
-    description: Development Server (EC2)
+    description: Dev Server (Local)
+  - url: https://api.dev.tecnoesis.org/api
+    description: Dev Server (EC2)
 
 paths:
   /auth/signup:
@@ -1541,7 +1541,7 @@ paths:
                       type: string
                       example: "Internal server error."
 
-  /event/{eventId}/team/add:
+  /team/event/{eventId}/add:
     post:
       description: Register a team for an event
 
@@ -1575,25 +1575,15 @@ paths:
               properties:
                 name:
                   type: string
-                  example: "John Smith"
+                  example: "404 Coders"
 
                 members:
                   type: array
 
                   items:
-                    type: object
-
-                    properties:
-                      username:
-                        type: string
-                        example: "johnsmittecno22"
-
-                      role:
-                        type: string
-                        enum:
-                          - LEADER
-                          - MEMBER
-                        example: MEMBER
+                    type: string
+                    example: ["john_smith99", "b4dg4m3r55"]
+                    description: "Array of usernames of members. No need to put leader's username"
 
       responses:
         200:
@@ -1652,7 +1642,7 @@ paths:
                     type: string
                     example: Team Already Exists.
 
-  /event/{eventId}/registered_teams:
+  /team/event/{eventId}/registered_teams:
     get:
       description: Get the details of all the teams registered in a particular event
       security:
@@ -1681,10 +1671,12 @@ paths:
                 type: array
                 items:
                   type: object
+
                   properties:
                     status:
                       type: number
                       example: 200
+
                     msg:
                       type: object
                       properties:
@@ -1699,7 +1691,7 @@ paths:
                           example: "john"
                         username:
                           type: string
-                          example: "josu"
+                          example: "john_smith29"
                         email:
                           type: string
                           example: "hello@nits.ac.in"
@@ -1708,9 +1700,23 @@ paths:
                           example: "NITS"
                         registrationId:
                           type: string
-                          example: "2012000"
+                          example: "2012001"
 
-  /event/{eventId}/team/{teamId}:
+        404:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: Event not found.
+
+  /team/{teamId}:
     get:
       description: Get the details of a team
       security:
@@ -1797,7 +1803,7 @@ paths:
                     type: string
                     example: Team Not Found.
 
-  /event/{eventId}/team/{teamId}/respond:
+  /team/{teamId}/respond:
     patch:
       description: User responding to team invite
 

@@ -68,7 +68,7 @@ const getAllTeamsOfEvent: Interfaces.Controller.Async = async (
 
   const eventId = parseInt(EID);
 
-  if (!eventId) {
+  if (isNaN(eventId)) {
     return next(Errors.Event.eventDoesntExist);
   }
 

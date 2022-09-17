@@ -8,8 +8,9 @@ const router: Router = Router({ mergeParams: true });
 // ROOT = /api/team
 
 router.post(
-  "/add",
+  "/event/:eventId/add",
   Middlewares.Auth.validateUser,
+  Middlewares.Event.isEventValid,
   Controllers.Team.registerTeam
 );
 
@@ -21,8 +22,9 @@ router.get(
 );
 
 router.get(
-  "/registered_teams/",
+  "/event/:eventId/registered_teams",
   Middlewares.Auth.isAdmin,
+  Middlewares.Event.isEventValid,
   Controllers.Team.getAllTeamsOfEvent
 );
 
@@ -31,6 +33,6 @@ router.patch(
   Middlewares.Auth.validateUser,
   Middlewares.Auth.getAdmin,
   Controllers.Team.teamRegistrationResponse
-); // check user middleware // Get userId from auth
+);
 
 export default router;

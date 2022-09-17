@@ -13,7 +13,11 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
   const { name, members: memberArray } =
     req.body as Interfaces.Team.RegisterTeamBody;
 
+  memberArray.push(req.user!.username);
+
   const members = new Set(memberArray);
+  // Any duplicate members, including leader,
+  // if duplicate is present, gets removed.
 
   if (members.size !== memberArray.length) {
     return next(Errors.Team.memberDuplicates);
@@ -177,7 +181,7 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
       subject = `Team Invitation for ${name} | ${process.env.NAME}`;
     }
 
-    Utils.Email.sendMail(user.email, html, subject); // Await Not Used On Purpose
+    Utils.Email.sendMail(user.email, html, subject); // Await Avoided On Purpose
   }
 
   return res.json(Success.Team.teamCreated);
