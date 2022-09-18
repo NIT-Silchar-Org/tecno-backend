@@ -1,6 +1,10 @@
+import dotenv from "dotenv";
+import * as Utils from "@utils";
+dotenv.config();
+Utils.Upload.initializeMulter();
+
 //----------------------- IMPORTS ---------------------------
 import express, { Express } from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -10,12 +14,9 @@ import YAML from "yamljs";
 
 import * as Routers from "@routes";
 import * as Constants from "@constants";
-import * as Utils from "@utils";
 import * as Interfaces from "@interfaces";
 
-dotenv.config();
 Utils.Firebase.firebaseInit();
-Utils.Upload.initializeMulter();
 
 const app: Express = express();
 
