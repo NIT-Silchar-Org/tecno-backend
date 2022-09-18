@@ -22,16 +22,10 @@ function initializeMulter() {
     }),
     fileFilter: (_, file, cb) => {
       const imgRE = /image\/[a-zA-Z0-9]*/;
-      const videoRE = /video\/[a-zA-Z0-9]*/;
 
       if (
         imgRE.test(file.mimetype) &&
-        file.size > Constants.Upload.FILE_UPLOAD_LIMIT_IMG
-      ) {
-        cb(null, true);
-      } else if (
-        videoRE.test(file.mimetype) &&
-        file.size > Constants.Upload.FILE_UPLOAD_LIMIT_VIDEO
+        file.size <= Constants.Upload.FILE_UPLOAD_LIMIT_IMG
       ) {
         cb(null, true);
       } else {

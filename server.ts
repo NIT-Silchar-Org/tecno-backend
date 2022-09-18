@@ -24,10 +24,7 @@ const app: Express = express();
 app
   .use(
     cors({
-      origin:
-        process.env!.NODE_ENV === "development"
-          ? "*"
-          : process.env.CLIENT!.split(", "),
+      origin: "*",
     })
   )
   .use(helmet())
