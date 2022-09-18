@@ -2,7 +2,7 @@ import multer from "multer";
 import multerS3 from "multer-s3";
 
 import { initializeAWS, s3 } from "@utils/aws";
-import * as Constants from "@constants";
+// import * as Constants from "@constants";
 
 let upload: multer.Multer;
 
@@ -22,11 +22,7 @@ function initializeMulter() {
     }),
     fileFilter: (_, file, cb) => {
       const imgRE = /image\/[a-zA-Z0-9]*/;
-
-      if (
-        imgRE.test(file.mimetype) &&
-        file.size <= Constants.Upload.FILE_UPLOAD_LIMIT_IMG
-      ) {
+      if (imgRE.test(file.mimetype)) {
         cb(null, true);
       } else {
         cb(new Error("File of large size or unknown type."));
