@@ -156,3 +156,26 @@ model Statics {
   name String @id
   json Json
 }
+
+enum TshirtSize {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+}
+
+model SparkTshirt {
+  id             Int        @id @default(autoincrement())
+  name           String
+  email          String
+  scholarId      String?
+  isNITS         Boolean
+  mobileNumber   String
+  hostelNumber   String?
+  address        String?
+  tshirtSize     TshirtSize
+  paymentReceipt String
+  transactionId  Int        @unique
+}
