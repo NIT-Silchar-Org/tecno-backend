@@ -1,5 +1,5 @@
 import * as Interfaces from "@interfaces";
-import { Event, User } from "@prisma/client";
+import { Event } from "@prisma/client";
 import { prisma } from "@utils/prisma";
 import * as Errors from "@errors";
 import * as Utils from "@utils";
@@ -47,7 +47,7 @@ const updateEvent: Interfaces.Controller.Async = async (req, res, next) => {
   if (registrationEndTime && JSON.stringify(regEnd) === "null")
     return next(Errors.Module.invalidInput);
 
-  const { organizers, managers }: { organizers: [User]; managers: [User] } =
+  const { organizers, managers }: { organizers: [string]; managers: [string] } =
     req.body;
 
   let organizersUsernames;

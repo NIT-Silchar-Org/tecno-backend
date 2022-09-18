@@ -1287,19 +1287,13 @@ paths:
                 organizers:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      username:
-                        type: string
-                        example: "mohan"
+                    type: string
+                    example: "mohan"
                 managers:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      username:
-                        type: string
-                        example: "rohan"
+                    type: string
+                    example: "rohan"
                 extraQuestions: 
                   type: array
                   items:
