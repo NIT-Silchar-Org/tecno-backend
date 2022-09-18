@@ -171,9 +171,9 @@ model SparkTshirt {
   name           String
   email          String     @unique
   scholarId      String?
-  isNITS         Boolean
+  isNITS         String
   mobileNumber   String     @unique
-  hostelNumber   String?
+  hostelName     String?
   address        String?
   tshirtSize     TshirtSize
   paymentReceipt String

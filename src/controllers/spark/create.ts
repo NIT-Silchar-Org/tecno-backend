@@ -14,22 +14,22 @@ const createTshirtRequest: Interfaces.Controller.Async = async (
   const {
     address,
     email,
-    hostelNumber,
+    hostelName,
     isNITS,
     mobileNumber,
     name,
-    paymentReceipt,
     scholarId,
     transactionId,
     tshirtSize,
   } = req.body as SparkTshirt;
 
+  const isNITSBool = isNITS === "yes";
+
   if (
     typeof email !== "string" ||
     typeof name !== "string" ||
-    typeof isNITS !== "boolean" ||
+    typeof isNITS !== "string" ||
     typeof mobileNumber !== "string" ||
-    typeof paymentReceipt !== "string" ||
     typeof transactionId !== "string" ||
     !Object.values(TshirtSize).includes(tshirtSize)
   ) {
@@ -40,10 +40,9 @@ const createTshirtRequest: Interfaces.Controller.Async = async (
     (!name && !name.trim().length) ||
     (!mobileNumber &&
       !Constants.Spark.EMAIL_REGEX.test(mobileNumber.replace(/\s/g, ""))) ||
-    !!hostelNumber !== isNITS ||
-    !paymentReceipt ||
-    !!scholarId !== isNITS ||
-    !!address === isNITS ||
+    !!hostelName !== isNITSBool ||
+    !!scholarId !== isNITSBool ||
+    !!address === isNITSBool ||
     !transactionId ||
     !tshirtSize ||
     !email
@@ -67,11 +66,11 @@ const createTshirtRequest: Interfaces.Controller.Async = async (
       isNITS,
       mobileNumber,
       name,
-      paymentReceipt,
+      paymentReceipt: (req.file as Express.MulterS3.File).location,
       transactionId,
       tshirtSize,
       address,
-      hostelNumber,
+      hostelName,
       scholarId,
     },
   });
