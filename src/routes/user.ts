@@ -7,6 +7,11 @@ const router: Router = Router({ mergeParams: true });
 
 router.get("/", Middlewares.Auth.isAdmin, Controllers.User.getAllUsers);
 router.get(
+  "/me/my_teams",
+  Middlewares.Auth.validateUser,
+  Controllers.User.getMyTeams
+);
+router.get(
   "/me/attended_events",
   Middlewares.Auth.validateUser,
   Controllers.User.getAllAttendedEventsOfUser
