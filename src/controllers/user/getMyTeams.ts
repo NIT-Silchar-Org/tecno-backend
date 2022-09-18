@@ -21,7 +21,23 @@ const getMyTeams: Interfaces.Controller.Async = async (req, res) => {
             registrationStatus: true,
             teamName: true,
             extraInformation: true,
-            members: true,
+            members: {
+              select: {
+                id: true,
+                registrationStatus: true,
+                role: true,
+                user: {
+                  select: {
+                    id: true,
+                    username: true,
+                    firstName: true,
+                    middleName: true,
+                    lastName: true,
+                    imageUrl: true,
+                  },
+                },
+              },
+            },
             event: {
               select: {
                 name: true,
