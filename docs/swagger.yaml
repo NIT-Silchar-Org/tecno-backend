@@ -51,10 +51,6 @@ components:
           type: string
           example: "1231231233"
 
-        phoneNumber:
-          type: string
-          example: "1231231233"
-
         collegeName:
           type: string
           example: "National Institute of Technology, Silchar"
@@ -308,12 +304,7 @@ paths:
                 - collegeName
                 - username
                 - phoneNumber
-              required:
-                - firstName
-                - lastName
-                - email
-                - collegeName
-                - username
+
       responses:
         200:
           description: Successful
@@ -1752,9 +1743,6 @@ paths:
                         phoneNumber:
                           type: string
                           example: "1231231230"
-                        phoneNumber:
-                          type: string
-                          example: "1231231230"
 
         404:
           description: Conflict
@@ -1935,8 +1923,6 @@ paths:
                   msg:
                     type: array
                     items:
-                      type: array
-                    items:
                       $ref: '#/components/schemas/User'
 
 
@@ -1957,15 +1943,7 @@ paths:
               properties:
                 firstName:
                   type: string
-                  firstName:
-                  type: string
                   nullable: true
-                  example: "netra"
-                middleName:
-                  type: string
-                  nullable: true
-                  example: "netra"
-                lastNullable: true
                   example: "netra"
                 middleName:
                   type: string
@@ -1980,10 +1958,6 @@ paths:
                   nullable: true
                   example: "National Institute of Technology Silchar"
                 registrationId:
-                  type: string
-                  nullable: true
-                  example: 2012000
-                phoneNumber:
                   type: string
                   nullable: true
                   example: 2012000
@@ -2008,6 +1982,22 @@ paths:
                     example: 200
                   msg:
                     $ref: '#/components/schemas/User'
+  /user/me/my_teams:
+    get:
+      description: get Array of all teams the  user is registered
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description:
+            Data fetched
+          content:
+            application/json:
+              schema:
+                type: object
+
   /user/me/attended_events:
     get:
       description:
