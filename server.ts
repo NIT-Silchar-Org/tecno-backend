@@ -15,6 +15,7 @@ import * as Interfaces from "@interfaces";
 
 dotenv.config();
 Utils.Firebase.firebaseInit();
+Utils.Upload.initializeMulter();
 
 const app: Express = express();
 
