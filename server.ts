@@ -23,8 +23,10 @@ const app: Express = express();
 app
   .use(
     cors({
-      origin: process.env.CLIENT!.split(", "),
-      credentials: true,
+      origin:
+        process.env!.NODE_ENV === "development"
+          ? "*"
+          : process.env.CLIENT!.split(", "),
     })
   )
   .use(helmet())
@@ -41,13 +43,13 @@ app.use(
   swaggerUI.serve,
   swaggerUI.setup(swaggerDocument, {
     customCss: ".swagger-ui .topbar { display: none }",
-    customSiteTitle: "Tecnoesis API",
+    customSiteTitle: "Tecnoesis 2022 API",
   })
 );
 
 //----------------------- HEALTH CHECK ----------------------------
 
-app.get(`${Constants.Server.ROOT}/`, ((_req, res, _next) => {
+app.get(`${Constants.Server.ROOT}/`, ((_req, res) => {
   res.json({
     status: 200,
     msg: "Health check OK",
@@ -62,8 +64,10 @@ app.use(`${Constants.Server.ROOT}/home`, Routers.Home);
 
 app.use(`${Constants.Server.ROOT}/module`, Routers.Module);
 app.use(`${Constants.Server.ROOT}/event`, Routers.Event);
+app.use(`${Constants.Server.ROOT}/team`, Routers.Team);
 app.use(`${Constants.Server.ROOT}/user`, Routers.User);
 app.use(`${Constants.Server.ROOT}/transaction`, Routers.Transaction);
+app.use(`${Constants.Server.ROOT}/statics`, Routers.Statics);
 
 //----------------------- ERROR HANDLERS ---------------------
 

@@ -8,4 +8,14 @@ const userUnauthorized = Utils.Response.Error(
   403
 );
 
-export { invalidInput, moduleNotFound, eventNotFound, userUnauthorized };
+const extraQuestionsJSONInvalid = Utils.Response.Error(
+  "extra questions misc JSON in invalid"
+);
+
+export {
+  invalidInput,
+  moduleNotFound,
+  eventNotFound,
+  userUnauthorized,
+  extraQuestionsJSONInvalid,
+};

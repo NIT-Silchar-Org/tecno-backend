@@ -51,6 +51,10 @@ components:
           type: string
           example: "1231231233"
 
+        phoneNumber:
+          type: string
+          example: "1231231233"
+
         collegeName:
           type: string
           example: "National Institute of Technology, Silchar"
@@ -80,6 +84,11 @@ components:
             - REGISTERED
             - PENDING
             - CANCELLED
+        
+        extraInformation:
+          type: array
+          items:
+            type: object
 
     TeamRegistration:
       type: object
@@ -189,14 +198,17 @@ components:
         registrationEndTime:
           type: string
           example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
-
+        extraQuestions:
+          type: array
+          items:
+            type: object
     Transaction:
       type: object
       properties:
         id:
           type: number
           example: 65
-          
+
         fromUserId:
           type: number
           example: 2
@@ -208,8 +220,8 @@ components:
         amount:
           type: number
           example: 2000
-          
-        description: 
+
+        description:
           type: string
           example: "Purchase"
 
@@ -219,7 +231,7 @@ components:
             - ATTENDANCE
             - PURCHASE
             - ONLINE_EVENT
-        
+
         eventId:
           type: number
           example: 2
@@ -227,6 +239,19 @@ components:
         createdAt:
           type: string
           example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+    Statics:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "TecnoTeam"
+        json:
+          type: object
+          properties:
+            teamName:
+              type: string
+            totalMembers:
+              type: integer
 
 servers:
   - url: http://localhost:5000/api
@@ -270,9 +295,19 @@ paths:
                 username:
                   type: string
                   example: "josu"
+                phoneNumber:
+                  type: string
+                  example: "1212312312"
                 imageUrl:
                   type: string
                   example: "https://avatars.githubusercontent.com/u/74897001"
+              required:
+                - firstName
+                - lastName
+                - email
+                - collegeName
+                - username
+                - phoneNumber
               required:
                 - firstName
                 - lastName
@@ -292,7 +327,7 @@ paths:
                     example: 200
                   msg:
                     type: string
-                    example: user created
+                    example: User Created
         409:
           description: Conflict user already exists
           content:
@@ -347,12 +382,12 @@ paths:
             schema:
               type: object
               properties:
-                toUserId:
+                toUserName:
                   type: string
-                  example: "u7dpk73akmjzs765"
+                  example: "tecnouser"
                 eventId:
                   type: string
-                  example: "pq864mvcx66238njdhfy98"
+                  example: "1"
 
       responses:
         200:
@@ -398,9 +433,9 @@ paths:
             schema:
               type: object
               properties:
-                toUserId:
+                toUserName:
                   type: string
-                  example: "Hnxp4N7WdYUcb3L3d4WNUx4Xld93"
+                  example: "tecnouser"
                 amount:
                   type: number
                   example: 100
@@ -464,7 +499,7 @@ paths:
   /transaction/online-event:
     post:
       description:
-        Transaction for online event, provided the sender is event manager.
+        Transaction for online event, provided the sender is admin.
       tags:
         - Transaction
       security:
@@ -476,9 +511,9 @@ paths:
             schema:
               type: object
               properties:
-                toUserId:
+                toUserName:
                   type: string
-                  example: "u7dpk73akmjzs765"
+                  example: "tecnouser"
                 amount:
                   type: number
                   example: 100
@@ -525,24 +560,14 @@ paths:
                   msg:
                     type: string
                     example: "Invalid amount transaction"
-  /transaction/{userId}:
+  /transaction:
     get:
       description:
-        An array of all the transactions, provided the user is admin.
+        An array of all your transactions, provided you are authorized.
       tags:
         - Transaction
       security:
         - BearerAuth: []
-      parameters:
-        - in: path
-          name: userId
-
-          schema:
-            type: number
-
-          required: true
-
-          description: UserId for which Transaction is needed.
       responses:
         200:
           description:
@@ -551,10 +576,10 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   type: object
                   properties:
-                    id: 
+                    id:
                       type: number
                       example: 65
                     amount:
@@ -563,7 +588,7 @@ paths:
                     reason:
                       type: string
                       example: "PURCHASE"
-                    description: 
+                    description:
                       type: string
                       example: "Transaction is for purchase"
                     type:
@@ -571,7 +596,7 @@ paths:
                       example: "DEBIT"
                     createdAt:
                       type: string
-                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"     
+                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
         500:
           description:
             Server error.
@@ -586,7 +611,7 @@ paths:
                   msg:
                     type: string
                     example: "Server error"
-  /transaction/:
+  /transaction/all:
     get:
       description:
         An array of all the transactions, provided the user is admin.
@@ -602,7 +627,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Transaction'
         500:
           description:
@@ -618,7 +643,7 @@ paths:
                   msg:
                     type: string
                     example: "Server error"
-                    
+
   /module/{moduleId}/event:
     get:
       summary: Get an array of JSON event objects in a module.
@@ -633,20 +658,26 @@ paths:
           required: true
 
           description: Numeric ID of the module requested.
-      tags: 
+      tags:
         - Module
       responses:
         '200':
           description: An Array of JSON event objects.
-          content:  
+          content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Event'
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 200
+                    msg: 
+                      $ref: '#/components/schemas/Event'
         '400':
           description: Throws if moduleId is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -684,7 +715,7 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
-    
+
   /module/:
     get:
       summary: Get an array of JSON module objects with nested events.
@@ -693,69 +724,25 @@ paths:
       responses:
         '200':
           description: An Array of JSON module objects.
-          content:  
+          content:
             application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    status:
-                      type: number
-                      example: 200
-                    msg:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          id:
-                            type: number
-                            example: 1
-                          name:
-                            type: string
-                            example: "module1"
-                          description:
-                            type: string
-                            example: "its a good module"
-                          iconImage:
-                            type: string
-                            example: "http://iconImage.com"
-                          coverImage: 
-                            type: string
-                            example: "http://coverImage.com"
-                          thridPartyUrl:
-                            type: string
-                            example: "http://thridPartyUrl.com"
-                          events:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                id:
-                                  type: number
-                                  example: 1
-                                name:
-                                  type: string
-                                  example: "roborobo"
-                                posterImage: 
-                                  type: string
-                                  example: "http://posterImage.com"
-                                attendanceIncentive:
-                                  type: number
-                                  example: 10000
-                                registrationIncentive:
-                                  type: number
-                                  example: 10000
-                                description:
-                                  type: string
-                                  example: "very very good event"
-                                registrationEndTime:
-                                  type: string
-                                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
-                                registrationStartTime:
-                                  type: string
-                                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
-                    
+              schema: 
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: array
+                    items:
+                      allOf:
+                          - $ref: '#/components/schemas/Module'
+                          - type: object
+                            properties:
+                              events:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/Event'
         '500':
             description: Throws if server is unresponsive.
             content:
@@ -788,7 +775,7 @@ paths:
         responses:
           '200':
             description: A JSON module object.
-            content:  
+            content:
               application/json:
                 schema:
                   type: object
@@ -800,7 +787,7 @@ paths:
                       $ref: '#/components/schemas/Module'
           '400':
             description: Throws if moduleId is not a number.
-            content:  
+            content:
               application/json:
                 schema:
                   type: object
@@ -858,7 +845,7 @@ paths:
       responses:
         '200':
           description: A JSON object of the deleted module.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -870,7 +857,7 @@ paths:
                     $ref: '#/components/schemas/Module'
         '400':
           description: Throws if moduleId is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -962,7 +949,7 @@ paths:
       responses:
         '200':
           description: A JSON object of the edited module.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -974,7 +961,7 @@ paths:
                     $ref: '#/components/schemas/Module'
         '400':
           description: Throws if moduleId is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1025,8 +1012,8 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
-                      
-    
+
+
   /module/create:
     post:
       requestBody:
@@ -1071,7 +1058,7 @@ paths:
                     $ref: '#/components/schemas/Module'
         '400':
           description: Throws if response body has empty fields.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1116,12 +1103,26 @@ paths:
       responses:
         '200':
           description: An Array of JSON event objects.
-          content:  
+          content:
             application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Event'
+             schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Event'
+                        - type: object
+                          properties:
+                            module:
+                              $ref: '#/components/schemas/Module'
+                                
+  
+                  
         '500':
             description: Throws if server is unresponsive.
             content:
@@ -1154,7 +1155,7 @@ paths:
       responses:
         '200':
           description: A JSON event object.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1163,10 +1164,15 @@ paths:
                     type: number
                     example: 200
                   msg:
-                    $ref: '#/components/schemas/Event'
+                    allOf:
+                    - $ref: '#/components/schemas/Event'
+                    - type: object
+                      properties:
+                        module:
+                          $ref: '#/components/schemas/Module'
         '400':
           description: Throws if event id is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1247,13 +1253,13 @@ paths:
                   type: integer
                   example: 1
 
-                incentive:
+                attendanceIncentive:
                   type: number
                   example: 100
 
-                isIncentivised:
-                  type: boolean
-                  example: true
+                registrationIncentive:
+                  type: number
+                  example: 100
 
                 prizeDescription:
                   type: string
@@ -1303,10 +1309,14 @@ paths:
                       username:
                         type: string
                         example: "rohan"
+                extraQuestions: 
+                  type: array
+                  items:
+                    type: object
       responses:
         '200':
           description: A JSON object of the edited event.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1318,7 +1328,7 @@ paths:
                     $ref: '#/components/schemas/Event'
         '400':
           description: Throws if event id is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1374,7 +1384,7 @@ paths:
       responses:
         '200':
           description: A JSON object of the deleted event.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1386,7 +1396,7 @@ paths:
                     $ref: '#/components/schemas/Event'
         '400':
           description: Throws if eventId is not a number.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1437,8 +1447,8 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
-      
-      
+
+
   /event/create:
     post:
       summary: Create an event.
@@ -1448,7 +1458,7 @@ paths:
         - BearerAuth: []
       requestBody:
         description: A JSON Object containing details of the event to be created.
-        content: 
+        content:
           application/json:
             schema:
               type: object
@@ -1473,13 +1483,13 @@ paths:
                   type: integer
                   example: 1
 
-                incentive:
+                attendanceIncentive:
                   type: number
                   example: 100
 
-                isIncentivised:
-                  type: boolean
-                  example: true
+                registrationIncentive:
+                  type: number
+                  example: 200
 
                 prizeDescription:
                   type: string
@@ -1512,10 +1522,14 @@ paths:
                 registrationEndTime:
                   type: string
                   example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+                extraQuestions:
+                  type: array
+                  items: 
+                    type: object
       responses:
         '200':
           description: A JSON object of the created event.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1527,7 +1541,7 @@ paths:
                     $ref: '#/components/schemas/Event'
         '400':
           description: Throws if requestbody has empty fields.
-          content:  
+          content:
             application/json:
               schema:
                 type: object
@@ -1564,8 +1578,8 @@ paths:
                     msg:
                       type: string
                       example: "Internal server error."
-                
-  /event/{eventId}/team/add:
+
+  /team/event/{eventId}/add:
     post:
       description: Register a team for an event
 
@@ -1599,25 +1613,19 @@ paths:
               properties:
                 name:
                   type: string
-                  example: "John Smith"
+                  example: "404 Coders"
 
                 members:
                   type: array
-
                   items:
+                    type: string
+                    example: "john_smith99"
+                    description: "Array of usernames of members. No need to put leader's username"
+                
+                extraInformation:
+                  type: array
+                  items: 
                     type: object
-
-                    properties:
-                      username:
-                        type: string
-                        example: "johnsmittecno22"
-
-                      role:
-                        type: string
-                        enum:
-                          - LEADER
-                          - MEMBER
-                        example: MEMBER
 
       responses:
         200:
@@ -1675,8 +1683,8 @@ paths:
                   msg:
                     type: string
                     example: Team Already Exists.
-                    
-  /event/{eventId}/registered_teams:
+
+  /team/event/{eventId}/registered_teams:
     get:
       description: Get the details of all the teams registered in a particular event
       security:
@@ -1695,7 +1703,7 @@ paths:
           required: true
 
           description: Numeric ID of the event
-      
+
       responses:
         200:
           description: Get a JSON Object with all the registered teams in event
@@ -1705,10 +1713,12 @@ paths:
                 type: array
                 items:
                   type: object
+
                   properties:
                     status:
                       type: number
                       example: 200
+
                     msg:
                       type: object
                       properties:
@@ -1729,7 +1739,7 @@ paths:
                           example: "john"
                         username:
                           type: string
-                          example: "josu"
+                          example: "john_smith29"
                         email:
                           type: string
                           example: "hello@nits.ac.in"
@@ -1738,12 +1748,29 @@ paths:
                           example: "NITS"
                         registrationId:
                           type: string
-                          example: "2012000"
+                          example: "2012001"
+                        phoneNumber:
+                          type: string
+                          example: "1231231230"
                         phoneNumber:
                           type: string
                           example: "1231231230"
 
-  /event/{eventId}/team/{teamId}:
+        404:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: Event not found.
+
+  /team/{teamId}:
     get:
       description: Get the details of a team
       security:
@@ -1752,17 +1779,6 @@ paths:
         - Team
 
       parameters:
-
-        - in: path
-          name: eventId
-
-          schema:
-            type: integer
-
-          required: true
-
-          description: Numeric ID of the event in which the team is registering
-
         - in: path
           name: teamId
 
@@ -1830,7 +1846,7 @@ paths:
                     type: string
                     example: Team Not Found.
 
-  /event/{eventId}/team/{teamId}/respond:
+  /team/{teamId}/respond:
     patch:
       description: User responding to team invite
 
@@ -1841,17 +1857,6 @@ paths:
         - BearerAuth: []
 
       parameters:
-
-        - in: path
-          name: eventId
-
-          schema:
-            type: integer
-
-          required: true
-
-          description: Numeric ID of the event in which the team is registering
-
         - in: path
           name: teamId
 
@@ -1919,7 +1924,7 @@ paths:
       responses:
         200:
           description: A JSON object contain all users in an array
-          content: 
+          content:
             application/json:
               schema:
                 type: object
@@ -1930,7 +1935,11 @@ paths:
                   msg:
                     type: array
                     items:
+                      type: array
+                    items:
                       $ref: '#/components/schemas/User'
+
+
 
 
     patch:
@@ -1948,7 +1957,15 @@ paths:
               properties:
                 firstName:
                   type: string
+                  firstName:
+                  type: string
                   nullable: true
+                  example: "netra"
+                middleName:
+                  type: string
+                  nullable: true
+                  example: "netra"
+                lastNullable: true
                   example: "netra"
                 middleName:
                   type: string
@@ -1963,6 +1980,10 @@ paths:
                   nullable: true
                   example: "National Institute of Technology Silchar"
                 registrationId:
+                  type: string
+                  nullable: true
+                  example: 2012000
+                phoneNumber:
                   type: string
                   nullable: true
                   example: 2012000
@@ -2003,10 +2024,10 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   type: object
                   properties:
-                    id: 
+                    id:
                       type: number
                       example: 65
                     amount:
@@ -2015,12 +2036,12 @@ paths:
                     reason:
                       type: string
                       example: "ATTENDANCE"
-                    description: 
+                    description:
                       type: string
                       example: "Transaction is for purchase"
                     createdAt:
                       type: string
-                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"     
+                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
                     event:
                       type: object
                       properties:
@@ -2217,7 +2238,7 @@ paths:
             type: integer
           required: true
           description: Numeric ID of the user to get
-        
+
       tags:
         - User
       description: Get one user using it's id
@@ -2320,3 +2341,220 @@ paths:
                   msg:
                     type: string
                     example: Incorrect user id
+  /statics/:
+    get:
+      tags: 
+        - Statics
+      description: Get all statics data
+      responses:
+        200:
+          description: A JSON object containing all the statics data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Statics'
+    post:
+      tags: 
+        - Statics
+      security:
+        - BearerAuth: []
+      description: Create particular static 
+      requestBody:
+
+        description: A JSON Object for the user's response to an invitation
+
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "TecnoTeam"
+                json:
+                  type: object
+                  properties:
+                    teamName: 
+                      type: string
+                    totalMember: 
+                      type: integer
+      responses: 
+        200:
+          description: Successfull creation of static
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Static created successfully"
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: Invalid input
+  /statics/{name}:
+    get:
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: The name of the static data requested
+      tags: 
+        - Statics
+      description: Get particular static data
+      responses: 
+        200:
+          description: A JSON object containing the requested static data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Statics'
+        404:
+          description: Static with the given name doesn't exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: Static not found
+    put:
+      tags: 
+        - Statics
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: The name of the static data requested
+      security:
+        - BearerAuth: []
+      description: Update particular static 
+      requestBody:
+
+        description: A JSON Object for the user's response to an invitation
+
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                json:
+                  type: object
+                  properties:
+                    teamName: 
+                      type: string
+                    totalMember: 
+                      type: integer
+      responses: 
+        200:
+          description: Successfull creation of static
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Static Updated successfully"
+        404:
+          description: Could not find static with given name 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: Could not find static with given name
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: Invalid input
+    delete:
+      tags: 
+        - Statics
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: The name of the static data requested
+      security:
+        - BearerAuth: []
+      description: Delete particular static   
+      responses: 
+        200:
+          description: Successfull creation of static
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Static Deleted successfully"
+        404:
+          description: Could not find static with given name 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: Could not find static with given name

@@ -1,15 +1,15 @@
 interface CreateAttendanceTransactionBody {
-  toUserId: string;
+  toUserName: string;
   eventId: string;
 }
 
 interface CreatePurchaseTransactionBody {
-  toUserId: string;
+  toUserName: string;
   amount: number;
 }
 
 interface CreateOnlineEventTransaction {
-  toUserId: string;
+  toUserName: string;
   amount: number;
 }
 

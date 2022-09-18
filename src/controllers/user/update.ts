@@ -37,6 +37,7 @@ const updateUserDetails: Interfaces.Controller.Async = async (
       collegeName: collegeName || user!.collegeName,
       registrationId: registrationId || user!.registrationId,
       phoneNumber: phoneNumber || user!.phoneNumber,
+      balance: req?.body?.balance || user!.balance,
       imageUrl: imageUrl || user!.imageUrl,
     },
   });
