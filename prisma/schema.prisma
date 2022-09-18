@@ -169,13 +169,13 @@ enum TshirtSize {
 model SparkTshirt {
   id             Int        @id @default(autoincrement())
   name           String
-  email          String
+  email          String     @unique
   scholarId      String?
   isNITS         Boolean
-  mobileNumber   String
+  mobileNumber   String     @unique
   hostelNumber   String?
   address        String?
   tshirtSize     TshirtSize
   paymentReceipt String
-  transactionId  Int        @unique
+  transactionId  String     @unique
 }
