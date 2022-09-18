@@ -498,7 +498,7 @@ const createRegisterCreationHTML = ({
           
     <h1 style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Open Sans',sans-serif; font-size: 30px;">
       <div><strong>Dear ${leaderName},
-        Thank you for taking an interest in </b>${process.env.NAME}</b>'
+        Thank you for taking an interest in </b>Tecnoesis</b>'s
         </b>${eventName}</b> event.</strong></div>
     </h1>
   
