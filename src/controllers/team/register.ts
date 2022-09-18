@@ -36,6 +36,16 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
       minTeamSize: true,
       registrationStartTime: true,
       registrationEndTime: true,
+      moduleId: true,
+    },
+  });
+
+  const module = await prisma.module.findFirst({
+    where: {
+      id: event?.moduleId,
+    },
+    select: {
+      name: true,
     },
   });
 
@@ -162,37 +172,20 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
     let html;
     let subject;
     if (member === req.user!.username) {
-      html = `
-        <p>
-          <h3>Dear <b>${user.firstName} ${
-        user.middleName ? user.middleName + " " : ""
-      }${user.lastName}</b>,</h3>
-          Thank you for taking an interest in </b>${process.env.NAME}</b>'s
-          </b>${event!.name}</b> event.
-
-          <br>
-          <br>
-
-          Your team <b>${name}</b>'s registration application has been submitted successfully.
-          All of your members now need to accept the invitation from their profile page
-          for your team to be registered.
-        </p>
-      `;
+      html = Utils.HTML.createRegisterCreationHTML({
+        eventName: event.name,
+        leaderName: user.firstName,
+        moduleName: module!.name,
+        teamName: name,
+      });
 
       subject = `Team Registration Application Submitted | ${process.env.NAME}`;
     } else {
-      html = `
-        <p>
-          <h3>Dear <b>${user.firstName} ${
-        user.middleName ? user.middleName + " " : ""
-      }${user.lastName}</b>,</h3>
-          You've been invited to join the team <b>${name}</b> at
-          </b>${process.env.NAME}</b>'s </b>${event!.name}</b> event.
-          <br>
-          You're requested to accept the invitation for the team to be
-          one step closer to being fully registered for the event.
-        </p>
-      `;
+      html = Utils.HTML.createRegisterInvitationHTML({
+        eventName: event.name,
+        leaderName: user.firstName,
+        moduleName: module!.name,
+      });
       subject = `Team Invitation for ${name} | ${process.env.NAME}`;
     }
 
