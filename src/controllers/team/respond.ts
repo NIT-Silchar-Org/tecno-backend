@@ -135,6 +135,7 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
       const memberRegistration = await prisma.teamRegistration.findFirst({
         where: {
           userId,
+          teamId: team.id,
         },
       });
 
