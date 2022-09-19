@@ -4,7 +4,7 @@ import { Prisma, RegistrationStatus, TeamMemberRole } from "@prisma/client";
 import * as Interfaces from "@interfaces";
 import * as Success from "@success";
 import * as Errors from "@errors";
-// import * as Utils from "@utils";
+import * as Utils from "@utils";
 
 const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
   const { eventId: EID } = req.params;
@@ -40,20 +40,20 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
     },
   });
 
-  // const module = await prisma.module.findFirst({
-  //   where: {
-  //     id: event?.moduleId,
-  //   },
-  //   select: {
-  //     name: true,
-  //   },
-  // });
+  const module = await prisma.module.findFirst({
+    where: {
+      id: event?.moduleId,
+    },
+    select: {
+      name: true,
+    },
+  });
 
   // Check time
-  // const now = new Date();
-  // if (now < event!.registrationStartTime || now > event!.registrationEndTime) {
-  //   return next(Errors.Team.timeNotRight);
-  // }
+  const now = new Date();
+  if (now < event!.registrationStartTime || now > event!.registrationEndTime) {
+    return next(Errors.Team.timeNotRight);
+  }
 
   if (!event) {
     return next(Errors.Event.eventDoesntExist);
@@ -169,27 +169,27 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
       return next(Errors.User.userNotFound);
     }
 
-    // let html;
-    // let subject;
-    // if (member === req.user!.username) {
-    //   html = Utils.HTML.createRegisterCreationHTML({
-    //     eventName: event.name,
-    //     leaderName: user.firstName,
-    //     moduleName: module!.name,
-    //     teamName: name,
-    //   });
+    let html;
+    let subject;
+    if (member === req.user!.username) {
+      html = Utils.HTML.createRegisterCreationHTML({
+        eventName: event.name,
+        leaderName: user.firstName,
+        moduleName: module!.name,
+        teamName: name,
+      });
 
-    //   subject = `Team Registration Application Submitted | ${process.env.NAME}`;
-    // } else {
-    //   html = Utils.HTML.createRegisterInvitationHTML({
-    //     eventName: event.name,
-    //     leaderName: user.firstName,
-    //     moduleName: module!.name,
-    //   });
-    //   subject = `Team Invitation for ${name} | ${process.env.NAME}`;
-    // }
+      subject = `Team Registration Application Submitted | ${process.env.NAME}`;
+    } else {
+      html = Utils.HTML.createRegisterInvitationHTML({
+        eventName: event.name,
+        leaderName: user.firstName,
+        moduleName: module!.name,
+      });
+      subject = `Team Invitation for ${name} | ${process.env.NAME}`;
+    }
 
-    // Utils.Email.sendMail(user.email, html, subject); // Await Avoided On Purpose
+    Utils.Email.sendMail(user.email, html, subject); // Await Avoided On Purpose
   }
 
   return res.json(Success.Team.teamCreated);
