@@ -6,9 +6,9 @@ const isValidTeamId: Interfaces.Middleware.Sync = (req, _res, next) => {
   const { teamId } = req.params;
 
   if (isNaN(parseInt(teamId))) {
-    next(Errors.Team.invalidTeamId);
+    return next(Errors.Team.invalidTeamId);
   } else {
-    next();
+    return next();
   }
 };
 
