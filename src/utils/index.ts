@@ -5,5 +5,17 @@ import * as Firebase from "./firebase";
 import * as Event from "./event";
 import * as User from "./user";
 import * as Transaction from "./transaction";
+import * as Upload from "./upload";
+import * as HTML from "./html";
 
-export { Response, Error, Email, Firebase, Event, User, Transaction };
+export {
+  Response,
+  Error,
+  Email,
+  Firebase,
+  Event,
+  User,
+  Transaction,
+  Upload,
+  HTML,
+};

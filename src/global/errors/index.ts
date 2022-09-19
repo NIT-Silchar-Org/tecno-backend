@@ -6,5 +6,6 @@ import * as Team from "./team";
 import * as Auth from "./auth";
 import * as Event from "./event";
 import * as Statics from "./statics";
+import * as Spark from "./spark";
 
-export { System, Transaction, User, Statics, Team, Module, Auth, Event };
+export { System, Transaction, User, Statics, Team, Module, Auth, Event, Spark };
