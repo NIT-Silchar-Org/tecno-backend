@@ -251,9 +251,9 @@ components:
 
 servers:
   - url: http://localhost:5000/api
-    description: Dev Server (Local)
+    description: Development Server
   - url: https://api.dev.tecnoesis.org/api
-    description: Dev Server (EC2)
+    description: Development Server (EC2)
 
 paths:
   /auth/signup:
@@ -304,6 +304,7 @@ paths:
                 - collegeName
                 - username
                 - phoneNumber
+
       responses:
         200:
           description: Successful
@@ -1919,6 +1920,8 @@ paths:
                       $ref: '#/components/schemas/User'
 
 
+
+
     patch:
       tags:
         - User
@@ -1973,6 +1976,91 @@ paths:
                     example: 200
                   msg:
                     $ref: '#/components/schemas/User'
+  /user/me/my_teams:
+    get:
+      description: get Array of all teams the  user is registered
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description:
+            Data fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        role: 
+                          type: string
+                          example: "MEMBER"
+                        registrationStatus:
+                          type: string
+                          example: "CANCELLED"
+                        team: 
+                          type: object
+                          properties:
+                            id: 
+                              type: number
+                              example: 1
+                            registrationStatus:
+                              type: string
+                              example: "CANCELLED"
+                            teamName:
+                              type: string
+                              example: "hello"
+                            extraInformation:
+                              type: object
+                            members:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                    example: 1
+                                  registrationStatus:
+                                    type: string
+                                    example: "CANCELLED"
+                                  role:
+                                    type: string
+                                    example: "MEMBER"
+                                  user:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: number
+                                        example: 1
+                                      username:
+                                        type: string
+                                        example: "josu"
+                                      firstName:
+                                        type: string
+                                        example: "net"
+                                      middleName:
+                                        type: string
+                                        example: "kk"
+                                      lastName:
+                                        type: string
+                                        example: "bar"
+                                      imageUrl:
+                                        type: string
+                                        example: "https://"
+                                
+                      
+
   /user/me/attended_events:
     get:
       description:

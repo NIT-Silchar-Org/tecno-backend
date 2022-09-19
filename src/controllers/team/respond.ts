@@ -37,13 +37,16 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
       id: teamId,
       members: {
         some: {
-          userId,
+          user: {
+            id: userId,
+          },
         },
       },
     },
     include: {
       members: {
         select: {
+          id: true,
           userId: true,
           registrationStatus: true,
           role: true,
@@ -107,7 +110,7 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
     // Cancel Team Registration
     await prisma.team.update({
       where: {
-        id: teamId,
+        id: team.id,
       },
       data: {
         registrationStatus: RegistrationStatus.CANCELLED,
@@ -129,15 +132,21 @@ const teamRegistrationResponse: Interfaces.Controller.Async = async (
 
     await prisma.$transaction(async (prisma) => {
       // Update Member's Status to Registered
+      const memberRegistration = await prisma.teamRegistration.findFirst({
+        where: {
+          userId,
+        },
+      });
+
       await prisma.team.update({
         where: {
-          id: teamId,
+          id: team.id,
         },
         data: {
           members: {
             update: {
               where: {
-                id: userId,
+                id: memberRegistration!.id,
               },
               data: {
                 registrationStatus: RegistrationStatus.REGISTERED,

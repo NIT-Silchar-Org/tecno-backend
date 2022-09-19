@@ -1,6 +1,10 @@
+import dotenv from "dotenv";
+import * as Utils from "@utils";
+dotenv.config();
+Utils.Upload.initializeMulter();
+
 //----------------------- IMPORTS ---------------------------
 import express, { Express } from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -10,10 +14,8 @@ import YAML from "yamljs";
 
 import * as Routers from "@routes";
 import * as Constants from "@constants";
-import * as Utils from "@utils";
 import * as Interfaces from "@interfaces";
 
-dotenv.config();
 Utils.Firebase.firebaseInit();
 
 const app: Express = express();
@@ -23,10 +25,7 @@ const app: Express = express();
 app
   .use(
     cors({
-      origin:
-        process.env!.NODE_ENV === "development"
-          ? "*"
-          : process.env.CLIENT!.split(", "),
+      origin: "*",
     })
   )
   .use(helmet())
@@ -68,6 +67,7 @@ app.use(`${Constants.Server.ROOT}/team`, Routers.Team);
 app.use(`${Constants.Server.ROOT}/user`, Routers.User);
 app.use(`${Constants.Server.ROOT}/transaction`, Routers.Transaction);
 app.use(`${Constants.Server.ROOT}/statics`, Routers.Statics);
+app.use(`${Constants.Server.ROOT}/spark`, Routers.Spark);
 
 //----------------------- ERROR HANDLERS ---------------------
 

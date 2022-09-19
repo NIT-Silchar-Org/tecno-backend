@@ -34,8 +34,16 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
       name: true,
       maxTeamSize: true,
       minTeamSize: true,
+      registrationStartTime: true,
+      registrationEndTime: true,
     },
   });
+
+  // Check time
+  const now = new Date();
+  if (now < event!.registrationStartTime || now > event!.registrationEndTime) {
+    return next(Errors.Team.timeNotRight);
+  }
 
   if (!event) {
     return next(Errors.Event.eventDoesntExist);

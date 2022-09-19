@@ -23,7 +23,7 @@ router.get(
 
 router.get(
   "/event/:eventId/registered_teams",
-  Middlewares.Auth.isAdmin,
+  Middlewares.Auth.isOrganizerOrAdmin,
   Middlewares.Event.isEventValid,
   Controllers.Team.getAllTeamsOfEvent
 );
