@@ -9,11 +9,12 @@ import * as Utils from "@utils";
 const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
   const { eventId: EID } = req.params;
   const eventId = parseInt(EID);
-  const {
-    name,
-    members: memberArray,
-    extraInformation,
-  } = req.body as Interfaces.Team.RegisterTeamBody;
+  const { members: memberArray, extraInformation } =
+    req.body as Interfaces.Team.RegisterTeamBody;
+
+  let { name } = req.body as Interfaces.Team.RegisterTeamBody;
+
+  name = name.trim();
 
   memberArray.push(req.user!.username);
 
