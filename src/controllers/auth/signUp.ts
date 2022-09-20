@@ -10,7 +10,7 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
 
   const user: Interfaces.User.CreateUserBody = req.body;
 
-  const {
+  let {
     username,
     firstName,
     middleName,
@@ -37,15 +37,15 @@ const signUp: Interfaces.Controller.Async = async (req, res, next) => {
     return next(Errors.User.badRequest("Auth token is missing"));
   }
 
-  username.trim();
-  firstName.trim();
-  lastName.trim();
-  middleName?.trim();
-  collegeName.trim();
-  registrationId?.trim();
-  email.trim();
-  imageUrl?.trim();
-  phoneNumber.trim();
+  username = username.trim();
+  firstName = firstName.trim();
+  lastName = lastName.trim();
+  middleName = middleName?.trim();
+  collegeName = collegeName.trim();
+  registrationId = registrationId?.trim();
+  email = email.trim();
+  imageUrl = imageUrl?.trim();
+  phoneNumber = phoneNumber.trim();
 
   if (!Utils.User.validateUsername(username)) {
     return next(Errors.User.notAcceptable("Username not Acceptable"));
