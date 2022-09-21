@@ -117,10 +117,10 @@ const updateEvent: Interfaces.Controller.Async = async (req, res, next) => {
       venue,
       moduleId,
       organizers: {
-        connect: organizersUsernames,
+        set: organizersUsernames,
       },
       managers: {
-        connect: managersUsernames,
+        set: managersUsernames,
       },
       extraQuestions: extraQuestions,
     },
