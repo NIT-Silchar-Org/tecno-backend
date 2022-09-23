@@ -1,5 +1,10 @@
 import { prisma } from "@utils/prisma";
-import { Prisma, RegistrationStatus, TeamMemberRole } from "@prisma/client";
+import {
+  Prisma,
+  RegistrationStatus,
+  TeamMemberRole,
+  TransactionReason,
+} from "@prisma/client";
 
 import * as Interfaces from "@interfaces";
 import * as Success from "@success";
@@ -32,12 +37,14 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
       id: eventId,
     },
     select: {
+      id: true,
       name: true,
       maxTeamSize: true,
       minTeamSize: true,
       registrationStartTime: true,
       registrationEndTime: true,
       moduleId: true,
+      registrationIncentive: true,
     },
   });
 
@@ -139,23 +146,78 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
     });
   });
 
-  await prisma.team.create({
-    data: {
-      teamName: name,
-      registrationStatus:
-        members.size === 1
-          ? RegistrationStatus.REGISTERED
-          : RegistrationStatus.PENDING,
-      event: {
-        connect: {
-          id: eventId,
+  await prisma.$transaction(async (prisma) => {
+    await prisma.team.create({
+      data: {
+        teamName: name,
+        registrationStatus:
+          members.size === 1
+            ? RegistrationStatus.REGISTERED
+            : RegistrationStatus.PENDING,
+        event: {
+          connect: {
+            id: eventId,
+          },
         },
+        members: {
+          create: memberRegistration,
+        },
+        extraInformation: extraInformation,
       },
-      members: {
-        create: memberRegistration,
-      },
-      extraInformation: extraInformation,
-    },
+    });
+
+    // Registration incentive if team size is 1.
+
+    if (members.size === 1) {
+      // Check for admin insufficient balance
+      if (req.admin!.balance < event!.registrationIncentive * members.size) {
+        return next(Errors.Transaction.insufficientBalance);
+      }
+
+      await prisma.transaction.create({
+        data: {
+          amount: event.registrationIncentive,
+          reason: TransactionReason.REGISTRATION,
+          event: {
+            connect: {
+              id: event.id,
+            },
+          },
+          from: {
+            connect: {
+              firebaseId: req.admin!.firebaseId,
+            },
+          },
+          to: {
+            connect: {
+              firebaseId: req.user!.firebaseId,
+              // User is the leader of the 1-member team
+            },
+          },
+        },
+      });
+
+      // User balance update
+      await prisma.user.update({
+        where: {
+          id: req.user!.id,
+        },
+        data: {
+          balance: req.user!.balance + event!.registrationIncentive,
+        },
+      });
+
+      // Admin balance update
+      await prisma.user.update({
+        where: {
+          firebaseId: req.admin!.firebaseId,
+        },
+        data: {
+          balance: req.admin!.balance - event!.registrationIncentive * 1,
+          // 1 member team
+        },
+      });
+    }
   });
 
   // Send Emails to User
@@ -190,7 +252,7 @@ const registerTeam: Interfaces.Controller.Async = async (req, res, next) => {
       subject = `Team Invitation for ${name} | ${process.env.NAME}`;
     }
 
-    Utils.Email.sendMail(user.email, html, subject); // Await Avoided On Purpose
+    Utils.Email.sendMail(user.email, html, subject); // Await Not Used On Purpose
   }
 
   return res.json(Success.Team.teamCreated);
