@@ -40,10 +40,6 @@ const createTshirtRequest: Interfaces.Controller.Async = async (
     (!name && !name.trim().length) ||
     (!mobileNumber &&
       !Constants.Spark.EMAIL_REGEX.test(mobileNumber.replace(/\s/g, ""))) ||
-//   NOTE: For the time being, I am removing the validations
-//     !!hostelName !== isNITSBool ||
-//     !!scholarId !== isNITSBool ||
-//     !!address === isNITSBool ||
     !transactionId ||
     !tshirtSize ||
     !email
