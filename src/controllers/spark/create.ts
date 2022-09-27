@@ -23,8 +23,6 @@ const createTshirtRequest: Interfaces.Controller.Async = async (
     tshirtSize,
   } = req.body as SparkTshirt;
 
-  const isNITSBool = isNITS === "yes";
-
   if (
     typeof email !== "string" ||
     typeof name !== "string" ||
