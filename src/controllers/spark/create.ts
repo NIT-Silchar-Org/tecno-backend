@@ -25,30 +25,31 @@ const createTshirtRequest: Interfaces.Controller.Async = async (
 
   const isNITSBool = isNITS === "yes";
 
-  if (
-    typeof email !== "string" ||
-    typeof name !== "string" ||
-    typeof isNITS !== "string" ||
-    typeof mobileNumber !== "string" ||
-    typeof transactionId !== "string" ||
-    !Object.values(TshirtSize).includes(tshirtSize)
-  ) {
-    return next(Errors.Spark.invalidInput);
-  }
+//   NOTE: For the time being, I am removing the validations
+//   if (
+//     typeof email !== "string" ||
+//     typeof name !== "string" ||
+//     typeof isNITS !== "string" ||
+//     typeof mobileNumber !== "string" ||
+//     typeof transactionId !== "string" ||
+//     !Object.values(TshirtSize).includes(tshirtSize)
+//   ) {
+//     return next(Errors.Spark.invalidInput);
+//   }
 
-  if (
-    (!name && !name.trim().length) ||
-    (!mobileNumber &&
-      !Constants.Spark.EMAIL_REGEX.test(mobileNumber.replace(/\s/g, ""))) ||
-    !!hostelName !== isNITSBool ||
-    !!scholarId !== isNITSBool ||
-    !!address === isNITSBool ||
-    !transactionId ||
-    !tshirtSize ||
-    !email
-  ) {
-    return next(Errors.Spark.invalidInput);
-  }
+//   if (
+//     (!name && !name.trim().length) ||
+//     (!mobileNumber &&
+//       !Constants.Spark.EMAIL_REGEX.test(mobileNumber.replace(/\s/g, ""))) ||
+//     !!hostelName !== isNITSBool ||
+//     !!scholarId !== isNITSBool ||
+//     !!address === isNITSBool ||
+//     !transactionId ||
+//     !tshirtSize ||
+//     !email
+//   ) {
+//     return next(Errors.Spark.invalidInput);
+//   }
 
   const sparkTShirtForm = await prisma.sparkTshirt.findFirst({
     where: {
