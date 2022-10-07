@@ -1,4 +1,4 @@
-import { getAllUsers } from "./get";
+import { getAllUsers, searchUsers } from "./get";
 import { getOneUserById } from "./getOne";
 import { getLogedInUser } from "./getLogedInUser";
 import { getAllAttendedEventsOfUser } from "./getAllAttendedEvents";
@@ -12,4 +12,5 @@ export {
   updateUserDetails,
   getLogedInUser,
   getMyTeams,
+  searchUsers,
 };

@@ -10,4 +10,39 @@ const getAllUsers: Interfaces.Controller.Async = async (_req, res) => {
   res.json(Success.User.getAllUsersResponse(users));
 };
 
-export { getAllUsers };
+const searchUsers: Interfaces.Controller.Async = async (req, res) => {
+  const { q } = req.query;
+  const query_string = q;
+
+  // TODO: Include array in the query string
+  
+  const result = await prisma.user.findMany({
+    where: {
+      OR: [
+        {
+          firstName: {
+            contains: query_string,
+          },
+        },
+        { lastName: { contains: query_string } },
+        {
+          username: {
+            contains: query_string,
+          },
+        }
+      ]
+    },
+    select: {
+      firstName: true,
+      lastName: true,
+      username: true,
+      email: true,
+      imageUrl: true,
+    },
+  })
+
+  res.json(Success.User.getAllUsersResponse(result));
+  
+};
+
+export { getAllUsers, searchUsers };

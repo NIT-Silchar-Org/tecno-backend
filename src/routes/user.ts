@@ -27,5 +27,10 @@ router.patch(
   Middlewares.Auth.validateUser,
   Controllers.User.updateUserDetails
 );
+// API to give the list of users on the basis of the search query
+router.get(
+  "/search/",
+  Controllers.User.searchUsers
+)
 
 export default router;
