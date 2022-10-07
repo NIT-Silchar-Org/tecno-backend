@@ -2059,8 +2059,47 @@ paths:
                                         type: string
                                         example: "https://"
                                 
-                      
-
+  /user/search/:
+    get:
+      description:
+        Returns a list of objects of users on the fuzzy search of first name, last name and username
+      tags:
+        - User
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          required: true
+          description: Search string
+      responses:
+        200:
+          description:
+            A JSON object contain searched users in an array
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                    nullable: true
+                    example: "aditya"
+                  lastName:
+                    type: string
+                    nullable: true
+                    example: "agarwal"
+                  username:
+                    type: string
+                    nullable: true
+                    example: "aditya.agarwal"
+                  email:
+                    type: string
+                    nullable: true
+                    example: "aditya.agarwal.20012712@gmail.com"
+                  imageUrl:
+                    type: string
+                    example: "https://avatars.githubusercontent.com/u/74897001"
   /user/me/attended_events:
     get:
       description:
