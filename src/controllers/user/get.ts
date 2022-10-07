@@ -26,12 +26,19 @@ const searchUsers: Interfaces.Controller.Async = async (req, res, next) => {
         {
           firstName: {
             contains: query_string,
+            mode: 'insensitive',
           },
         },
-        { lastName: { contains: query_string } },
+        { 
+          lastName: { 
+            contains: query_string, 
+            mode: 'insensitive', 
+          },
+        },
         {
           username: {
             contains: query_string,
+            mode: 'insensitive',
           },
         }
       ]
