@@ -3,6 +3,7 @@ import * as Success from "@success";
 
 import { User } from "@prisma/client";
 import { prisma } from "@utils/prisma";
+import * as Utils from "@utils";
 import * as Errors from "@errors";
 
 const getAllUsers: Interfaces.Controller.Async = async (_req, res) => {
@@ -44,7 +45,7 @@ const searchUsers: Interfaces.Controller.Async = async (req, res, next) => {
     },
   })
 
-  res.json(Success.User.getAllUsersResponse(result));
+  res.json(Utils.Response.Success(result));
   
 };
 
