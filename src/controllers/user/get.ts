@@ -3,6 +3,7 @@ import * as Success from "@success";
 
 import { User } from "@prisma/client";
 import { prisma } from "@utils/prisma";
+import * as Errors from "@errors";
 
 const getAllUsers: Interfaces.Controller.Async = async (_req, res) => {
   const users: User[] = await prisma.user.findMany();
@@ -10,11 +11,13 @@ const getAllUsers: Interfaces.Controller.Async = async (_req, res) => {
   res.json(Success.User.getAllUsersResponse(users));
 };
 
-const searchUsers: Interfaces.Controller.Async = async (req, res) => {
+const searchUsers: Interfaces.Controller.Async = async (req, res, next) => {
   const { q } = req.query;
   const query_string = q;
 
-  // TODO: Include array in the query string
+  if( typeof query_string !== "string" ) {
+    return next(Errors.User.badRequest("Query is not a string")); 
+  }
   
   const result = await prisma.user.findMany({
     where: {
