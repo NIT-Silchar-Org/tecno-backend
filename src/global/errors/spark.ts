@@ -5,5 +5,9 @@ const duplicateKey = Utils.Response.Error(
   "Request already exists. Duplicate key found.",
   400
 );
+const sparkFormClosed = Utils.Response.Error(
+  "Form is no longer accepting responses.",
+  400
+);
 
-export { invalidInput, duplicateKey };
+export { invalidInput, duplicateKey, sparkFormClosed };
