@@ -1,0 +1,2652 @@
+openapi: 3.0.0
+info:
+  title: Tecnoesis API
+  version: 1.0.0
+  description: The API for Tecnoesis 2022 event
+
+components:
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 38
+
+        firebaseId:
+          type: string
+          example: "YiuqYLtElLTNGaNy9vistAz3u663"
+
+        firstName:
+          type: string
+          example: "John"
+          
+        middleName:
+          type: string
+          example: "Doe"
+
+        lastName:
+          type: string
+          example: "Smith"
+
+        username:
+          type: string
+          example: "helloworldxxx69"
+
+        email:
+          type: string
+          example: "helloworld@nits.ac.in"
+
+        balance:
+          type: integer
+          example: 1000
+
+        phoneNumber:
+          type: string
+          example: "1231231233"
+
+        collegeName:
+          type: string
+          example: "National Institute of Technology, Silchar"
+
+        registrationId:
+          type: string
+          example: "2012001"
+
+        imageUrl:
+          type: string
+          example: "https://avatars.githubusercontent.com/u/74897001"
+
+    Team:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 32
+
+        teamName:
+          type: string
+          example: "404 Coders"
+
+        registrationStatus:
+          type: string
+          enum:
+            - REGISTERED
+            - PENDING
+            - CANCELLED
+        
+        extraInformation:
+          type: array
+          items:
+            type: object
+
+    TeamRegistration:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 23
+
+        registrationStatus:
+          type: string
+          enum:
+            - REGISTERED
+            - PENDING
+            - CANCELLED
+
+        rol:
+          type: string
+          enum:
+            - LEADER
+            - MEMBER
+
+    Module:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 93
+
+        name:
+          type: string
+          example: "Coding Hackathon"
+
+        description:
+          type: string
+          example: "A very good event module"
+
+        iconImage:
+          type: string
+          example: "https://avatars.githubusercontent.com/u/74897001"
+        coverImage:
+          type: string
+          example: "https://avatars.githubusercontent.com/u/74897001"
+
+        thirdPartyURL:
+          type: string
+          example: "https://www.google.com"
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 43
+
+        name:
+          type: string
+          example: "Coding Competition"
+
+        posterImage:
+          type: string
+          example: "https://avatars.githubusercontent.com/u/74897001"
+
+        maxTeamSize:
+          type: integer
+          example: 5
+
+        minTeamSize:
+          type: integer
+          example: 1
+
+        attendanceIncentive:
+          type: number
+          example: 100
+
+        registrationIncentive:
+          type: number
+          example: 100
+
+        prizeDescription:
+          type: string
+          example: "First prize gets a Lamborghini"
+
+        stagesDescription:
+          type: string
+          example: "First round will be a group discussion"
+
+        description:
+          type: string
+          example: "Very good competition. Pls register."
+
+        venue:
+          type: string
+          example: "Sports Complex"
+
+        lat:
+          type: string
+          example: "24.7560907"
+
+        lng:
+          type: string
+          example: "92.7823423"
+
+        registrationStartTime:
+          type: string
+          example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+
+        registrationEndTime:
+          type: string
+          example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+        extraQuestions:
+          type: array
+          items:
+            type: object
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 65
+
+        fromUserId:
+          type: number
+          example: 2
+
+        toUserId:
+          type: number
+          example: 3
+
+        amount:
+          type: number
+          example: 2000
+
+        description:
+          type: string
+          example: "Purchase"
+
+        reason:
+          type: string
+          enum:
+            - ATTENDANCE
+            - PURCHASE
+            - ONLINE_EVENT
+
+        eventId:
+          type: number
+          example: 2
+
+        createdAt:
+          type: string
+          example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+    Statics:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "TecnoTeam"
+        json:
+          type: object
+          properties:
+            teamName:
+              type: string
+            totalMembers:
+              type: integer
+
+servers:
+  - url: http://localhost:5000/api
+    description: Development Server
+  - url: https://api.dev.tecnoesis.org/api
+    description: Development Server (EC2)
+
+paths:
+  /auth/signup:
+    post:
+      description: Login or SignUp a user
+      tags:
+        - Auth
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON object containing user information
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: "John"
+                middleName:
+                  type: string
+                  example: "Doe"
+                lastName:
+                  type: string
+                  example: "Smith"
+                email:
+                  type: string
+                  example: "awesomeguy@nits.ac.in"
+                collegeName:
+                  type: string
+                  example: "National Institute of Technology, Silchar"
+                registrationId:
+                  type: string
+                  example: "2012001"
+                username:
+                  type: string
+                  example: "josu"
+                phoneNumber:
+                  type: string
+                  example: "1212312312"
+                imageUrl:
+                  type: string
+                  example: "https://avatars.githubusercontent.com/u/74897001"
+              required:
+                - firstName
+                - lastName
+                - email
+                - collegeName
+                - username
+                - phoneNumber
+
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: User Created
+        409:
+          description: Conflict user already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 409
+                  msg:
+                    type: string
+                    example: User exist with same parameters
+        401:
+          description: User not authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 401
+                  msg:
+                    type: string
+                    example: User Not authenticated
+        403:
+          description: Username not acceptable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: Username is not acceptable
+
+  /transaction/attendance:
+    post:
+      description: Transaction for attendance, provided the user is manager of the event.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON containing the eventId and the attendee id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toUserName:
+                  type: string
+                  example: "tecnouser"
+                eventId:
+                  type: string
+                  example: "1"
+
+      responses:
+        200:
+          description:
+            Transaction completed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Transaction completed successfully."
+        403:
+          description:
+            Transaction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "Transaction failed."
+  /transaction/purchase:
+    post:
+      description:
+        Transaction for purchase, provided the receiver is admin.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON containing the eventId and the attendee id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toUserName:
+                  type: string
+                  example: "tecnouser"
+                amount:
+                  type: number
+                  example: 100
+      responses:
+        200:
+          description:
+            Transaction completed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Transaction completed successfully."
+        403:
+          description:
+            Transaction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "Transaction failed."
+        400:
+          description:
+            Transaction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid amount transaction"
+        429:
+          description:
+            Transaction too quick.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 429
+                  msg:
+                    type: string
+                    example: "Invalid amount transaction"
+  /transaction/online-event:
+    post:
+      description:
+        Transaction for online event, provided the sender is admin.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON containing the attendee id and the amount
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toUserName:
+                  type: string
+                  example: "tecnouser"
+                amount:
+                  type: number
+                  example: 100
+      responses:
+        200:
+          description:
+            Transaction completed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Transaction completed successfully."
+        403:
+          description:
+            Transaction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "Transaction failed."
+        400:
+          description:
+            Transaction failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid amount transaction"
+  /transaction:
+    get:
+      description:
+        An array of all your transactions, provided you are authorized.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description:
+            Data fetched
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 65
+                    amount:
+                      type: number
+                      example: 1000
+                    reason:
+                      type: string
+                      example: "PURCHASE"
+                    description:
+                      type: string
+                      example: "Transaction is for purchase"
+                    type:
+                      type: string
+                      example: "DEBIT"
+                    createdAt:
+                      type: string
+                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+        500:
+          description:
+            Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  msg:
+                    type: string
+                    example: "Server error"
+  /transaction/all:
+    get:
+      description:
+        An array of all the transactions, provided the user is admin.
+      tags:
+        - Transaction
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description:
+            Transaction completed.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        500:
+          description:
+            Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  msg:
+                    type: string
+                    example: "Server error"
+
+  /module/{moduleId}/event:
+    get:
+      summary: Get an array of JSON event objects in a module.
+      description: Get all events inside a module.
+      parameters:
+        - in: path
+          name: moduleId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: Numeric ID of the module requested.
+      tags:
+        - Module
+      responses:
+        '200':
+          description: An Array of JSON event objects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 200
+                    msg: 
+                      $ref: '#/components/schemas/Event'
+        '400':
+          description: Throws if moduleId is not a number.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '404':
+            description: Throws if module does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Module not found"
+
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+
+  /module/:
+    get:
+      summary: Get an array of JSON module objects with nested events.
+      tags:
+          - Module
+      responses:
+        '200':
+          description: An Array of JSON module objects.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: array
+                    items:
+                      allOf:
+                          - $ref: '#/components/schemas/Module'
+                          - type: object
+                            properties:
+                              events:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/Event'
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+  /module/{moduleId}:
+    get:
+        summary: Get a JSON module object.
+        parameters:
+          - in: path
+            name: moduleId
+
+            schema:
+              type: number
+
+            required: true
+
+            description: Numeric ID of the module requested.
+
+        tags:
+          - Module
+        responses:
+          '200':
+            description: A JSON module object.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 200
+                    msg:
+                      $ref: '#/components/schemas/Module'
+          '400':
+            description: Throws if moduleId is not a number.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 400
+                    msg:
+                      type: string
+                      example: "Invalid input"
+
+          '404':
+              description: Throws if module does not exist.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      status:
+                        type: number
+                        example: 404
+                      msg:
+                        type: string
+                        example: "Module not found"
+          '500':
+              description: Throws if server is unresponsive.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      status:
+                        type: number
+                        example: 500
+                      msg:
+                        type: string
+                        example: "Internal server error."
+    delete:
+      security:
+        - BearerAuth: []
+      summary: Delete a module.
+      parameters:
+        - in: path
+          name: moduleId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: Numeric ID of the module requested.
+
+      tags:
+        - Module
+      responses:
+        '200':
+          description: A JSON object of the deleted module.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Module'
+        '400':
+          description: Throws if moduleId is not a number.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot delete a module.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+
+        '404':
+            description: Throws if module does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Module not found"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+    patch:
+      security:
+        - BearerAuth: []
+      summary: Edit a module.
+      parameters:
+        - in: path
+          name: moduleId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: Numeric ID of the module requested.
+      requestBody:
+        description: A JSON object containing all the details for a module.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'Big Module 6'
+                description:
+                  type: string
+                  example: '<p>This is an example <strong>module</strong></p>'
+                iconImage:
+                  type: string
+                  example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
+                coverImage:
+                  type: string
+                  example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
+                thirdPartyURL:
+                  type: string
+                  example: 'https://google.com/'
+      tags:
+        - Module
+      responses:
+        '200':
+          description: A JSON object of the edited module.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Module'
+        '400':
+          description: Throws if moduleId is not a number.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot edit a module.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+
+        '404':
+            description: Throws if module does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Module not found"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+
+
+  /module/create:
+    post:
+      requestBody:
+        description: A JSON object containing all the details for a module.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'Big Module 6'
+                description:
+                  type: string
+                  example: '<p>This is an example <strong>module</strong></p>'
+                iconImage:
+                  type: string
+                  example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
+                coverImage:
+                  type: string
+                  example: 'https://i.kym-cdn.com/entries/icons/facebook/000/040/009/3dsaulcover.jpg'
+                thirdPartyURL:
+                  type: string
+                  example: 'https://google.com/'
+      security:
+      - BearerAuth: []
+      summary: Create a module
+      tags:
+        - Module
+      responses:
+        '200':
+          description: A JSON object of created module objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Module'
+        '400':
+          description: Throws if response body has empty fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot create a module.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+        '500':
+          description: Throws if server is unresponsive.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  msg:
+                    type: string
+                    example: "Internal server error."
+  /event:
+    get:
+      summary: Get an array of all events
+      tags:
+        - Event
+      responses:
+        '200':
+          description: An Array of JSON event objects.
+          content:
+            application/json:
+             schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Event'
+                        - type: object
+                          properties:
+                            module:
+                              $ref: '#/components/schemas/Module'
+                                
+  
+                  
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+  /event/{eventId}:
+    get:
+      summary: Get a JSON event object.
+      parameters:
+        - in: path
+          name: eventId
+
+          schema:
+            type: number
+
+          required: true
+
+          description: Numeric ID of the event requested.
+
+      tags:
+        - Event
+      responses:
+        '200':
+          description: A JSON event object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    allOf:
+                    - $ref: '#/components/schemas/Event'
+                    - type: object
+                      properties:
+                        module:
+                          $ref: '#/components/schemas/Module'
+        '400':
+          description: Throws if event id is not a number.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+
+        '404':
+            description: Throws if event does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Event not found"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+    patch:
+      summary: Edit an event
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+      parameters:
+      - in: path
+        name: eventId
+
+        schema:
+          type: number
+
+        required: true
+
+        description: Numeric ID of the event requested.
+      requestBody:
+        description: A JSON Object containg the edits to be made to the event.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                moduleId:
+                  type: integer
+                  example: 43
+
+                name:
+                  type: string
+                  example: "Coding Competition"
+
+                posterImage:
+                  type: string
+                  example: "https://avatars.githubusercontent.com/u/74897001"
+
+                maxTeamSize:
+                  type: integer
+                  example: 5
+
+                minTeamSize:
+                  type: integer
+                  example: 1
+
+                attendanceIncentive:
+                  type: number
+                  example: 100
+
+                registrationIncentive:
+                  type: number
+                  example: 100
+
+                prizeDescription:
+                  type: string
+                  example: "First prize gets a Lamborghini"
+
+                stagesDescription:
+                  type: string
+                  example: "First round will be a group discussion"
+
+                description:
+                  type: string
+                  example: "Very good competition. Pls register."
+
+                venue:
+                  type: string
+                  example: "Sports Complex"
+
+                lat:
+                  type: string
+                  example: "24.7560907"
+
+                lng:
+                  type: string
+                  example: "92.7823423"
+
+                registrationStartTime:
+                  type: string
+                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+
+                registrationEndTime:
+                  type: string
+                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+
+                organizers:
+                  type: array
+                  items:
+                    type: string
+                    example: "mohan"
+                managers:
+                  type: array
+                  items:
+                    type: string
+                    example: "rohan"
+                extraQuestions: 
+                  type: array
+                  items:
+                    type: object
+      responses:
+        '200':
+          description: A JSON object of the edited event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Event'
+        '400':
+          description: Throws if event id is not a number.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot create an event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+    delete:
+      summary: Delete an event
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+      parameters:
+      - in: path
+        name: eventId
+
+        schema:
+          type: number
+
+        required: true
+
+        description: Numeric ID of the event requested
+      responses:
+        '200':
+          description: A JSON object of the deleted event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Event'
+        '400':
+          description: Throws if eventId is not a number.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot delete an event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+
+        '404':
+            description: Throws if event does not exist.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 404
+                    msg:
+                      type: string
+                      example: "Module not found"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+
+
+  /event/create:
+    post:
+      summary: Create an event.
+      tags:
+        - Event
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON Object containing details of the event to be created.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                moduleId:
+                  type: integer
+                  example: 43
+
+                name:
+                  type: string
+                  example: "Coding Competition"
+
+                posterImage:
+                  type: string
+                  example: "https://avatars.githubusercontent.com/u/74897001"
+
+                maxTeamSize:
+                  type: integer
+                  example: 5
+
+                minTeamSize:
+                  type: integer
+                  example: 1
+
+                attendanceIncentive:
+                  type: number
+                  example: 100
+
+                registrationIncentive:
+                  type: number
+                  example: 200
+
+                prizeDescription:
+                  type: string
+                  example: "First prize gets a Lamborghini"
+
+                stagesDescription:
+                  type: string
+                  example: "First round will be a group discussion"
+
+                description:
+                  type: string
+                  example: "Very good competition. Pls register."
+
+                venue:
+                  type: string
+                  example: "Sports Complex"
+
+                lat:
+                  type: string
+                  example: "24.7560907"
+
+                lng:
+                  type: string
+                  example: "92.7823423"
+
+                registrationStartTime:
+                  type: string
+                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+
+                registrationEndTime:
+                  type: string
+                  example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+                extraQuestions:
+                  type: array
+                  items: 
+                    type: object
+      responses:
+        '200':
+          description: A JSON object of the created event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Event'
+        '400':
+          description: Throws if requestbody has empty fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: "Invalid input"
+        '403':
+          description: The user is not an admin and cannot create an event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 403
+                  msg:
+                    type: string
+                    example: "User is not authorized to perform the request"
+        '500':
+            description: Throws if server is unresponsive.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      example: 500
+                    msg:
+                      type: string
+                      example: "Internal server error."
+
+  /team/event/{eventId}/add:
+    post:
+      description: Register a team for an event
+
+      tags:
+        - Team
+
+      security:
+        - BearerAuth: []
+
+      parameters:
+
+        - in: path
+          name: eventId
+
+          schema:
+            type: integer
+
+          required: true
+
+          description: Numeric ID of the event in which the team is registering
+
+      requestBody:
+
+        description: A JSON Object containing team info for registering
+
+        content:
+          application/json:
+            schema:
+              type: object
+
+              properties:
+                name:
+                  type: string
+                  example: "404 Coders"
+
+                members:
+                  type: array
+                  items:
+                    type: string
+                    example: "john_smith99"
+                    description: "Array of usernames of members. No need to put leader's username"
+                
+                extraInformation:
+                  type: array
+                  items: 
+                    type: object
+
+      responses:
+        200:
+          description: Team Registration Successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  msg:
+                    type: string
+                    example: Team Created sucessfully.
+
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: Team size isn't allowed.
+
+        404:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: User not found.
+
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 409
+                  msg:
+                    type: string
+                    example: Team Already Exists.
+
+  /team/event/{eventId}/registered_teams:
+    get:
+      description: Get the details of all the teams registered in a particular event
+      security:
+        - BearerAuth: []
+      tags:
+        - Team
+
+      parameters:
+
+        - in: path
+          name: eventId
+
+          schema:
+            type: integer
+
+          required: true
+
+          description: Numeric ID of the event
+
+      responses:
+        200:
+          description: Get a JSON Object with all the registered teams in event
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+                  properties:
+                    status:
+                      type: number
+                      example: 200
+
+                    msg:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 34
+                        fireabaseId:
+                          type: string
+                          example: "YiuqYLtElLTNGaNy9vistAz3u663"
+                        firstName:
+                          type: string
+                          example: "john"
+                        lastName:
+                          type: string
+                          example: "john"
+                        middleName:
+                          type: string
+                          example: "john"
+                        username:
+                          type: string
+                          example: "john_smith29"
+                        email:
+                          type: string
+                          example: "hello@nits.ac.in"
+                        collegeName:
+                          type: string
+                          example: "NITS"
+                        registrationId:
+                          type: string
+                          example: "2012001"
+                        phoneNumber:
+                          type: string
+                          example: "1231231230"
+
+        404:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: Event not found.
+
+  /team/{teamId}:
+    get:
+      description: Get the details of a team
+      security:
+        - BearerAuth: []
+      tags:
+        - Team
+
+      parameters:
+        - in: path
+          name: teamId
+
+          schema:
+            type: integer
+
+          required: true
+
+          description: Numeric ID of the team
+
+      responses:
+
+        200:
+          description: Team Deatils Successfully Recieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  teamName:
+                    type: string
+                    example: "404 Coders"
+                  registrationStatus:
+                    type: string
+                    enum:
+                      - REGISTERED
+                      - PENDING
+                      - CANCELLED
+                  event:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: "Coding Hackathon"
+                      venue:
+                        type: string
+                        example: "Sports Complex"
+                      lat:
+                        type: string
+                        description: "Latitude"
+                        example: "24.7560907"
+
+                      lng:
+                        type: string
+                        description: "Longitude"
+                        example: "93.7560907"
+                      module:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: "Hackathons"
+
+        404:
+          description: Team Not Found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: Team Not Found.
+
+  /team/{teamId}/respond:
+    patch:
+      description: User responding to team invite
+
+      tags:
+        - Team
+
+      security:
+        - BearerAuth: []
+
+      parameters:
+        - in: path
+          name: teamId
+
+          schema:
+            type: integer
+
+          required: true
+
+          description: Numeric ID of the team
+
+      requestBody:
+
+        description: A JSON Object for the user's response to an invitation
+
+        content:
+          application/json:
+            schema:
+              type: object
+
+              properties:
+
+                status:
+                  type: string
+                  enum:
+                    - REGISTERED
+                    - PENDING
+                    - CANCELLED
+                  example: REGISTERED
+
+      responses:
+        200:
+          description: User Response Registered.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  msg:
+                    type: string
+                    example: User Status Updated.
+
+        409:
+          description: Conflict.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: User Not Part of Team.
+  /user:
+    get:
+      tags:
+        - User
+      description: Get all users
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: A JSON object contain all users in an array
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+
+
+
+
+    patch:
+      tags:
+        - User
+      description: updates the details of the user loged in
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: A JSON object with the updated details of the user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  nullable: true
+                  example: "netra"
+                middleName:
+                  type: string
+                  nullable: true
+                  example: "netra"
+                lastName:
+                  type: string
+                  nullable: true
+                  example: "netra"
+                collegeName:
+                  type: string
+                  nullable: true
+                  example: "National Institute of Technology Silchar"
+                registrationId:
+                  type: string
+                  nullable: true
+                  example: 2012000
+                phoneNumber:
+                  type: string
+                  nullable: true
+                  example: 2012000
+                imageUrl:
+                  type: string
+                  nullable: true
+                  example: https://picsum.photos/200
+      responses:
+        200:
+          description:  A JSON object containing the updated user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/User'
+  /user/me/my_teams:
+    get:
+      description: get Array of all teams the  user is registered
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description:
+            Data fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        role: 
+                          type: string
+                          example: "MEMBER"
+                        registrationStatus:
+                          type: string
+                          example: "CANCELLED"
+                        team: 
+                          type: object
+                          properties:
+                            id: 
+                              type: number
+                              example: 1
+                            registrationStatus:
+                              type: string
+                              example: "CANCELLED"
+                            teamName:
+                              type: string
+                              example: "hello"
+                            extraInformation:
+                              type: object
+                            members:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                    example: 1
+                                  registrationStatus:
+                                    type: string
+                                    example: "CANCELLED"
+                                  role:
+                                    type: string
+                                    example: "MEMBER"
+                                  user:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: number
+                                        example: 1
+                                      username:
+                                        type: string
+                                        example: "josu"
+                                      firstName:
+                                        type: string
+                                        example: "net"
+                                      middleName:
+                                        type: string
+                                        example: "kk"
+                                      lastName:
+                                        type: string
+                                        example: "bar"
+                                      imageUrl:
+                                        type: string
+                                        example: "https://"
+                                
+  /user/search/:
+    get:
+      description:
+        Returns a list of objects of users on the fuzzy search of first name, last name and username
+      tags:
+        - User
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          required: true
+          description: Search string
+      responses:
+        200:
+          description:
+            A JSON object contain searched users in an array
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                    nullable: true
+                    example: "aditya"
+                  lastName:
+                    type: string
+                    nullable: true
+                    example: "agarwal"
+                  username:
+                    type: string
+                    nullable: true
+                    example: "aditya.agarwal"
+                  email:
+                    type: string
+                    nullable: true
+                    example: "aditya.agarwal.20012712@gmail.com"
+                  imageUrl:
+                    type: string
+                    example: "https://avatars.githubusercontent.com/u/74897001"
+  /user/me/attended_events:
+    get:
+      description:
+        An array of all the attendance of an event given to the given user, provided the user is admin.
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description:
+            Data fetched
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 65
+                    amount:
+                      type: number
+                      example: 1000
+                    reason:
+                      type: string
+                      example: "ATTENDANCE"
+                    description:
+                      type: string
+                      example: "Transaction is for purchase"
+                    createdAt:
+                      type: string
+                      example: "Tue Aug 16 2022 18:47:42 GMT+0530 (India Standard Time)"
+                    event:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        name:
+                          type: string
+                          example: "Coding Competition"
+        500:
+          description:
+            Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  msg:
+                    type: string
+                    example: "Server error"
+  /user/me:
+    get:
+      tags:
+        - User
+      description: get the loged in User
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: A JSON Object with the loged in user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 38
+              
+                      firebaseId:
+                        type: string
+                        example: "YiuqYLtElLTNGaNy9vistAz3u663"
+              
+                      name:
+                        type: string
+                        example: "John Smith"
+              
+                      username:
+                        type: string
+                        example: "helloworldxxx69"
+              
+                      email:
+                        type: string
+                        example: "helloworld@nits.ac.in"
+              
+                      balance:
+                        type: integer
+                        example: 1000
+              
+                      phoneNumber:
+                        type: string
+                        example: "1231231233"
+              
+                      collegeName:
+                        type: string
+                        example: "National Institute of Technology, Silchar"
+              
+                      registrationId:
+                        type: string
+                        example: "2012001"
+              
+                      imageUrl:
+                        type: string
+                        example: "https://avatars.githubusercontent.com/u/74897001"
+                      
+                      manages:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 43
+                    
+                            name:
+                              type: string
+                              example: "Coding Competition"
+                              
+                            maxTeamSize:
+                              type: integer
+                              example: 5
+                            
+                            minTeamSize:
+                              type: integer
+                              example: 1
+                    
+                            attendanceIncentive:
+                              type: number
+                              example: 100
+                    
+                            registrationIncentive:
+                              type: number
+                              example: 100
+                    
+                            prizeDescription:
+                              type: string
+                              example: "First prize gets a Lamborghini"
+                    
+                            stagesDescription:
+                              type: string
+                              example: "First round will be a group discussion"
+                    
+                            description:
+                              type: string
+                              example: "Very good competition. Pls register."
+                    
+                            venue:
+                              type: string
+                              example: "Sports Complex"
+                              
+                      organizes:
+                        type: array
+                        items: 
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 43
+                    
+                            name:
+                              type: string
+                              example: "Coding Competition"
+                              
+                            maxTeamSize:
+                              type: integer
+                              example: 5
+                            
+                            minTeamSize:
+                              type: integer
+                              example: 1
+                    
+                            attendanceIncentive:
+                              type: number
+                              example: 100
+                    
+                            registrationIncentive:
+                              type: number
+                              example: 100
+                    
+                            prizeDescription:
+                              type: string
+                              example: "First prize gets a Lamborghini"
+                    
+                            stagesDescription:
+                              type: string
+                              example: "First round will be a group discussion"
+                    
+                            description:
+                              type: string
+                              example: "Very good competition. Pls register."
+                    
+                            venue:
+                              type: string
+                              example: "Sports Complex"
+                            
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: User not found
+  /user/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the user to get
+
+      tags:
+        - User
+      description: Get one user using it's id
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: A JSON object containing the requested user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 38
+              
+                      firebaseId:
+                        type: string
+                        example: "YiuqYLtElLTNGaNy9vistAz3u663"
+              
+                      name:
+                        type: string
+                        example: "John Smith"
+              
+                      username:
+                        type: string
+                        example: "helloworldxxx69"
+              
+                      email:
+                        type: string
+                        example: "helloworld@nits.ac.in"
+              
+                      balance:
+                        type: integer
+                        example: 1000
+              
+                      phoneNumber:
+                        type: string
+                        example: "1231231233"
+              
+                      collegeName:
+                        type: string
+                        example: "National Institute of Technology, Silchar"
+              
+                      registrationId:
+                        type: string
+                        example: "2012001"
+              
+                      imageUrl:
+                        type: string
+                        example: "https://avatars.githubusercontent.com/u/74897001"
+                      manages:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Event'
+                      organizes:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Event'
+                      to:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Transaction'
+                      from:
+                        type: array
+                        items:  
+                          $ref: '#/components/schemas/Transaction'
+
+
+        404:
+          description: User with given id not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: User not found
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: Incorrect user id
+  /statics/:
+    get:
+      tags: 
+        - Statics
+      description: Get all statics data
+      responses:
+        200:
+          description: A JSON object containing all the statics data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Statics'
+    post:
+      tags: 
+        - Statics
+      security:
+        - BearerAuth: []
+      description: Create particular static 
+      requestBody:
+
+        description: A JSON Object for the user's response to an invitation
+
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "TecnoTeam"
+                json:
+                  type: object
+                  properties:
+                    teamName: 
+                      type: string
+                    totalMember: 
+                      type: integer
+      responses: 
+        200:
+          description: Successfull creation of static
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Static created successfully"
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: Invalid input
+  /statics/{name}:
+    get:
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: The name of the static data requested
+      tags: 
+        - Statics
+      description: Get particular static data
+      responses: 
+        200:
+          description: A JSON object containing the requested static data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    $ref: '#/components/schemas/Statics'
+        404:
+          description: Static with the given name doesn't exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: Static not found
+    put:
+      tags: 
+        - Statics
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: The name of the static data requested
+      security:
+        - BearerAuth: []
+      description: Update particular static 
+      requestBody:
+
+        description: A JSON Object for the user's response to an invitation
+
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                json:
+                  type: object
+                  properties:
+                    teamName: 
+                      type: string
+                    totalMember: 
+                      type: integer
+      responses: 
+        200:
+          description: Successfull creation of static
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Static Updated successfully"
+        404:
+          description: Could not find static with given name 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: Could not find static with given name
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 400
+                  msg:
+                    type: string
+                    example: Invalid input
+    delete:
+      tags: 
+        - Statics
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: The name of the static data requested
+      security:
+        - BearerAuth: []
+      description: Delete particular static   
+      responses: 
+        200:
+          description: Successfull creation of static
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  msg:
+                    type: string
+                    example: "Static Deleted successfully"
+        404:
+          description: Could not find static with given name 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 404
+                  msg:
+                    type: string
+                    example: Could not find static with given name

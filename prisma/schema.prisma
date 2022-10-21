@@ -1,0 +1,181 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions", "fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  firebaseId String @unique
+
+  firstName   String
+  middleName  String @default("")
+  lastName    String
+  username    String @unique
+  email       String @unique
+  phoneNumber String
+
+  balance Int
+
+  collegeName    String
+  registrationId String?
+
+  imageUrl String
+
+  teamsRegistered TeamRegistration[]
+
+  to   Transaction[] @relation("to")
+  from Transaction[] @relation("from")
+
+  manages   Event[] @relation("manager")
+  organizes Event[] @relation("organizer")
+}
+
+model Team {
+  id Int @id @default(autoincrement())
+
+  teamName String
+
+  registrationStatus RegistrationStatus
+
+  members TeamRegistration[]
+
+  extraInformation Json[]
+
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id])
+}
+
+model TeamRegistration {
+  id Int @id @default(autoincrement())
+
+  registrationStatus RegistrationStatus
+  role               TeamMemberRole
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  teamId Int
+  team   Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+enum RegistrationStatus {
+  REGISTERED
+  PENDING
+  CANCELLED
+}
+
+enum TeamMemberRole {
+  LEADER
+  MEMBER
+}
+
+model Module {
+  id Int @id @default(autoincrement())
+
+  name        String
+  description String
+
+  iconImage  String
+  coverImage String
+
+  thirdPartyURL String?
+
+  events Event[]
+}
+
+model Event {
+  id Int @id @default(autoincrement())
+
+  name        String
+  posterImage String
+
+  maxTeamSize Int
+  minTeamSize Int
+
+  registrationIncentive Int @default(0)
+  attendanceIncentive   Int @default(0)
+
+  prizeDescription  String
+  stagesDescription String
+  description       String
+
+  venue String
+  lat   String
+  lng   String
+
+  managers   User[] @relation("manager")
+  organizers User[] @relation("organizer")
+
+  registrationStartTime DateTime
+  registrationEndTime   DateTime
+
+  extraQuestions Json[] @default([])
+
+  moduleId Int
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  teams Team[]
+
+  transactions Transaction[]
+}
+
+enum TransactionReason {
+  ATTENDANCE
+  PURCHASE
+  REGISTRATION
+  ONLINE_EVENT
+}
+
+model Transaction {
+  id Int @id @default(autoincrement())
+
+  fromUserId Int
+  from       User @relation(fields: [fromUserId], references: [id], name: "from", onDelete: Restrict)
+
+  toUserId Int
+  to       User @relation(fields: [toUserId], references: [id], name: "to", onDelete: Restrict)
+
+  amount Int
+
+  reason      TransactionReason
+  description String?
+
+  eventId Int?
+  event   Event? @relation(fields: [eventId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+}
+
+model Statics {
+  name String @id
+  json Json
+}
+
+enum TshirtSize {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+}
+
+model SparkTshirt {
+  id             Int        @id @default(autoincrement())
+  name           String
+  email          String     @unique
+  scholarId      String?
+  isNITS         String
+  mobileNumber   String     @unique
+  hostelName     String?
+  address        String?
+  tshirtSize     TshirtSize
+  paymentReceipt String
+  transactionId  String     @unique
+}

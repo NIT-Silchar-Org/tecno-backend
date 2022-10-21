@@ -1,0 +1,3 @@
+const FILE_UPLOAD_LIMIT_IMG = 1024 * 1024 * 5; // 5 MB
+
+export { FILE_UPLOAD_LIMIT_IMG };

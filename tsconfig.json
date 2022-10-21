@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@interfaces": ["src/global/interfaces"],
+      "@errors": ["src/global/errors"],
+      "@success": ["src/global/success"],
+      "@constants": ["src/global/constants"],
+      "@routes": ["src/routes"],
+      "@globals/*": ["src/global/*"],
+      "@controllers": ["src/controllers"],
+      "@utils": ["src/utils"],
+      "@utils/*": ["src/utils/*"],
+      "@middlewares": ["src/middlewares"],
+      "@types/*": ["./node_modules/@types"],
+      "@prisma/*": ["./node_modules/@prisma"]
+    },
+    "moduleResolution": "node",
+    "incremental": true,
+    "target": "ES5",
+    "experimentalDecorators": true,
+    "rootDir": "./",
+    "baseUrl": ".",
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "removeComments": true,
+    "declarationDir": "./dist/types",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "skipLibCheck": true,
+    "typeRoots": ["@types", "./node_modules/@types"],
+    "resolveJsonModule": true
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
+}
