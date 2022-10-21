@@ -33,6 +33,7 @@ const createNewAttendanceTransaction: Interfaces.Controller.Async = async (
       where: {
         toUserId: toUser.id,
         eventId: event.id,
+        reason: "ATTENDANCE",
       },
     });
 
